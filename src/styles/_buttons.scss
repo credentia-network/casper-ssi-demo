@@ -53,6 +53,17 @@
           border-color: #E30E15;
         }
       }
+
+      &pink {
+        background: #F178B6;
+        border-color: #F178B6;
+        color: #FFFFFF;
+
+        &:hover:not([disabled]) {
+          background: #F178B6;
+          border-color: #F178B6;
+        }
+      }
     }
   }
   
