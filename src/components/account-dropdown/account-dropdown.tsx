@@ -4,20 +4,22 @@ import {ReactComponent as Union} from '../../assets/images/union.svg';
 import {ReactComponent as Vector} from '../../assets/images/vector.svg';
 import './account-dropdown.scss';
 
-export class AccountDropdown extends React.Component<any, any> {
-    state = { accountKey: this.cutKey(store.getState().signin.accountKey) };
+export class AccountDropdown extends React.Component {
+    state = {key: this.getShorterKey()};
 
     render() {
         return (
-            <div className="account-dropdown d-flex">
-                <div className="union">{Union}</div>
-                <div>{this.state.accountKey}</div>
-                <div className="text-white">{Vector}</div>
+            <div className="account-dropdown d-flex text-white">
+                <div className="union">{<Union></Union>}</div>
+                <div className="px-2">{this.state.key}</div>
+                <div className="text-white">{<Vector></Vector>}</div>
             </div>
         );
     }
 
-    private cutKey(key: string): string {
-        return `${key.substr(0, 5)}...${key.substr(key.length - 6)}`;
+    private getShorterKey(): string {
+        const state = store.getState();
+        const accountKey = state.signin.accountKey;
+        return `${accountKey.substr(0, 5)}...${accountKey.substr(accountKey.length - 6)}`;
     }
 }

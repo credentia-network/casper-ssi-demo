@@ -6,10 +6,25 @@ import SigninButton from "../signin-button/signin-button";
 import { Title } from "../title/title";
 import "./header.scss";
 
-export default class Header extends React.Component {    
-    render() {
-        const isSignedIn = store.getState().signin.accountKey;
+export default class Header extends React.Component {
+    unsubscribe;
+    state = {isSignedIn: false};
 
+    componentDidMount() {
+        this.unsubscribe = store.subscribe(() => {
+            const storeState = store.getState();
+            this.setState(state => ({
+                ...state,
+                isSignedIn: !!storeState.signin.accountKey
+            }));
+        });
+    }
+
+    componentWillUnmount = () => {
+        this.unsubscribe && this.unsubscribe();
+    }
+
+    render() {
         return (
             <header className="app-header">
                 <Logo></Logo>
@@ -17,10 +32,10 @@ export default class Header extends React.Component {
 
                 <div className="spacer"></div>
 
-                {!!isSignedIn &&
+                {!!this.state.isSignedIn &&
                     <AccountDropdown></AccountDropdown>}
 
-                {!isSignedIn &&
+                {!this.state.isSignedIn &&
                     <SigninButton></SigninButton>}
 
             </header>
