@@ -14,24 +14,41 @@ function App() {
     <>
       <Header></Header>
       <Router>
-        <div className="app-wrapper w-100">
-          <div className="container">
-            <Switch>
-              <Route path="/did-management">
+        <Switch>
+
+          <Route path="/did-management">
+            <div className="page-bg-blue">
+              <div className="container">
                 <DidManagement />
-              </Route>
-              <Route path="/issuer">
+              </div>
+            </div>
+          </Route>
+
+          <Route path="/issuer">
+            <div className="page-bg-blue">
+              <div className="container">
                 <Issuer />
-              </Route>
-              <Route path="/create-did-document">
+              </div>
+            </div>
+          </Route>
+
+          <Route path="/create-did-document">
+            <div className="page-bg-blue">
+              <div className="container">
                 <CreateDidDocument />
-              </Route>
-              <Route path="/">
+              </div>
+            </div>
+          </Route>
+
+          <Route path="/">
+            <div className="page-bg-blue">
+              <div className="container">
                 <Home />
-              </Route>
-            </Switch>
-          </div>
-        </div>
+              </div>
+            </div>
+          </Route>
+          
+        </Switch>
       </Router>
     </>
   );

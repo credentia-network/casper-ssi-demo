@@ -1,3 +1,9 @@
-.app-wrapper {
-    background: linear-gradient(180deg, #DFE9F3 0%, #FFFFFF 53.32%);
+.page-bg- {
+    &blue {
+        background: linear-gradient(180deg, #DFE9F3 0%, #FFFFFF 53.32%);
+    }
+
+    &pink {
+        background: linear-gradient(180deg, #FFE9F4 0%, #FFFFFF 53.32%);
+    }
 }
