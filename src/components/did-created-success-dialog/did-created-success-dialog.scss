@@ -1,0 +1,26 @@
+
+.did-created-success-dialog {
+    background-color: #FFFFFF;
+    width: 456px;
+    height: 384px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+    padding: 40px;
+
+    .check {
+        width: 80px;
+        height: 80px;
+        background: #15B44B;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;        
+    }
+
+    h5 {
+        color: #15B44B;
+        font-weight: bold;
+        font-size: 22px;
+        margin: 2rem 0;
+    }
+}

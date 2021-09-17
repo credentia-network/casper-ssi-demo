@@ -1,0 +1,24 @@
+.app-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    padding: 8px;
+    border-radius: 40px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: center;
+ 
+    &.label- {
+        &success {
+            background-color: #15B44B;
+        }
+
+        &danger {
+            background-color: #F83036;
+        }
+    }
+}

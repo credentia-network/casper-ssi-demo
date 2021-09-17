@@ -1,0 +1,27 @@
+.key-field {
+    .key-field-title {
+        border-radius: 4px 0px 0px 4px;
+        background: #DBE2EA;
+        color: #4F4F4F;
+        width: 198px;
+    }
+
+    .key-field-button {
+        background: #0081F9;
+        width: 114px;
+        border-radius: 0px 4px 4px 0px;
+
+        button {
+            width: 100%;
+            border: none;
+            background: #0081F9;
+            color: #ffffff;
+        }
+    }
+
+    .key-field-value {
+        width: 600px;
+        color: #828282;
+        background-color: #ffffff;
+    }
+}

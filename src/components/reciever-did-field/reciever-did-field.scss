@@ -1,0 +1,21 @@
+
+.reciever-did-field {
+    width: 398px;
+
+    input {
+        width: 250px;
+    }
+
+    .did-not-checked {
+        font-size: 14px;
+        color: #333333;
+    }
+
+    .did-valid {
+        background-color: #15B44B;
+        color: #ffffff;
+        border-radius: 4px;
+        padding: 4px 0px 4px 8px;
+        width: 100%;
+    }
+}

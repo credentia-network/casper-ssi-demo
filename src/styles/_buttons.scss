@@ -1,0 +1,126 @@
+
+.button {  
+  background-color: #FFFFFF;
+  border: 1px solid #DBE2EA;
+  box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08), 0px 4px 8px rgba(44, 39, 56, 0.08);
+  border-radius: 4px;
+  color: #191919;
+
+  &:hover:not([disabled]) {
+    box-shadow: 0px 12px 24px rgba(44, 39, 56, 0.04), 0px 24px 48px rgba(44, 39, 56, 0.08);
+  }
+  
+  &:active,
+  &:focus {
+    border: 2px solid #6E747B;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.0001), 0px 2px 4px rgba(44, 39, 56, 0.08);
+  }
+  
+  &[disabled] {
+    background: #EBF4F8;
+    border-color: #EBF4F8;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.08);
+    color: rgba(44, 39, 56, 0.24);
+    cursor: no-drop;
+  }
+  
+  &.primary  {
+    border-color: #0081F9;
+    background-color: #0081F9;
+    color: #FFFFFF;
+
+    &[disabled] {
+      background: #DBE2EA;
+      border-color: #DBE2EA;
+      color: rgba(44, 39, 56, 0.24);      
+    }
+
+    &:hover:not([disabled]) {
+      background-color: #061391;
+      border-color: #061391;
+    }
+
+    &.color- {
+      &red {
+        background: #F83036;
+        border-color: #F83036;
+        color: #FFFFFF;
+
+        &:hover:not([disabled]) {
+          background: #E30E15;
+          border-color: #E30E15;
+        }
+      }
+    }
+  }
+  
+  &.outline {
+    border: 2px solid #6E747B;
+
+    &:hover {
+      border-color: #191919;
+    }
+
+    &:active,
+    &:focus {
+      border-color: #756F86;
+      color: #756F86;
+    }
+
+    &[disabled] {
+      border-color: rgba(44, 39, 56, 0.24);
+      mix-blend-mode: normal;
+      color: rgba(44, 39, 56, 0.24);
+    }
+  }
+
+  &.second {
+    border-color: #DBE2EA;
+    background-color: #EBF4F8;
+    color: #00001F;
+
+    &:hover:not([disabled]) {
+      border-color: #DBE2EA;
+      background-color: #DBE2EA;
+    }
+  }
+  
+  &.button- {
+    &sm {
+      min-width: 100px;
+      height: 34px;
+      font-size: 14px;
+    }
+
+    &md {
+      min-width: 140px;
+      height: 48px;
+    }
+    
+    &lg {
+      min-width: 180px;
+      height: 56px;
+    }
+
+    &icon {
+      min-width: 48px;
+      height: 48px;
+    }
+  }
+}
+  
+a.button[role=button] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  &.static {
+    &.solid:hover:not([disabled]) {
+      border-color: #0081F9;
+      background-color: #0081F9;
+    }
+  }
+}

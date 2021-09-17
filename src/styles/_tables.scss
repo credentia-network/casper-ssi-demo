@@ -1,0 +1,18 @@
+.table {
+    thead tr th {
+        color: #464646;
+        font-weight: 500;
+        font-size: 16px;
+    }
+
+    tbody tr td {
+        font-size: 14px;
+        color: #1F2129;
+        vertical-align: middle;
+    }
+
+    &.table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: #F9F9F9;
+        color: #1F2129;
+    }
+}

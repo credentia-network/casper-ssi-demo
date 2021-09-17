@@ -1,0 +1,56 @@
+.pill-tab {
+    width: 289px;
+    background: #FFFFFF;
+    border: 1px solid #DBE2EA;
+    box-sizing: border-box;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    height: 98px;
+
+    .pill-tab-title {
+        text-transform: uppercase;
+        color: #333333;
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 140%;
+    }
+
+    .pill-tab-description {
+        color: #828282;
+        font-size: 16px;
+        line-height: 140%;
+        letter-spacing: -0.02em;
+    }
+
+    .pill-tab-link {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        padding: 8px;
+        border-radius: 4px;
+        color: #FFFFFF;
+
+        &.link-color- {
+            &pink {
+                border-color: #F178B6;
+                background-color: #F178B6;
+            }
+    
+            &blue {
+                border-color: #0081F9;
+                background-color: #0081F9;
+            }
+    
+            &purpure {
+                border-color: #7879F1;
+                background-color: #7879F1;
+            }
+        }
+    }    
+}

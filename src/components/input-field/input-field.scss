@@ -1,0 +1,29 @@
+.input-field {
+    .input-field-label {
+        background-color: #DBE2EA;
+        border: 1px solid #DBE2EA;
+        border-radius: 4px 0px 0px 4px;
+        color: #4F4F4F;
+    }
+
+    .input-field-input {
+        border: 1px solid #DBE2EA;
+        border-radius: 0px 4px 4px 0px;
+
+        input {
+            border:  none;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            color: #333333;
+
+            &:focus{
+                outline: none;
+            }
+
+            &::placeholder {
+                color: #828282;
+            }              
+        }
+    }
+}

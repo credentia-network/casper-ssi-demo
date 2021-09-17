@@ -1,0 +1,43 @@
+
+.app-stepper {
+    margin-bottom: 1.5rem;
+
+    .step {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #DBE2EA;
+        margin: 0;
+        padding: 0;
+
+        &.completed {
+            border-color: #0081F9;
+            background-color: #0081F9;
+        }
+
+        &.active {
+            border-color: #0081F9;            
+        }
+
+        &.last:not(.active):not(.completed) {
+            border-color: #DBE2EA;
+            background-color: #DBE2EA;
+        }
+
+        .step-name {
+            color: #828282;
+            font-size: 14px;
+        }
+    }
+
+    .connector {
+        height: 2px;
+        flex: 1 1 auto;    
+        background-color: #DBE2EA; 
+        
+        &.active {
+            background-color: #0081F9;
+        }
+    }
+}
