@@ -6,9 +6,10 @@ import SigninButton from "../signin-button/signin-button";
 import { Title } from "../title/title";
 import "./header.scss";
 
-export default class Header extends React.Component {
-    state = { isSignedIn: store.getState().signin.accountKey };
+export default class Header extends React.Component {    
     render() {
+        const isSignedIn = store.getState().signin.accountKey;
+
         return (
             <header className="app-header">
                 <Logo></Logo>
@@ -16,10 +17,10 @@ export default class Header extends React.Component {
 
                 <div className="spacer"></div>
 
-                {!!this.state.isSignedIn &&
+                {!!isSignedIn &&
                     <AccountDropdown></AccountDropdown>}
 
-                {!this.state.isSignedIn &&
+                {!isSignedIn &&
                     <SigninButton></SigninButton>}
 
             </header>

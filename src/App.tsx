@@ -13,8 +13,9 @@ import { Issuer } from './pages/issuer/issuer';
 function App() {
   return (
     <>
-      <Header></Header>
       <Router>
+        <Header></Header>
+
         <Switch>
 
           <Route path="/did-management">
@@ -56,7 +57,7 @@ function App() {
               </div>
             </div>
           </Route>
-          
+
         </Switch>
       </Router>
     </>
