@@ -1,21 +1,10 @@
 import React from "react";
 import casper_signer from "../../assets/images/casper_signer.png";
-import { signin } from "../../common/actions/signin-actions";
-import { store } from "../../common/store";
+import SigninButton from "../signin-button/signin-button";
 import "./casper-signer-block.scss";
 
-export class CasperSignerBlock extends React.Component {
-    constructor(props) {
-        super(props);
 
-        store.subscribe(() => {
-            const state = store.getState();
-            if (state.signin.accountKey) {
-                window.location.href = '/did-management';
-            }
-        });
-    }
-
+export class CasperSignerBlock extends React.Component<any, any> {
     render() {
         return (
             <div className="casper-signer-block mb-4 row align-items-center">
@@ -29,14 +18,10 @@ export class CasperSignerBlock extends React.Component {
                 </div>
 
                 <div className="col-12 col-md p-0">
-                    <button className="button button-lg primary mb-3" onClick={this.onSingnInButtonclick}>Sign In</button>
+                    <SigninButton className="button-lg color-red mb-3"></SigninButton>
                     <button className="button button-lg">Download signer</button>
                 </div>
             </div>
         );
     }
-
-    private onSingnInButtonclick = () => {
-        store.dispatch(signin());
-    }    
 }
