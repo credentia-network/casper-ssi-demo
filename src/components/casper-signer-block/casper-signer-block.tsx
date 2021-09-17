@@ -1,9 +1,21 @@
-import React from "react"
-import "./casper-signer-block.scss";
+import React from "react";
 import casper_signer from "../../assets/images/casper_signer.png";
-const { Keys } = require("casper-js-sdk");
+import { signin } from "../../common/actions/signin-actions";
+import { store } from "../../common/store";
+import "./casper-signer-block.scss";
 
 export class CasperSignerBlock extends React.Component {
+    constructor(props) {
+        super(props);
+
+        store.subscribe(() => {
+            const state = store.getState();
+            if (state.signin.accountKey) {
+                window.location.href = '/did-management';
+            }
+        });
+    }
+
     render() {
         return (
             <div className="casper-signer-block mb-4 row align-items-center">
@@ -25,7 +37,6 @@ export class CasperSignerBlock extends React.Component {
     }
 
     private onSingnInButtonclick = () => {
-
-    }
-
+        store.dispatch(signin());
+    }    
 }
