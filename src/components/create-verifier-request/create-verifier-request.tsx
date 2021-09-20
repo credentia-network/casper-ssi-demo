@@ -6,11 +6,15 @@ import {Button} from "../button/button";
 import './create-verifier.scss'
 import {useEffect, useState} from "react";
 
-export class CreateVerifierRequest extends React.Component {
-    steps = ['Choose fields', 'Send VC request'];
-    choosen =[]
-    toggle = false
-    render() {
+export function CreateVerifierRequest(){
+    const steps = ['Choose fields', 'Send VC request'];
+const [state,setState] = useState({
+    btn: false,
+    btntt:false
+})
+    const handleChange = (prop) => {
+        setState({...state, [prop]: !state[prop]})
+    }
         return (
             <div>
 
@@ -28,11 +32,12 @@ export class CreateVerifierRequest extends React.Component {
                         yourself). The issued document can be revoked and its data can be viewed.</p>
                 </div>
 
-                <Stepper steps={this.steps} active={1}></Stepper>
+                <Stepper steps={steps} active={1}></Stepper>
                 <div>
                     <h4>Personal</h4>
                     <div>
-                        {/*<button className="bgg-choose" onClick={this.getdd}>aaaaaaa</button>*/}
+                        {/*<button className={state.btn ? 'bgg-choose-white' : 'bgg-choose-red'} onClick={() => setState({...state, btn: !state.btn})}>aaaaaaa</button>*/}
+                        <button className={state.btn ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('btn')}>VC ID</button>
 
                     </div>
 
@@ -40,6 +45,4 @@ export class CreateVerifierRequest extends React.Component {
 
             </div>
         );
-    }
-
 }
