@@ -1,4 +1,5 @@
 import React from "react";
+import { store } from "../../common/store";
 import { CreateDidDialog } from "../../components/create-did-dialog/create-did-dialog";
 import { DidCreatedSuccessDialog } from "../../components/did-created-success-dialog/did-created-success-dialog";
 import { DidManagementTable } from "../../components/did-management-table/did-management-table";
@@ -7,7 +8,18 @@ import { PillTab } from "../../components/pill-tab/pill-tab";
 import "./did-management.scss";
 
 export class DidManagement extends React.Component<any, any> {
-    state = { createDialogOpenned: false, didCreated: false };
+    unsubscribe;
+
+    constructor(props) {
+        super(props);
+        const storeState = store.getState();
+        console.log(storeState);
+        this.state = {
+            createDialogOpenned: false, 
+            didCreated: false,
+            ...storeState.signin
+        }
+    }
 
     render() {
         return (
@@ -20,8 +32,8 @@ export class DidManagement extends React.Component<any, any> {
 
                 <h4 className="my-4">Account</h4>
 
-                <KeyField name="Public Key" value="01eecc0fa33486a6ffcd9bed49119f5d91551ffbf09e23ebb12b79f9a05e2e0214"></KeyField>
-                <KeyField name="Account Hash" value="b93b845b496b3711c0c4fe06bd11b88f2419f973abc9b16b9c9e6ef84e94f726"></KeyField>
+                <KeyField name="Public Key" value={this.state.publicKey}></KeyField>
+                <KeyField name="Account Hash" value={this.state.accountHash}></KeyField>
 
                 <h4 className="my-4">Managing your DID identifiers</h4>
 

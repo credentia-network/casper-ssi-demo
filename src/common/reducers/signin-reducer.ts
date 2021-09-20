@@ -1,14 +1,18 @@
 import { SIGNIN } from "./types"
 
 const initState = {
-    accountKey: null
+    publicKey: null,
+    accountHash: null
 }
 
 export const signinReducer = (state = initState, action) => {
     switch (action.type) {
         case SIGNIN:
-            return { ...state, accountKey: action.payload.accountKey };
-        default: 
+            return {
+                ...state,
+                ...action.payload
+            };
+        default:
             return { ...state };
     }
 }

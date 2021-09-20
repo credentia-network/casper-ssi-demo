@@ -12,7 +12,7 @@ const SigninButton = (props: any) => {
 
         const unsubscribe = store.subscribe(() => {
             const state = store.getState();
-            if (state.signin.accountKey) {
+            if (state.signin.publicKey) {
                 history.push('/did-management');
             }
             unsubscribe();

@@ -19,7 +19,7 @@ export class AccountDropdown extends React.Component {
 
     private getShorterKey(): string {
         const state = store.getState();
-        const accountKey = state.signin.accountKey;
-        return `${accountKey.substr(0, 5)}...${accountKey.substr(accountKey.length - 6)}`;
+        const publicKey = state.signin.publicKey;
+        return `${publicKey.substr(0, 5)}...${publicKey.substr(publicKey.length - 6)}`;
     }
 }
