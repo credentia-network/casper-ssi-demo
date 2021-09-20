@@ -9,6 +9,8 @@ import { DidManagement } from './pages/did-management/did-management';
 import { Holder } from './pages/holder/holder';
 import Home from './pages/home/home';
 import { Issuer } from './pages/issuer/issuer';
+import { Verifier } from "./pages/verifier/verifier";
+import {CreateVerifierRequest} from "./components/create-verifier-request/create-verifier-request";
 
 function App() {
   return (
@@ -46,6 +48,21 @@ function App() {
             <div className="page-bg-pink">
               <div className="container">
                 <Holder />
+              </div>
+            </div>
+          </Route>
+
+          <Route path="/verifier">
+            <div className="page-bg-blue">
+              <div className="container">
+                <Verifier />
+              </div>
+            </div>
+          </Route>
+          <Route path="/create-verifier">
+            <div className="page-bg-blue">
+              <div className="container">
+                <CreateVerifierRequest />
               </div>
             </div>
           </Route>

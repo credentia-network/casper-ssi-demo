@@ -1,5 +1,5 @@
 
 export interface LabelProps {
     name: string;
-    color: 'success' | 'danger'
+    color: 'success' | 'danger' | 'warning'
 }

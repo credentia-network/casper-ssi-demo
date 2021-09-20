@@ -6,8 +6,9 @@ export class BackButton extends React.Component<BackButtonProps> {
     render() {
         return (
             <a role="button" className={'button primary button-icon static ' + (this.props.color === 'pink' ? 'color-pink' : '')} href={this.props.link}>
+
                 <ArrowLeft></ArrowLeft>
             </a>
         )
     }
-}
+}   // <a className={'pill-tab-link link-color-' + this.props.color} href={this.props.link}>
