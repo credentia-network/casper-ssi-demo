@@ -1,11 +1,13 @@
 .bgg-choose-green{
   background-color: #27AE60;
   color: #FFFFFF;
-  border: 1px solid #FFFFFF;
+  border: 1px solid #27AE60;
   box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08), 0px 4px 8px rgba(44, 39, 56, 0.08);
   border-radius: 4px;
   min-width: 100px;
   height: 48px;
+  margin-right: 5px;
+  margin-bottom: 5px;
 }
 .bgg-choose-white{
   background-color: #FFFFFF;
@@ -15,4 +17,25 @@
   border-radius: 4px;
   min-width: 100px;
   height: 48px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+.btn-close{
+
+  width: 140px;
+  height: 48px;
+  background: #EBF4F8;
+  border: 1px solid #DBE2EA;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.0001), 0px 4px 8px rgba(44, 39, 56, 0.08);
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.btn-create {
+  width: 170px;
+  height: 48px;
+  background: #7879F1;
+  border: 1px solid #7879F1;
+  border-radius: 4px;
 }

@@ -11,6 +11,7 @@ import Home from './pages/home/home';
 import { Issuer } from './pages/issuer/issuer';
 import { Verifier } from "./pages/verifier/verifier";
 import {CreateVerifierRequest} from "./components/create-verifier-request/create-verifier-request";
+import {SaveVerifierRequest} from "./components/save-verifier-request/save-verifier-request";
 
 function App() {
   return (
@@ -63,6 +64,13 @@ function App() {
             <div className="page-bg-blue">
               <div className="container">
                 <CreateVerifierRequest />
+              </div>
+            </div>
+          </Route>
+          <Route path="/save-verifier">
+            <div className="page-bg-blue">
+              <div className="container">
+                <SaveVerifierRequest/>
               </div>
             </div>
           </Route>
