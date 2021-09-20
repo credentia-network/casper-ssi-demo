@@ -1,14 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as ArrowLeft } from '../../assets/images/arrow-left.svg';
 import { BackButtonProps } from "./back-button-props";
 
 export class BackButton extends React.Component<BackButtonProps> {
     render() {
         return (
-            <a role="button" className={'button primary button-icon static ' + (this.props.color === 'pink' ? 'color-pink' : '')} href={this.props.link}>
-
+            <Link role="button" className={'button primary button-icon static ' + (this.props.color === 'pink' ? 'color-pink' : '')} to={this.props.link}>
                 <ArrowLeft></ArrowLeft>
-            </a>
+            </Link>
         )
     }
-}   // <a className={'pill-tab-link link-color-' + this.props.color} href={this.props.link}>
+}

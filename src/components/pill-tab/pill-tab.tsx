@@ -1,7 +1,8 @@
 import React from "react";
 import { PillTabProps } from "./pill-tab-props";
 import './pill-tab.scss';
-import { ReactComponent as ArrowRight} from '../../assets/images/arrow-right.svg';
+import { ReactComponent as ArrowRight } from '../../assets/images/arrow-right.svg';
+import { Link } from "react-router-dom";
 
 export class PillTab extends React.Component<PillTabProps> {
     render() {
@@ -13,9 +14,9 @@ export class PillTab extends React.Component<PillTabProps> {
                 </div>
 
                 <div>
-                    <a className={'pill-tab-link link-color-' + this.props.color} href={this.props.link}>
+                    <Link to={this.props.link} className={'pill-tab-link link-color-' + this.props.color}>
                         <ArrowRight></ArrowRight>
-                    </a>
+                    </Link>
                 </div>
             </div>
         )
