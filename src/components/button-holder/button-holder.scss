@@ -1,0 +1,146 @@
+.button-for-holder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 21px 24px;
+
+  position: static;
+  width: 387px;
+  height: 120px;
+  left: 814px;
+  top: 0px;
+  text-decoration: none;
+
+  background: #FFFFFF;
+
+  box-shadow: 0px 0px 4px rgba(40, 66, 90, 0.2);
+  border-radius: 4px;
+
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+  margin: 0px 20px;
+}
+.button-for-holder:hover{
+  background: #EBF4F8;
+  .government{
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/government_hover.svg");
+  }
+  .personaldata{
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/personal data_hover.svg");
+  }
+  .ehealth{
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/e-health_hover.svg");
+  }
+  .finance{
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/finance_hover.svg");
+  }
+  .education{
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/education_hover.svg");
+  }
+  .professional_achievments{
+    background-repeat: no-repeat;
+    background-image: url("../../assets/images/professional_achievements_hover.svg");
+  }
+  box-shadow: 0px 0px 4px rgba(40, 66, 90, 0.2);
+  border-radius: 4px;
+}
+.title{
+  position: static;
+  width: 144px;
+  height: 27px;
+  left: 114.06px;
+  top: 45.5px;
+
+  font-family: Helvetica Neue;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 27px;
+
+  color: #333333;
+
+  flex: none;
+  order: 2;
+  flex-grow: 0;
+  margin: 0px 28px;
+}
+.government{
+  position: static;
+  width: 80.06px;
+  height: 76px;
+  left: 24px;
+  top: 21px;
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/images/government_default.svg");
+}
+.personaldata{
+  position: static;
+  width: 80.06px;
+  height: 76px;
+  left: 24px;
+  top: 21px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/images/personal_data_default.svg");
+}
+.ehealth {
+  position: static;
+  width: 80.06px;
+  height: 76px;
+  left: 24px;
+  top: 21px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/images/e-health_default.svg");
+}
+.finance{
+  position: static;
+  width: 80.06px;
+  height: 76px;
+  left: 24px;
+  top: 21px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/images/finance_default.svg");
+}
+.education{
+  position: static;
+  width: 80.06px;
+  height: 76px;
+  left: 24px;
+  top: 21px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/images/education_default.svg");
+}
+.professional_achievments{
+  position: static;
+  width: 80.06px;
+  height: 76px;
+  left: 24px;
+  top: 21px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+  background-repeat: no-repeat;
+  background-image: url("../../assets/images/professional_achievements_default.svg");
+}
+
