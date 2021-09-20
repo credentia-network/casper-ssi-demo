@@ -15,7 +15,7 @@ export default class Header extends React.Component {
             const storeState = store.getState();
             this.setState(state => ({
                 ...state,
-                isSignedIn: !!storeState.signin.accountKey
+                isSignedIn: !!storeState.signin?.publicKey
             }));
         });
     }
