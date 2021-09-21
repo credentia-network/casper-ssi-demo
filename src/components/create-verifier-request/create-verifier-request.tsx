@@ -7,11 +7,16 @@ import { Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {VERIFIER} from "../../common/reducers/types";
 import {getVerifier} from "../../common/reducers/verifier-reducer";
+import {ButtonCreateVerifier} from "../button-create-verifier/button-create-verifier";
 
 export function CreateVerifierRequest(){
+
     const dispatch = useDispatch()
+
     const steps = ['Choose fields', 'Send VC request'];
+
     const verifier = useSelector(state => getVerifier(state));
+
     const handleChange = (prop,key) => {
         dispatch({
             type: VERIFIER,
@@ -30,55 +35,88 @@ export function CreateVerifierRequest(){
                 </div>
 
                 <h4 className="mb-4">Request and verify third party VC</h4>
+
                 <div>
                     <p>In this tab you can create and sign (issue) VC documents for a specific recipient (including
                         yourself). The issued document can be revoked and its data can be viewed.</p>
                 </div>
 
                 <Stepper steps={steps} active={1}></Stepper>
+
                 <div>
                     <h5 className="mb-2">Personal</h5>
                     <div className="mb-2 d-flex w-50 flex-lg-wrap">
-                        <button className={verifier.personal.vcid ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('vcid','personal')}>VC ID</button>
-                        <button className={verifier.personal.vcdescription ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('vcdescription','personal')}>VC Description</button>
-                        <button className={verifier.personal.phone1 ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('phone1','personal')}>Phone1</button>
-                        <button className={verifier.personal.phone2 ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('phone2','personal')}>Phone2</button>
-                        <button className={verifier.personal.telegram ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('telegram','personal')}>Telegram</button>
-                        <button className={verifier.personal.linkedin ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('linkedin','personal')}>Linkedin</button>
-                        <button className={verifier.personal.whatsup ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('whatsup','personal')}>WhatsApp</button>
-                        <button className={verifier.personal.viber ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('viber','personal')}>Viber</button>
+
+                        <ButtonCreateVerifier toggle={verifier.personal.vcid } title="VC ID"
+                                              onClick={() => handleChange('vcid','personal')}/>
+                        <ButtonCreateVerifier toggle={verifier.personal.vcdescription } title="VC Description"
+                                              onClick={() => handleChange('vcdescription','personal')}/>
+                        <ButtonCreateVerifier toggle={verifier.personal.phone1 } title="Phone1"
+                                              onClick={() => handleChange('phone1','personal')}/>
+                        <ButtonCreateVerifier toggle={verifier.personal.phone2 } title="Phone2"
+                                              onClick={() => handleChange('phone2','personal')}/>
+                        <ButtonCreateVerifier toggle={verifier.personal.telegram } title="Telegram"
+                                              onClick={() => handleChange('telegram','personal')}/>
+                        <ButtonCreateVerifier toggle={verifier.personal.linkedin } title="Linkedin"
+                                              onClick={() => handleChange('linkedin','personal')}/>
+                        <ButtonCreateVerifier toggle={verifier.personal.whatsup } title="WhatsApp"
+                                              onClick={() => handleChange('whatsup','personal')}/>
+                        <ButtonCreateVerifier toggle={verifier.personal.viber } title="Viber"
+                                              onClick={() => handleChange('viber','personal')}/>
                     </div>
+
                     <h5 className="mb-2">Governament</h5>
+
                     <div className="mb-2">
-                        <button className={verifier.govarnment.id ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('id', 'govarnment')}>Id</button>
-                        <button className={verifier.govarnment.social ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('social', 'govarnment')}>#Social</button>
+
+                        <ButtonCreateVerifier toggle={verifier.govarnment.id} title="Id"
+                                              onClick={() => handleChange('id', 'govarnment')}/>
+                        <ButtonCreateVerifier toggle={verifier.govarnment.social } title="#Social"
+                                              onClick={() => handleChange('social', 'govarnment')}/>
 
                     </div>
+
                     <h5 className="mb-2">Finance</h5>
+
                     <div className="mb-2">
-                        <button className={verifier.finance.finvcid ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('finvcid', 'finance')}>VC ID</button>
-                        <button className={verifier.finance.finvcdescription ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('finvcdescription', 'finance')}>VC Description</button>
+
+                        <ButtonCreateVerifier toggle={verifier.finance.finvcid } title="VC ID"
+                                              onClick={() => handleChange('finvcid', 'finance')}/>
+                        <ButtonCreateVerifier toggle={verifier.finance.finvcdescription } title="VC Description"
+                                              onClick={() => handleChange('finvcdescription', 'finance')}/>
 
                     </div >
+
                     <h5 className="mb-2">E-Health</h5>
+
                     <div className="mb-2">
-                        <button className={verifier.health.vacctination ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('vacctination', 'health')}>Vaccination covid
-                        </button>
+
+                        <ButtonCreateVerifier toggle={verifier.health.vacctination } title="Vaccination covid"
+                                              onClick={() => handleChange('vacctination', 'health')}/>
 
                     </div>
+
                     <h5 className="mb-2">Education</h5>
+
                     <div className="mb-2">
-                        <button className={verifier.education.id_diplom ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('id_diplom', 'education')}>Diplom ID</button>
-                        <button className={verifier.education.speciality ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('speciality', 'education')}>Speciality</button>
-                        <button className={verifier.education.academic_degree ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('academic_degree', 'education')}>Academic degree
-                        </button>
-                        <button className={verifier.education.date ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('date', 'education')}>Date</button>
+
+                        <ButtonCreateVerifier toggle={verifier.education.id_diplom } title="Diplom ID"
+                                              onClick={() => handleChange('id_diplom', 'education')}/>
+                        <ButtonCreateVerifier toggle={verifier.education.speciality } title="Speciality"
+                                              onClick={() => handleChange('speciality', 'education')}/>
+                        <ButtonCreateVerifier toggle={verifier.education.academic_degree } title="Academic degree"
+                                              onClick={() => handleChange('academic_degree', 'education')}/>
+                        <ButtonCreateVerifier toggle={verifier.education.date } title="Date"
+                                              onClick={() => handleChange('date', 'education')}/>
 
                     </div>
+
                     <h5 className="mb-2">Professional</h5>
+
                     <div className="mb-4">
-                        <button className={verifier.profesional.email ? 'bgg-choose-green' : 'bgg-choose-white'} onClick={() => handleChange('email', 'profesional')}>Email
-                        </button>
+
+                        <ButtonCreateVerifier toggle={verifier.profesional.email } title="Email"
+                                              onClick={() => handleChange('email', 'profesional')}/>
 
                     </div>
 
