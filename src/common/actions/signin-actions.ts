@@ -7,7 +7,14 @@ export function signin() {
 
         function receiveMessage(event: any) {
             if (event.detail.activeKey) {
-                dispatch({ type: SIGNIN, payload: { publicKey: event.detail.activeKey, accountHash: toAccountHash(event.detail.activeKey) } });
+                dispatch({
+                    type: SIGNIN,
+                    payload: {
+                        publicKey: event.detail.activeKey,
+                        accountHash: toAccountHash(event.detail.activeKey),
+                        did: `did:casper:${event.detail.activeKey}`
+                    }
+                });
             }
         }
 

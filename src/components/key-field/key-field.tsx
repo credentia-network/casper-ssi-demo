@@ -10,9 +10,13 @@ export class KeyField extends React.Component<KeyFieldProps> {
                 <div className="key-field-title p-2">{this.props.name}</div>
                 <div className="py-2 px-3 key-field-value">{this.props.value}</div>
                 <div className="key-field-button p-2">
-                    <button><Copy></Copy> Copy</button>
+                    <button onClick={this.onCopyButtonClick}><Copy></Copy> Copy</button>
                 </div>
             </div>
         )
+    }
+
+    private onCopyButtonClick = () => {
+        navigator.clipboard.writeText(this.props.value);
     }
 }

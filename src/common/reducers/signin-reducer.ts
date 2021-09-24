@@ -2,7 +2,8 @@ import { SIGNIN } from "./types"
 
 const initState = {
     publicKey: null,
-    accountHash: null
+    accountHash: null,
+    did: null
 }
 
 export const signinReducer = (state = initState, action) => {
