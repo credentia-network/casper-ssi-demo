@@ -3,7 +3,6 @@ import "./verifier.scss"
 import {BackButton} from '../../components/back-button/back-button';
 import {Pagetitle} from '../../components/page-title/page-title';
 import {VerefierTable} from "../../components/verifier-table/verefier-table";
-import {CreateVerifierRequest} from "../../components/create-verifier-request/create-verifier-request";
 import {Link} from "react-router-dom";
 
 export class Verifier extends React.Component {
@@ -13,7 +12,7 @@ export class Verifier extends React.Component {
 
                 <div className="d-flex p-3">
                     <div className="me-4">
-                        <BackButton link="/did-management" color="purple"></BackButton>
+                        <BackButton link="/did-management" color="purpure"></BackButton>
                     </div>
 
                     <Pagetitle title="verifier" subtitle="Verifiable Credentials"></Pagetitle>
@@ -24,18 +23,14 @@ export class Verifier extends React.Component {
                     <p>In this tab you can create and sign (issue) VC documents for a specific recipient (including
                         yourself). The issued document can be revoked and its data can be viewed.</p>
                     <div className="conte">
-                        <Link to="/create-verifier"> <button className="button primary button-sm w-auto px-3 text-nowrap" onClick={this.createRequest}>Create VC request</button></Link>
-                       <button className="button primary button-sm w-auto px-3 text-nowrap">Create VC request</button>
+                        <Link to="/create-verifier"> <button className="button primary button-sm w-auto px-3 text-nowrap" >Create VC request</button></Link>
+                       <button className="button primary button-sm w-auto px-3 text-nowrap">Validate VC by ID</button>
                     </div>
                     <div>
                         <VerefierTable/>
                     </div>
                 </div>
-
-                {/*<div><CreateVerifierRequest /></div>*/}
             </div>
         );
-    }
-    createRequest(){
     }
 }

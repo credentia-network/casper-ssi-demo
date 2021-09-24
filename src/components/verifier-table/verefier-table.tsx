@@ -21,7 +21,7 @@ export class VerefierTable extends React.Component {
                     <td>Contact details</td>
                     <td>DID: ex: 0987654321abcdef</td>
                     <td>
-                        <button className="button primary button-sm  float-end ">Revoke</button>
+                        <button className="button primary button-sm  float-end ">Validate</button>
                     </td>
                 </tr>
                 <tr>
@@ -30,7 +30,7 @@ export class VerefierTable extends React.Component {
                     <td>Contact details and diploma</td>
                     <td>DID: ex: 0987654321abcdef</td>
                     <td>
-                        <button className="button primary button-sm  float-end ">Revoke</button>
+                        <button className="button primary button-sm  float-end ">Validate</button>
                     </td>
                 </tr>
                 <tr>
@@ -39,7 +39,7 @@ export class VerefierTable extends React.Component {
                     <td>Contact details and diploma</td>
                     <td>DID: ex: 0987654321abcdef</td>
                     <td className="">
-                        <button className="button primary button-sm float-end ">Revoke</button>
+                        <button className="button primary button-sm float-end ">Validate</button>
                     </td>
                 </tr>
                 </tbody>

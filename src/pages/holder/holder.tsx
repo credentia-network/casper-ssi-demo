@@ -4,9 +4,17 @@ import { BackButton } from '../../components/back-button/back-button';
 import { Pagetitle } from '../../components/page-title/page-title';
 import {ButtonHolder} from "../../components/button-holder/button-holder";
 import {HolderTable} from "../../components/holder-table/holder-table";
+import {ViewDidDialog} from "../../components/view-did-dialog/view-did-dialog";
 
 
-export class Holder extends React.Component {
+export class Holder extends React.Component<any, any> {
+    constructor(props) {
+        super(props);
+        this.state = {
+            createDialogOpenned: false,
+            didCreated: false,
+        }
+    }
     render() {
         return (
             <div>
@@ -37,7 +45,19 @@ export class Holder extends React.Component {
                  </div>
                    <h4 className="mb-4">Incoming data requests</h4>
                <div> <HolderTable/></div>
+                <div className="mb-4">
+                    <button className="button primary button-md" onClick={this.onViewDidDocument}>View DID</button>
+                </div>
+                {!!this.state.createDialogOpenned &&
+                <ViewDidDialog onClose={this.onViewDidDialogClose}></ViewDidDialog>
+                }
             </div>
         );
     }
-}
+    private onViewDidDialogClose = (data: any) => {
+        this.setState((state: any) => ({ ...state, createDialogOpenned: false, didCreated: true }));
+    }
+    private onViewDidDocument = () => {
+        this.setState((state: any) => ({ ...state, createDialogOpenned: true }));
+    }
+};

@@ -1,5 +1,5 @@
 
 export interface BackButtonProps {
     link: string;
-    color?: 'blue' | 'pink' | 'purple';
+    color?: 'blue' | 'pink' | 'purpure';
 }

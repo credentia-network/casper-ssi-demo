@@ -24,7 +24,7 @@ export class CreateDidDocument extends React.Component {
 
                 <h5 className="my-4">Create DID Document</h5>
 
-                <Stepper steps={this.steps} active={2}></Stepper>
+                <Stepper steps={this.steps} page="issuer" active={2}></Stepper>
 
                 <ReceiverDidField></ReceiverDidField>
 
