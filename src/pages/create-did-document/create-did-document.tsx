@@ -36,14 +36,14 @@ export class CreateDidDocument extends React.Component {
                 <CategoriesBar categories={[{ title: 'Personal Data', button: 'My contacts' }, { title: 'Government', button: 'Passport' }]}></CategoriesBar>
 
                 <div>
-                    <InputField label="VC ID" placeholder="DID: ex: 1234567890abcdef" className="mb-2"></InputField>
-                    <InputField label="VC Description" className="mb-2"></InputField>
-                    <InputField label="Phone 1" className="mb-2"></InputField>
-                    <InputField label="Phone 2" className="mb-2"></InputField>
-                    <InputField label="Telegram" className="mb-2"></InputField>
-                    <InputField label="Viber" className="mb-2"></InputField>
-                    <InputField label="WhatsApp" className="mb-2"></InputField>
-                    <InputField label="Linkedin" className="mb-2"></InputField>
+                    <InputField label="VC ID" placeholder="DID: ex: 1234567890abcdef" className="mb-2" inputChange={true}></InputField>
+                    <InputField label="VC Description" className="mb-2" inputChange={true}></InputField>
+                    <InputField label="Phone 1" className="mb-2" inputChange={true}></InputField>
+                    <InputField label="Phone 2" className="mb-2" inputChange={true}></InputField>
+                    <InputField label="Telegram" className="mb-2" inputChange={true}></InputField>
+                    <InputField label="Viber" className="mb-2" inputChange={true}></InputField>
+                    <InputField label="WhatsApp" className="mb-2" inputChange={true}></InputField>
+                    <InputField label="Linkedin" className="mb-2" inputChange={true}></InputField>
                     <InputField label="Email"></InputField>
                 </div>
 

@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import {Button} from '../button/button';
 import "./view-did-dialog.scss";
 import {ViewDidDialogProps} from "./view-did-dialog-props";
-import {ViewDidField} from "../view-did-field/view-did-field";
+import {InputField} from "../input-field/input-field";
 
 ReactModal.defaultStyles = {}
 
@@ -35,10 +35,6 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps> {
     }
 
 changeChecked= (event,key,prop) => {
-        let kkk ={ mm:false}
-    if (kkk.mm){
-        console.log('blalba');
-    }
     this.setState({...this.state , [key] : { ...this.state[key], [prop]: {checked: event.target.checked} } })
 }
 selectAll = (key) => {
@@ -68,39 +64,40 @@ selectAll = (key) => {
                             <div className="text-primary" onClick={()=>this.selectAll('personal')}>Allow All VC</div>
 
                         </div>
-                        <ViewDidField title="VC ID" value="DID: ex: 1234567890abcdef"
+                        <InputField label="VC ID" value="DID: ex: 1234567890abcdef" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'vcId')}}
-                                      isChecked={this.state.personal.vcId.checked}/>
+                                      isChecked={this.state.personal.vcId.checked}
+                        />
 
-                        <ViewDidField title="VC Description" value="My contacts"
+                        <InputField label="VC Description" value="My contacts" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'vcDes')}}
                                       isChecked={this.state.personal.vcDes.checked} />
 
-                        <ViewDidField title="Phone 1" value="+38 (067) 123 45 67"
+                        <InputField label="Phone 1" value="+38 (067) 123 45 67" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'phoneOne')}}
                                       isChecked={this.state.personal.phoneOne.checked} />
 
-                        <ViewDidField title="Phone 2" value="+38 (067) 123 49 67"
+                        <InputField label="Phone 2" value="+38 (067) 123 49 67" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'phoneTwo')}}
                                       isChecked={this.state.personal.phoneTwo.checked}/>
 
-                        <ViewDidField title="Telegram" value="@test_user"
+                        <InputField label="Telegram" value="@test_user" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'telegram')}}
                                       isChecked={this.state.personal.telegram.checked}/>
 
-                        <ViewDidField title="Viber" value="+38 (067) 123 49 67"
+                        <InputField label="Viber" value="+38 (067) 123 49 67" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'viber')}}
                                       isChecked={this.state.personal.viber.checked}/>
 
-                        <ViewDidField title="WhatsApp" value="+38 (067) 123 49 67"
+                        <InputField label="WhatsApp" value="+38 (067) 123 49 67" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'whatsapp')}}
                                       isChecked={this.state.personal.whatsapp.checked}/>
 
-                        <ViewDidField title="Linkedin" value="/userlink_1"
+                        <InputField label="Linkedin" value="/userlink_1" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'linkedin')}}
                                       isChecked={this.state.personal.linkedin.checked}/>
 
-                        <ViewDidField title="Email" value="my@mail.com"
+                        <InputField label="Email" value="my@mail.com" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'personal', 'email')}}
                                       isChecked={this.state.personal.email.checked}/>
                     </div>
@@ -113,27 +110,27 @@ selectAll = (key) => {
                             <div className="text-primary" onClick={()=>this.selectAll('education')}>Allow All VC</div>
 
                         </div>
-                        <ViewDidField title="VC ID" value="DID: ex: 1234567890abcdef"
+                        <InputField label="VC ID" value="DID: ex: 1234567890abcdef" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'education', 'vcId')}}
                                       isChecked={this.state.education.vcId.checked}/>
 
-                        <ViewDidField title="VC description" value="My contacts"
+                        <InputField label="VC description" value="My contacts" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'education', 'vcDes')}}
                                       isChecked={this.state.education.vcDes.checked}/>
 
-                        <ViewDidField title="Diploma ID" value="89010019291"
+                        <InputField label="Diploma ID" value="89010019291" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'education', 'diplom')}}
                                       isChecked={this.state.education.diplom.checked}/>
 
-                        <ViewDidField title="Speciality" value="Medical Assistant"
+                        <InputField label="Speciality" value="Medical Assistant" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'education', 'speciality')}}
                                       isChecked={this.state.education.speciality.checked}/>
 
-                        <ViewDidField title="Academic degree" value="Pre-college"
+                        <InputField label="Academic degree" value="Pre-college" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'education', 'academic_degree')}}
                                       isChecked={this.state.education.academic_degree.checked}/>
 
-                        <ViewDidField title="Date" value="9/4/12"
+                        <InputField label="Date" value="9/4/12" checkbox={true} className="mb-2"
                                       onChange={(e) => {this.changeChecked(e, 'education', 'date')}}
                                       isChecked={this.state.education.date.checked}/>
                     </div>

@@ -5,14 +5,15 @@ import { Pagetitle } from '../../components/page-title/page-title';
 import {ButtonHolder} from "../../components/button-holder/button-holder";
 import {HolderTable} from "../../components/holder-table/holder-table";
 import {ViewDidDialog} from "../../components/view-did-dialog/view-did-dialog";
+import {ViewDidReadDialog} from "../../components/view-did-read-dialog/view-did-read-dialog";
 
 
 export class Holder extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {
-            createDialogOpenned: false,
-            didCreated: false,
+            viewDialogOpenned: false,
+            viewReadDialogOpenned: false
         }
     }
     render() {
@@ -46,18 +47,28 @@ export class Holder extends React.Component<any, any> {
                    <h4 className="mb-4">Incoming data requests</h4>
                <div> <HolderTable/></div>
                 <div className="mb-4">
-                    <button className="button primary button-md" onClick={this.onViewDidDocument}>View DID</button>
+                    <button className="button primary button-md" onClick={this.onViewDidDocument}>View DID checkbox</button>
+                    <button className="button primary button-md" onClick={this.onViewDidReadDocument}>View DID </button>
                 </div>
-                {!!this.state.createDialogOpenned &&
+                {!!this.state.viewDialogOpenned &&
                 <ViewDidDialog onClose={this.onViewDidDialogClose}></ViewDidDialog>
+                }
+                {!!this.state.viewReadDialogOpenned &&
+                <ViewDidReadDialog onClose={this.onViewDidReadDocumentClose}/>
                 }
             </div>
         );
     }
     private onViewDidDialogClose = (data: any) => {
-        this.setState((state: any) => ({ ...state, createDialogOpenned: false, didCreated: true }));
+        this.setState((state: any) => ({ ...state, viewDialogOpenned: false }));
     }
     private onViewDidDocument = () => {
-        this.setState((state: any) => ({ ...state, createDialogOpenned: true }));
+        this.setState((state: any) => ({ ...state, viewDialogOpenned: true }));
+    }
+    private onViewDidReadDocumentClose = () => {
+        this.setState((state: any) => ({ ...state, viewReadDialogOpenned: false }));
+    }
+    private onViewDidReadDocument = () => {
+        this.setState((state: any) => ({ ...state, viewReadDialogOpenned: true }));
     }
 };
