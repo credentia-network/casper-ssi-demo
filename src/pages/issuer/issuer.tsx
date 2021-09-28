@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { BackButton } from "../../components/back-button/back-button";
 import { IssuerTable } from "../../components/issuer-table/issuer-table";
 import { Pagetitle } from "../../components/page-title/page-title";
@@ -21,7 +22,7 @@ export class Issuer extends React.Component {
                     <p>In this tab you can create and sign (issue) VC documents for a specific recipient (including yourself).<br />The issued document can be revoked and its data can be viewed.</p>                    
                     <div className="spacer"></div>
                     <div>
-                        <button className="button primary button-sm w-auto px-3 text-nowrap">Create Issuer VC</button>
+                        <Link role="button" className="button primary w-auto px-3 text-nowrap" to="create-did-document">Create Issuer VC</Link>
                     </div>
                 </div>
 

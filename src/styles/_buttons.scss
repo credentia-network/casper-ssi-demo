@@ -129,6 +129,7 @@ a.button[role=button] {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
 
   &.static {
     &.solid:hover:not([disabled]) {

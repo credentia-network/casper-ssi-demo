@@ -3,4 +3,9 @@
     .category-item ~ .category-item {
         margin-left: 1rem;
     }
+
+    .category-item button.active {
+        background-color: #4F4F4F;
+        color: #FFFFFF;
+    }
 }

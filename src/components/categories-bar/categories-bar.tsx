@@ -16,10 +16,18 @@ export class CategoriesBar extends React.Component<CategoriesBarProps, Categorie
                 {this.props.categories.map((item, index) =>
                     <div className="category-item">
                         <p className="fw-bolder text-nowrap mb-1">{item.title}</p>
-                        <Button color="outline" size="sm" className="text-nowrap px-3">{item.button}</Button>
+                        <Button color="outline" size="sm" className={'text-nowrap px-3' + (this.state.active === index ? ' active' : '')} 
+                            onClick={this.onCategoryClick.bind(this, index)}>{item.button}</Button>
                     </div>
                 )}
             </div>
         );
+    }
+
+    private onCategoryClick(index: number) {
+        this.setState(state => ({ ...state, active: index }));
+        if (this.props.onSelectCategory) {
+            this.props.onSelectCategory(index);
+        }
     }
 }

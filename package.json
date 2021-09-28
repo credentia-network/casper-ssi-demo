@@ -4,7 +4,10 @@
   "private": true,
   "dependencies": {
     "bootstrap": "5.1.1",
+    "casper-did-reesolver": "git+https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-provider.git",
+    "casper-did-resolver": "git+https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-resolver.git",
     "casper-js-sdk": "1.4.3",
+    "did-resolver": "3.1.0",
     "node-sass": "4.14.1",
     "react": "17.0.2",
     "react-dom": "^17.0.2",
@@ -27,7 +30,13 @@
     "@types/react": "17.0.20",
     "@types/react-dom": "17.0.9",
     "@types/react-modal": "3.12.1",
-    "@types/react-router-dom": "5.1.8"
+    "@types/react-router-dom": "5.1.8",
+    "@veramo/core": "3.0.0",
+    "@veramo/data-store": "3.0.0",
+    "@veramo/did-manager": "3.0.0",
+    "@veramo/did-resolver": "3.0.0",
+    "@veramo/key-manager": "3.0.0",
+    "@veramo/kms-local": "3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
