@@ -6,7 +6,7 @@ import { BackButtonProps } from "./back-button-props";
 export class BackButton extends React.Component<BackButtonProps> {
     render() {
         return (
-            <Link role="button" className={'button primary button-icon static ' + (this.props.color === 'pink' ? 'color-pink' : '')} to={this.props.link}>
+            <Link role="button" className={'button primary button-icon static ' + (this.props.color  ?  'color-' + this.props.color : '')} to={this.props.link}>
                 <ArrowLeft></ArrowLeft>
             </Link>
         )

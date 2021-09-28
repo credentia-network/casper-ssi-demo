@@ -11,16 +11,27 @@
         margin: 0;
         padding: 0;
 
-        &.completed {
+        &.completed-issuer {
             border-color: #0081F9;
             background-color: #0081F9;
         }
-
-        &.active {
-            border-color: #0081F9;            
+        &.completed-verifier {
+            border-color: #7879F1;
+            background-color: #7879F1;
         }
 
-        &.last:not(.active):not(.completed) {
+        &.active-issuer {
+            border-color: #0081F9;
+        }
+        &.active-verifier {
+            border-color: #7879F1;
+        }
+
+        &.last-issuer:not(.active-issuer):not(.completed-issuer) {
+            border-color: #DBE2EA;
+            background-color: #DBE2EA;
+        }
+        &.last-verifier:not(.active-verifier):not(.completed-verifier) {
             border-color: #DBE2EA;
             background-color: #DBE2EA;
         }
@@ -34,10 +45,13 @@
     .connector {
         height: 2px;
         flex: 1 1 auto;    
-        background-color: #DBE2EA; 
-        
-        &.active {
+        background-color: #DBE2EA;
+
+        &.active-issuer {
             background-color: #0081F9;
+        }
+        &.active-verifier {
+            background-color: #7879F1;
         }
     }
 }

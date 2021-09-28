@@ -16,8 +16,12 @@ export class InputField extends React.Component<InputFieldProps, InputFieldState
                     {this.props.label}
                 </div>
                 <div className="input-field-input w-50 p-2">
-                    <input value={this.props.value} placeholder={this.props.placeholder} onChange={this.onInputChange} />
+                    <input value={this.props.value} placeholder={this.props.placeholder} disabled={!this.props.inputChange} onChange={this.onInputChange} />
                 </div>
+                {this.props.checkbox ? <div className="form-check view-switch ">
+                    <input className="view-check-input" type="checkbox" onChange={this.props.onChange}
+                           checked={this.props.isChecked}/>
+                </div> : null}
             </div>
         );
     }

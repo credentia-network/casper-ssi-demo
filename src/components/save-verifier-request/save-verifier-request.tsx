@@ -24,7 +24,7 @@ export function SaveVerifierRequest (){
     const verifier = useSelector(state => getVerifier(state));
     for (const globalkey in verifier){
         for (const key in verifier[globalkey]){
-            if (verifier[globalkey][key] == true && verdata[globalkey] == false){
+            if (verifier[globalkey][key] && !verdata[globalkey]){
                 setVerdata({...verdata, [globalkey]: true})
             }
         }
@@ -34,7 +34,7 @@ export function SaveVerifierRequest (){
                 <div className="d-flex p-3">
 
                     <div className="me-4">
-                        <BackButton link="/did-management" color="purple"></BackButton>
+                        <BackButton link="/did-management" color="purpure"></BackButton>
                     </div>
 
                     <Pagetitle title="verifier" subtitle="Verifiable Credentials"></Pagetitle>
@@ -48,7 +48,7 @@ export function SaveVerifierRequest (){
                         yourself). The issued document can be revoked and its data can be viewed.</p>
                 </div>
 
-                <Stepper steps={steps} active={2}></Stepper>
+                <Stepper steps={steps} page="verifier" active={2}></Stepper>
 
                 <div className="d-flex flex-wrap">
 

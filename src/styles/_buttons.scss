@@ -66,6 +66,15 @@
           border-color: #F178B6;
         }
       }
+      &purpure {
+        background-color:#7879F1;
+        border-color: #7879F1;
+        color: #FFFFFF;
+        &:hover:not([disabled]) {
+          background: #7879F1;
+          border-color: #7879F1;
+        }
+      }
     }
   }
   

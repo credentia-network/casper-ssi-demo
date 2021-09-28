@@ -30,14 +30,14 @@ export class Stepper extends React.Component<StepperProps> {
     private getStepStateClass(currentIndex: number, active: number, isLast = false): string {
         let state = '';
         if (active === currentIndex) {
-            state = 'active';
+            state = 'active-' + this.props.page;
         }
         if (active > currentIndex) {
-            state = 'completed';
+            state = 'completed-' + this.props.page;
         }
 
         if (isLast) {
-            state += ' last';
+            state += ' last-' + this.props.page;
         }
 
         return state;
@@ -45,7 +45,7 @@ export class Stepper extends React.Component<StepperProps> {
 
     private renderConnector(currentIndex: number, active = false) {
         return (
-            <div key={'connector-' + currentIndex} className={'connector ' + (active ? 'active' : '')}></div>
+            <div key={'connector-' + currentIndex} className={'connector ' + (active ? 'active-' + this.props.page : '')}></div>
         )
     }
 }

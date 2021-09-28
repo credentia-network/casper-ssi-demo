@@ -41,7 +41,7 @@ export class CreateDidDocument extends React.Component {
 
                 <h5 className="my-4">Create DID Document</h5>
 
-                <Stepper steps={this.steps} active={this.state.step + 1}></Stepper>
+                <Stepper steps={this.steps} page="issuer" active={this.state.step + 1}></Stepper>
 
                 {this.state.step <= 1 &&
                     <ReceiverDidField onDidEnter={this.onDidEnter}></ReceiverDidField>}
@@ -60,15 +60,15 @@ export class CreateDidDocument extends React.Component {
                 {this.state.step === 3 &&
                     <>
                         <div className="mt-4 w-50">
-                            <InputField label="VC ID" placeholder="DID: ex: 1234567890abcdef" className="mb-2" onChange={this.onFieldChange('id')}></InputField>
-                            <InputField label="VC Description" placeholder="My contacts" className="mb-2" onChange={this.onFieldChange('description')}></InputField>
-                            <InputField label="Phone 1" placeholder="+38 (067) 123 45 67" className="mb-2" onChange={this.onFieldChange('phone1')}></InputField>
-                            <InputField label="Phone 2" placeholder="+38 (067) 123 45 67" className="mb-2" onChange={this.onFieldChange('phone2')}></InputField>
-                            <InputField label="Telegram" placeholder="@test_user" className="mb-2" onChange={this.onFieldChange('telegram')}></InputField>
-                            <InputField label="Viber" placeholder="+38 (067) 123 45 67" className="mb-2" onChange={this.onFieldChange('viber')}></InputField>
-                            <InputField label="WhatsApp" placeholder="+38 (067) 123 45 67" className="mb-2" onChange={this.onFieldChange('whatsApp')}></InputField>
-                            <InputField label="Linkedin" placeholder="/userlink_1" className="mb-2"  onChange={this.onFieldChange('linkedIn')}></InputField>
-                            <InputField label="Email" placeholder="my@mail.com"  onChange={this.onFieldChange('email')}></InputField>
+                            <InputField label="VC ID" placeholder="DID: ex: 1234567890abcdef" className="mb-2" inputChange={true} onChange={this.onFieldChange('id')}></InputField>
+                            <InputField label="VC Description" placeholder="My contacts" className="mb-2" inputChange={true} onChange={this.onFieldChange('description')}></InputField>
+                            <InputField label="Phone 1" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('phone1')}></InputField>
+                            <InputField label="Phone 2" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('phone2')}></InputField>
+                            <InputField label="Telegram" placeholder="@test_user" className="mb-2" inputChange={true} onChange={this.onFieldChange('telegram')}></InputField>
+                            <InputField label="Viber" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('viber')}></InputField>
+                            <InputField label="WhatsApp" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('whatsApp')}></InputField>
+                            <InputField label="Linkedin" placeholder="/userlink_1" className="mb-2" inputChange={true} onChange={this.onFieldChange('linkedIn')}></InputField>
+                            <InputField label="Email" placeholder="my@mail.com" inputChange={true} onChange={this.onFieldChange('email')}></InputField>
                         </div>
                         <div className="d-flex mt-4">
                             <Link to="/did-management">

@@ -28,7 +28,7 @@ export function CreateVerifierRequest(){
 
                 <div className="d-flex p-3">
                     <div className="me-4">
-                        <BackButton link="/did-management" color="purple"></BackButton>
+                        <BackButton link="/did-management" color="purpure"></BackButton>
                     </div>
 
                     <Pagetitle title="verifier" subtitle="Verifiable Credentials"></Pagetitle>
@@ -41,7 +41,7 @@ export function CreateVerifierRequest(){
                         yourself). The issued document can be revoked and its data can be viewed.</p>
                 </div>
 
-                <Stepper steps={steps} active={1}></Stepper>
+                <Stepper steps={steps} page="verifier" active={1}></Stepper>
 
                 <div>
                     <h5 className="mb-2">Personal</h5>

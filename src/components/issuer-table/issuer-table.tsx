@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Label } from '../label/label';
+import {IssuerTableProps} from "./issuer-table-props";
 
-export class IssuerTable extends React.Component {
+export class IssuerTable extends React.Component<IssuerTableProps> {
     render() {
         return (
             <table className="table table-bordered table-striped">
@@ -25,8 +26,7 @@ export class IssuerTable extends React.Component {
                         <td>-</td>
                         <td>Lectus mattis nulla neque</td>
                         <td>
-                            <button className="button primary button-sm me-2">Revoke</button>
-                            <button className="button outline button-sm">Rotate key</button>
+                            <button className="button primary button-sm me-2" onClick={this.props.onClick}>Revoke</button>
                         </td>
                     </tr>
                     <tr>
@@ -37,8 +37,7 @@ export class IssuerTable extends React.Component {
                         <td>02:31:42 (UTC) 24 July 2021</td>
                         <td>Lectus mattis nulla neque</td>
                         <td>
-                            <button className="button primary button-sm me-2">Revoke</button>
-                            <button className="button outline button-sm">Rotate key</button>
+                            <button className="button primary button-sm me-2" onClick={this.props.onClick}>Revoke</button>
                         </td>
                     </tr>
                 </tbody>

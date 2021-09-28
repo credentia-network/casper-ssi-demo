@@ -6,4 +6,7 @@ export interface InputFieldProps {
     placeholder?: string;
     onChange?: InputFieldChangeEventHandler;
     className?: string;
+    checkbox?: boolean;
+    isChecked?: any;
+    inputChange?: boolean
 }
