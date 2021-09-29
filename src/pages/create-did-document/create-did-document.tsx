@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import ipfsClient from '../../common/ipfs-client';
 import { BackButton } from '../../components/back-button/back-button';
 import { Button } from '../../components/button/button';
 import { CategoriesBar } from '../../components/categories-bar/categories-bar';
@@ -14,7 +15,8 @@ export class CreateDidDocument extends React.Component {
         step: 0,
         did: null,
         category: null,
-        data: null
+        data: null,
+        transactionId: null
     };
 
     steps = ['Choose reciever', 'Choose document type', 'Generate document', 'Check document', 'Sign a document'];
@@ -126,7 +128,7 @@ export class CreateDidDocument extends React.Component {
                     </>}
 
                 {this.state.step === 4 &&
-                    <DidDocumentSuccess transaction="1jh2k45g12346hfjhfjljg135jgk235khgjh5"></DidDocumentSuccess>}
+                    <DidDocumentSuccess transaction={this.state.transactionId}></DidDocumentSuccess>}
             </div>
         );
     }
@@ -150,7 +152,10 @@ export class CreateDidDocument extends React.Component {
         };
     }
 
-    private onSignButtonClick = () => {
-        this.setState(state => ({ ...state, step: 4 }));
+    private onSignButtonClick = async () => {
+        const dataStr = JSON.stringify(this.state.data);
+        const { cid } = await ipfsClient.add(dataStr);
+
+        this.setState(state => ({ ...state, step: 4, transactionId: cid + '' }));
     }
 }

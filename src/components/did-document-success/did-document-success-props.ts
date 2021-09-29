@@ -1,3 +1,3 @@
 export interface DidDocumentSuccessProps {
-    transaction: string;
+    transaction: any;
 }
