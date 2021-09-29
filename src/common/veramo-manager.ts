@@ -1,4 +1,4 @@
-import { CasperDidProvider } from "casper-did-resolver";
+import { CasperDidProvider } from "casper-did-provider";
 import { createAgent } from "@veramo/core";
 import { DIDManager, MemoryDIDStore } from "@veramo/did-manager";
 import { Keys } from "casper-js-sdk";
@@ -12,9 +12,11 @@ const PUBLIC_KEY = Keys.Ed25519.readBase64WithPEM('MCowBQYDK2VwAyEANUSxkqzpKbbhY
 
 const PRIVATE_KEY = Keys.Ed25519.readBase64WithPEM('MC4CAQAwBQYDK2VwBCIEIAdjynMSLimFalVdB51TI6wGlwQKaI8PwdsG55t2qMZM');
 
-const RPC_URL = 'http://164.90.198.193:7777/rpc';
+const RPC_URL = 'http://144.76.97.151:7777/rpc';
 
 const CONTRACT = 'CasperDIDRegistry9';
+
+const NETWORK = 'casper-test';
 
 
 export class VeramoManager {
@@ -23,8 +25,8 @@ export class VeramoManager {
     private readonly agent;
 
     private constructor() {
-        const contractKey = Keys.Ed25519.parseKeyPair(PUBLIC_KEY, PRIVATE_KEY);
-        const identityKey = Keys.Ed25519.parseKeyPair(PUBLIC_KEY, PRIVATE_KEY);
+        const contractKey: any = Keys.Ed25519.parseKeyPair(PUBLIC_KEY, PRIVATE_KEY);
+        const identityKey: any = Keys.Ed25519.parseKeyPair(PUBLIC_KEY, PRIVATE_KEY);
 
         this.agent = createAgent({
             plugins: [
@@ -45,7 +47,7 @@ export class VeramoManager {
                             rpcUrl: RPC_URL,
                             defaultKms: 'local',
                             gasPrice: 10,
-                            network: 'casper-test',
+                            network: NETWORK,
                             ttl: 3600000,
                             gasPayment: 50000000000
                         })
@@ -66,20 +68,38 @@ export class VeramoManager {
     async resolveDid(did: string): Promise<any> {
         const result = await this.agent.resolveDid({
             didUrl: did
+        })
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch(e => {
+            console.error(e);
+            return null;
         });
         return result;
     }
 
     async registerDid(did: string, publicKey: string): Promise<any> {
-        const identifier = await this.agent.didManagerCreate();
+        const keyType = 'Ed25519'
+        const key = await this.agent.keyManagerCreate({ kms: 'local', type: keyType });
+
         const result = await this.agent.didManagerAddKey({
-            did: identifier.did,
-            key: { kid: did, publicKeyHex: publicKey }
+            did,
+            key: { kid: key.kid, publicKeyHex: publicKey }
+        })
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch(e => {
+            console.error(e);
+            return null;
         });
         return result;
     }
 
     createDid(publicKey: string) {
-        return `did:casper:${publicKey}`;
+        return `did:casper:${NETWORK}:${publicKey}`;
     }
 }
