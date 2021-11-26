@@ -1,4 +1,4 @@
-import {VERIFIER} from "./types"
+import { VERIFIER, VERIFIER_VC } from "./types"
 
 const initState = {
     data: {
@@ -33,18 +33,26 @@ const initState = {
             email: false,
         }
 
-    }
-}
+    },
+    ipfsHash: null
+};
 
-export const verifierReducer = (state = initState, {type, data}) => {
-    switch (type) {
+export const verifierReducer = (state = initState, action): any => {
+    switch (action.type) {
         case VERIFIER:
             return {
-                data: {...data}
-
+                data: { ...action.data }
             };
+
+        case VERIFIER_VC:
+            return {
+                ...state,
+                ipfsHash: action.payload.ipfsHash
+            };
+
         default:
-            return {...state};
+            return { ...state };
     }
 }
+
 export const getVerifier = (state) => state.verefier.data;

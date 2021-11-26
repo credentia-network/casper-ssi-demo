@@ -1,4 +1,4 @@
-import { SIGNIN } from "./types"
+import { SIGNEDIN } from "./types";
 
 const initState = {
     publicKey: null,
@@ -8,11 +8,11 @@ const initState = {
 
 export const signinReducer = (state = initState, action) => {
     switch (action.type) {
-        case SIGNIN:
+        case SIGNEDIN:
             return {
                 ...state,
                 ...action.payload
-            };
+            };       
         default:
             return { ...state };
     }

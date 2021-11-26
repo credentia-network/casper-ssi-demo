@@ -8,7 +8,7 @@ export class KeyField extends React.Component<KeyFieldProps> {
         return (
             <div className="d-flex key-field">
                 <div className="key-field-title p-2">{this.props.name}</div>
-                <div className="py-2 px-3 key-field-value">{this.props.value}</div>
+                <div className="py-2 px-3 key-field-value text-truncate">{this.props.value}</div>
                 <div className="key-field-button p-2">
                     <button onClick={this.onCopyButtonClick}><Copy></Copy> Copy</button>
                 </div>

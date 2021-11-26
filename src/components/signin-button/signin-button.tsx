@@ -10,13 +10,13 @@ const SigninButton = (props: any) => {
     const onButtonClick = () => {
         store.dispatch(signin() as any);
 
-        const unsubscribe = store.subscribe(() => {
-            const state = store.getState();
-            if (state.signin.publicKey) {
-                history.push('/did-management');
-            }
-            unsubscribe();
-        });
+        // const unsubscribe = store.subscribe(() => {
+        //     const state = store.getState();
+        //     if (state.signin.publicKey) {
+        //         history.push('/did-management');
+        //     }
+        //     unsubscribe();
+        // });
     }
 
     return (

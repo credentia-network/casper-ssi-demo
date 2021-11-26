@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { VeramoManager } from '../../common/veramo-manager';
+import veramoManager from '../../common/veramo-manager';
 import { Button } from '../button/button';
 import { ReceiverDidFieldProps } from './reciever-did-field-props';
 import { ReceiverDidFieldState } from './reciever-did-field-state';
@@ -38,7 +38,7 @@ export class ReceiverDidField extends React.Component<ReceiverDidFieldProps, Rec
     }
 
     private checkDid = async () => {
-        const result = this.state.did ? await VeramoManager.instance.resolveDid(this.state.did) : null;
+        const result = true;// this.state.did ? await veramoManager.resolveDid(this.state.did) : null;
         const valid = !!result;
         this.setState(state => ({ ...state, valid }));
         if (valid && this.props.onDidEnter) {

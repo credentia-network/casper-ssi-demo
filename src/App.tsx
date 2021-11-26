@@ -3,90 +3,109 @@ import {
   BrowserRouter as Router, Route, Switch
 } from "react-router-dom";
 import './App.scss';
+import { signedin } from './common/actions/signedin-action';
+import { signoutAction } from './common/actions/signout-action';
+import { store } from './common/store';
+import { CreateVerifierRequest } from "./components/create-verifier-request/create-verifier-request";
 import Header from './components/header/header';
+import { SaveVerifierRequest } from "./components/save-verifier-request/save-verifier-request";
 import { CreateDidDocument } from './pages/create-did-document/create-did-document';
-import { DidManagement } from './pages/did-management/did-management';
+import DidManagement from './pages/did-management/did-management';
 import { Holder } from './pages/holder/holder';
 import Home from './pages/home/home';
 import { Issuer } from './pages/issuer/issuer';
 import { Verifier } from "./pages/verifier/verifier";
-import {CreateVerifierRequest} from "./components/create-verifier-request/create-verifier-request";
-import {SaveVerifierRequest} from "./components/save-verifier-request/save-verifier-request";
 
-function App() {
-  return (
-    <>
-      <Router>
-        <Header></Header>
+export class App extends React.Component {
 
-        <Switch>
+  componentDidMount() {
+    window.addEventListener('signer:locked', () => {
+      store.dispatch(signoutAction());
+      window.location.href = '/';
+    });
 
-          <Route path="/did-management">
-            <div className="page-bg-blue">
-              <div className="container">
-                <DidManagement />
+    window.addEventListener('signer:unlocked', (event: any) => {
+      if (event.detail.activeKey) {
+        store.dispatch(signedin(event.detail.activeKey));
+      }
+    });
+  }
+
+  render() {
+    return (
+      <>
+        <Router>
+          <Header></Header>
+
+          <Switch>
+
+            <Route path="/did-management">
+              <div className="page-bg-blue">
+                <div className="container">
+                  <DidManagement />
+                </div>
               </div>
-            </div>
-          </Route>
+            </Route>
 
-          <Route path="/issuer">
-            <div className="page-bg-blue">
-              <div className="container">
-                <Issuer />
+            <Route path="/issuer">
+              <div className="page-bg-blue">
+                <div className="container">
+                  <Issuer />
+                </div>
               </div>
-            </div>
-          </Route>
+            </Route>
 
-          <Route path="/create-did-document">
-            <div className="page-bg-blue">
-              <div className="container">
-                <CreateDidDocument />
+            <Route path="/create-did-document">
+              <div className="page-bg-blue">
+                <div className="container">
+                  <CreateDidDocument />
+                </div>
               </div>
-            </div>
-          </Route>
+            </Route>
 
-          <Route path="/holder">
-            <div className="page-bg-pink">
-              <div className="container">
-                <Holder />
+            <Route path="/holder">
+              <div className="page-bg-pink">
+                <div className="container">
+                  <Holder />
+                </div>
               </div>
-            </div>
-          </Route>
+            </Route>
 
-          <Route path="/verifier">
-            <div className="page-bg-blue">
-              <div className="container">
-                <Verifier />
+            <Route path="/verifier">
+              <div className="page-bg-blue">
+                <div className="container">
+                  <Verifier />
+                </div>
               </div>
-            </div>
-          </Route>
-          <Route path="/create-verifier">
-            <div className="page-bg-blue">
-              <div className="container">
-                <CreateVerifierRequest />
+            </Route>
+            <Route path="/create-verifier">
+              <div className="page-bg-blue">
+                <div className="container">
+                  <CreateVerifierRequest />
+                </div>
               </div>
-            </div>
-          </Route>
-          <Route path="/save-verifier">
-            <div className="page-bg-blue">
-              <div className="container">
-                <SaveVerifierRequest/>
+            </Route>
+            <Route path="/save-verifier">
+              <div className="page-bg-blue">
+                <div className="container">
+                  <SaveVerifierRequest />
+                </div>
               </div>
-            </div>
-          </Route>
+            </Route>
 
-          <Route path="/">
-            <div className="page-bg-blue">
-              <div className="container">
-                <Home />
+            <Route path="/">
+              <div className="page-bg-blue">
+                <div className="container">
+                  <Home />
+                </div>
               </div>
-            </div>
-          </Route>
+            </Route>
 
-        </Switch>
-      </Router>
-    </>
-  );
+          </Switch>
+        </Router>
+      </>
+    );
+  }
 }
 
 export default App;

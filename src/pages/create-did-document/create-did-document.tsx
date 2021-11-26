@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { createVcAction } from '../../common/actions/create-vc-action';
 import ipfsClient from '../../common/ipfs-client';
+import { store } from '../../common/store';
 import { BackButton } from '../../components/back-button/back-button';
 import { Button } from '../../components/button/button';
 import { CategoriesBar } from '../../components/categories-bar/categories-bar';
@@ -153,9 +155,30 @@ export class CreateDidDocument extends React.Component {
     }
 
     private onSignButtonClick = async () => {
-        const dataStr = JSON.stringify(this.state.data);
-        const { cid } = await ipfsClient.add(dataStr);
+        //const dataStr = JSON.stringify(this.state.data);
+        //const { cid } = await ipfsClient.add(dataStr);
 
-        this.setState(state => ({ ...state, step: 4, transactionId: cid + '' }));
+        const unsubscribe = store.subscribe(() => {
+            unsubscribe();
+            const storeState = store.getState();
+            console.log(storeState);
+            if (storeState.verefier.ipfsHash) {
+                this.setState(state => ({ ...state, step: 4, transactionId: storeState.verefier.ipfsHash + '' }));
+            }
+        });
+
+        store.dispatch(createVcAction(this.state));
+
+        // const state = store.getState();
+
+        // const jsonLd = getJsonLd(this.state.data, state.signin.did);
+        // Signer.sign(jsonLd, state.signin.publicKey, this.state.did!)
+        //     .then(signedData => {
+        //         const ci = new CredentialIssuer();
+        //         ci.createVerifiableCredential({ credential: signedData } as any, null as any);
+        //     });
+        // const signedData = await veramoManager.sign(this.state.data, this.state.did!);
+
+        // this.setState(state => ({ ...state, step: 4, transactionId: cid + '' }));
     }
 }
