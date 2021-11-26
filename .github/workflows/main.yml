@@ -18,13 +18,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         token: ${{ secrets.TOKEN }}
-    - name: Yarn Install
-      run: |
-        yarn add https://${{ secrets.TOKEN }}ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-provider.git
-        yarn install
-    - name: Staging Build
-      run: |
-        yarn build
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+    - run: npm i -e https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-provider.git
+    - run: npm i -e https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-resolver.git
+    - run: npm build
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master
       with:
