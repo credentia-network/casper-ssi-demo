@@ -2,7 +2,7 @@ name: React to S3
 on:
   push:
     branches:
-      - main
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
