@@ -24,7 +24,7 @@ jobs:
       with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-    - run: npm i -e https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-provider.git
+    - run: npm i -e https://github.com/ITsurkan-Vareger/casper-did-provider.git/
     - run: npm i -e https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-resolver.git
     - run: npm build
     - name: Deploy to S3
