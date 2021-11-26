@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
     - run: npm install -g git-credential-env
-           GIT_USER=ITsurkan-Vareger
+           GIT_USER="ITsurkan-Vareger"
            GIT_PASS=${{ secrets.TOKEN }}
     - run: npm i -e https://github.com/ITsurkan-Vareger/casper-did-provider.git/
     - run: npm i -e https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-resolver.git
