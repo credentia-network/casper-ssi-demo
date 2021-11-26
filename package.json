@@ -4,8 +4,8 @@
   "private": true,
   "dependencies": {
     "bootstrap": "5.1.1",
-    "casper-did-provider": "https://$TOKEN:ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-provider.git",
-    "casper-did-resolver": "https://ITsurkan-Vareger:$TOKEN@github.com/ITsurkan-Vareger/casper-did-resolver.git",
+    "casper-did-provider": "https://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:ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-provider.git",
+    "casper-did-resolver": "https://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:ITsurkan-Vareger:$TOKEN@github.com/ITsurkan-Vareger/casper-did-resolver.git",
     "casper-js-sdk": "1.4.3",
     "did-resolver": "3.1.0",
     "ipfs-http-client": "53.0.1",
