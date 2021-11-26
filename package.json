@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "5.1.1",
-    "casper-did-provider": "https://ITsurkan-Vareger:$TOKEN@github.com/ITsurkan-Vareger/casper-did-provider.git",
+    "casper-did-provider": "https://$TOKEN@github.com/ITsurkan-Vareger/casper-did-provider.git",
     "casper-did-resolver": "https://ITsurkan-Vareger:$TOKEN@github.com/ITsurkan-Vareger/casper-did-resolver.git",
     "casper-js-sdk": "1.4.3",
     "did-resolver": "3.1.0",
