@@ -20,6 +20,7 @@ jobs:
         token: ${{ secrets.TOKEN }}
     - name: Yarn Install
       run: |
+        yarn add https://${{ secrets.TOKEN }}ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-provider.git
         yarn install
     - name: Staging Build
       run: |
