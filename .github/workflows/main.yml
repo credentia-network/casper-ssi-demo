@@ -30,7 +30,7 @@ jobs:
         key: ${{ secrets.TOKEN }}
         name: id_rsa # optional
         known_hosts: github.com
-    - run: npm build
+    - run: npm run-script build
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master
       with:
