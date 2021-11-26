@@ -22,11 +22,11 @@ jobs:
         TOKEN: ${{ secrets.TOKEN }}
       run: |
         yarn install --flat
+        with: 
+          credentials: ${{secrets.TOKEN}}
     - name: Staging Build
       run: |
         yarn build
-      env: 
-        TOKEN: ${{ secrets.TOKEN }}
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master
       with:
