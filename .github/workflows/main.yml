@@ -18,10 +18,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Yarn Install
-      run: |
-        yarn install --flat
       env:
         TOKEN: ${{ secrets.TOKEN }}
+      run: |
+        yarn install --flat
     - name: Staging Build
       run: |
         yarn build
