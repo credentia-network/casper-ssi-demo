@@ -1,11 +1,10 @@
 import React from "react";
-import { useHistory } from "react-router";
 import { signin } from "../../common/actions/signin-actions";
 import { store } from "../../common/store";
 import './signin-button.scss';
 
 const SigninButton = (props: any) => {
-    const history = useHistory();
+    
 
     const onButtonClick = () => {
         store.dispatch(signin() as any);

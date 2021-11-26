@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { createVcAction } from '../../common/actions/create-vc-action';
-import ipfsClient from '../../common/ipfs-client';
 import { store } from '../../common/store';
 import { BackButton } from '../../components/back-button/back-button';
 import { Button } from '../../components/button/button';

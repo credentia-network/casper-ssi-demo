@@ -1,5 +1,4 @@
-import { CredentialIssuer } from "@veramo/credential-w3c";
-import { CLValue, DeployUtil, PublicKey, RuntimeArgs, Signer } from "casper-js-sdk";
+import { CLValue, DeployUtil, PublicKey, RuntimeArgs } from "casper-js-sdk";
 import { CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, NETWORK } from "../constants";
 import ipfsClient from "../ipfs-client";
 import { VERIFIER_VC } from "../reducers/types";

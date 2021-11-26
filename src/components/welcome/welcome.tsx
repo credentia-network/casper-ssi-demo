@@ -17,7 +17,7 @@ export class Welcome extends React.Component {
 
                 <h3>Don’t have an account?</h3>
 
-                <a href="#">Create Account -&gt;</a>
+                {/* <a href="#">Create Account -&gt;</a> */}
             </div> 
         );
     }

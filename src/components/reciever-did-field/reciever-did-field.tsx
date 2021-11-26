@@ -1,5 +1,4 @@
 import * as React from 'react';
-import veramoManager from '../../common/veramo-manager';
 import { Button } from '../button/button';
 import { ReceiverDidFieldProps } from './reciever-did-field-props';
 import { ReceiverDidFieldState } from './reciever-did-field-state';
