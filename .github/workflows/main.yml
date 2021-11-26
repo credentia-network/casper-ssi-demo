@@ -2,7 +2,7 @@ name: React to S3
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,13 +17,10 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Yarn Install test
-      uses: fusion-engineering/setup-git-credentials@v2
-      with: 
-        credentials: ${{secrets.TOKEN}}
-    - name: Yarn Install test
+        token: ${{ secrets.TOKEN }}
+    - name: Yarn Install
       run: |
-        yarn install --flat
+        yarn install
     - name: Staging Build
       run: |
         yarn build
