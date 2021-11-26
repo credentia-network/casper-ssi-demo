@@ -17,13 +17,13 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Yarn Install
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
+    - name: Yarn Install test
+      uses: fusion-engineering/setup-git-credentials@v2
+      with: 
+        credentials: ${{secrets.TOKEN}}
+    - name: Yarn Install test
       run: |
         yarn install --flat
-        with: 
-          credentials: ${{secrets.TOKEN}}
     - name: Staging Build
       run: |
         yarn build
