@@ -30,8 +30,8 @@ jobs:
         key: ${{ secrets.TOKEN }}
         name: id_rsa # optional
         known_hosts: github.com
-    - run: npm i -e https://github.com/ITsurkan-Vareger/casper-did-provider.git/
-    - run: npm i -e https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-resolver.git
+    - run: npm i -e git@github.com:ITsurkan-Vareger/casper-did-provider.git
+    - run: npm i -e git@github.com:ITsurkan-Vareger/casper-did-resolver.git
     - run: npm build
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master
