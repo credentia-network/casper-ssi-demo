@@ -24,10 +24,12 @@ jobs:
       with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-    - run: npm install -g git-credential-env \
-          --username=ITsurkan-Vareger \ 
-          --password=${{ secrets.TOKEN }} \
-          git config credential.helper "env --username=GIT_USER --password=GIT_PASS"
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.TOKEN }}
+        name: id_rsa # optional
+        known_hosts: github.com
     - run: npm i -e https://github.com/ITsurkan-Vareger/casper-did-provider.git/
     - run: npm i -e https://ITsurkan-Vareger@github.com/ITsurkan-Vareger/casper-did-resolver.git
     - run: npm build
