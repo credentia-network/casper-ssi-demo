@@ -1,5 +1,5 @@
 # Getting Started with Create React App
-
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
