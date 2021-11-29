@@ -1,7 +1,7 @@
+import { Signer } from "casper-js-sdk";
 import { createDidKey } from "../helpers/create-did-key";
 import { toAccountHash } from "../helpers/to-account-hash";
 import { SIGNEDIN } from "../reducers/types";
-const { Signer } = require("casper-js-sdk");
 
 export function restoreSigninAction() {
     return function (dispatch) {
