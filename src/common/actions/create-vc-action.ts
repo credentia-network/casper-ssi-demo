@@ -1,5 +1,5 @@
-import { CLValue, DeployUtil, PublicKey, RuntimeArgs } from "casper-js-sdk";
-import { CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, NETWORK } from "../constants";
+//import { CLValue, DeployUtil, PublicKey, RuntimeArgs } from "casper-js-sdk";
+//import { CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, NETWORK } from "../constants";
 import ipfsClient from "../ipfs-client";
 import { VERIFIER_VC } from "../reducers/types";
 import { store } from "../store";
@@ -43,25 +43,4 @@ export function createVcAction(data: any) {
         //         console.log(vc);
         //     });
     }
-}
-
-function createDeploy(publicKey: string, data: any): DeployUtil.Deploy {
-    const contractHashAsByteArray = [...Buffer.from(CONTRACT_DID_HASH.slice(5), "hex") as any];
-
-    return DeployUtil.makeDeploy(
-        new DeployUtil.DeployParams(
-            PublicKey.fromHex(publicKey),
-            NETWORK,
-            DEPLOY_GAS_PRICE,
-            DEPLOY_TTL_MS
-        ),
-        DeployUtil.ExecutableDeployItem.newStoredContractByHash(
-            contractHashAsByteArray as any,
-            "setAttribute",
-            RuntimeArgs.fromMap({
-                vc: CLValue.string(JSON.stringify(data))
-            })
-        ),
-        DeployUtil.standardPayment(DEPLOY_GAS_PAYMENT)
-    );
 }
