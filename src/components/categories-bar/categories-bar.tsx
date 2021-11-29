@@ -14,7 +14,7 @@ export class CategoriesBar extends React.Component<CategoriesBarProps, Categorie
         return (
             <div className="d-flex categories-bar">
                 {this.props.categories.map((item, index) =>
-                    <div className="category-item">
+                    <div className="category-item" key={`category-item-${index}`}>
                         <p className="fw-bolder text-nowrap mb-1">{item.title}</p>
                         <Button color="outline" size="sm" className={'text-nowrap px-3' + (this.state.active === index ? ' active' : '')} 
                             onClick={this.onCategoryClick.bind(this, index)}>{item.button}</Button>
