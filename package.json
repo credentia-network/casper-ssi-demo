@@ -4,9 +4,10 @@
   "private": true,
   "dependencies": {
     "@veramo/credential-w3c": "3.1.0",
+    "@veramo/selective-disclosure": "3.1.0",
     "bootstrap": "5.1.1",
-    "casper-did-provider": "git@github.com:ITsurkan-Vareger/casper-did-provider.git",
-    "casper-did-resolver": "git@github.com:ITsurkan-Vareger/casper-did-resolver.git",
+    "casper-did-provider": "git+ssh://git@github.com/ITsurkan-Vareger/casper-did-provider.git",
+    "casper-did-resolver": "git+ssh://git@github.com/ITsurkan-Vareger/casper-did-resolver.git",
     "casper-js-sdk": "1.4.3",
     "did-resolver": "3.1.0",
     "ipfs-http-client": "53.0.1",
@@ -50,7 +51,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "rules": {
+      "eqeqeq": 0
+    }
   },
   "browserslist": {
     "production": [

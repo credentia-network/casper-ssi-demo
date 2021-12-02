@@ -4,13 +4,14 @@ import { DIDManager, MemoryDIDStore } from "@veramo/did-manager";
 import { DIDResolverPlugin } from "@veramo/did-resolver";
 import { KeyManager, MemoryKeyStore, MemoryPrivateKeyStore } from "@veramo/key-manager";
 import { KeyManagementSystem } from "@veramo/kms-local";
+import { ISelectiveDisclosure, SelectiveDisclosure } from "@veramo/selective-disclosure";
 import { BrowserCasperSignerAdapter, CasperDidProvider } from "casper-did-provider";
 import { CasperDidResolver } from "casper-did-resolver";
 import { CasperClient, CasperServiceByJsonRPC } from "casper-js-sdk";
 import { CONTRACT_DID_HASH, NETWORK, RPC_URL } from "./constants";
 
 export class VeramoAgentManager {
-    agent: TAgent<IResolver | ICredentialIssuer | IDIDManager>;
+    agent: TAgent<IResolver | ICredentialIssuer | IDIDManager | ISelectiveDisclosure>;
     identifier!: Omit<IIdentifier, 'provider'>;
 
     constructor(publicKeyHex: string) {
@@ -21,6 +22,7 @@ export class VeramoAgentManager {
         this.agent = createAgent<IResolver | ICredentialIssuer | IDIDManager>({
             plugins: [
                 new CredentialIssuer(),
+                new SelectiveDisclosure(),
                 new KeyManager({
                     store: new MemoryKeyStore(),
                     kms: {
@@ -78,6 +80,17 @@ export class VeramoAgentManager {
         const jsonLd = this.getJsonLd(data, identifier.did);
     
         return this.agent.createVerifiableCredential({ credential: jsonLd, proofFormat: 'jwt' });
+    }
+
+    async createSdr(fields: string[]) {
+        const identifier = await this.agent.didManagerGetOrCreate();
+
+        return this.agent.createSelectiveDisclosureRequest({
+            data:   {
+                issuer: identifier.did,
+                claims: fields.map(t => ({claimType: t}))
+            }
+        });
     }
 
     private getJsonLd(data: any, did: string) {

@@ -6,9 +6,8 @@ import './App.scss';
 import { signedin } from './common/actions/signedin-action';
 import { signoutAction } from './common/actions/signout-action';
 import { store } from './common/store';
-import { CreateVerifierRequest } from "./components/create-verifier-request/create-verifier-request";
+import CreateVerifierRequest from "./pages/create-verifier-request/create-verifier-request";
 import Header from './components/header/header';
-import { SaveVerifierRequest } from "./components/save-verifier-request/save-verifier-request";
 import { CreateDidDocument } from './pages/create-did-document/create-did-document';
 import DidManagement from './pages/did-management/did-management';
 import { Holder } from './pages/holder/holder';
@@ -82,13 +81,6 @@ export class App extends React.Component {
               <div className="page-bg-blue">
                 <div className="container">
                   <CreateVerifierRequest />
-                </div>
-              </div>
-            </Route>
-            <Route path="/save-verifier">
-              <div className="page-bg-blue">
-                <div className="container">
-                  <SaveVerifierRequest />
                 </div>
               </div>
             </Route>

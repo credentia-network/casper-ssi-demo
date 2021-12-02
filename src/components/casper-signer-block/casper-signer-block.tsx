@@ -19,7 +19,7 @@ export class CasperSignerBlock extends React.Component<any, any> {
 
                 <div className="col-12 col-md p-0">
                     <SigninButton className="button-lg color-red mb-3"></SigninButton>
-                    <button className="button button-lg">Download signer</button>
+                    <a role="button" className="button button-lg" target="_blank" href="https://chrome.google.com/webstore/detail/casperlabs-signer/djhndpllfiibmcdbnmaaahkhchcoijce?utm_source=chrome-ntp-icon">Download signer</a>
                 </div>
             </div>
         );
