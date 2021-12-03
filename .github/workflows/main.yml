@@ -30,6 +30,8 @@ jobs:
         key: ${{ secrets.TOKEN }}
         name: id_rsa # optional
         known_hosts: github.com
+      env:
+        CI: false
     - run: npm install -E
     - run: npm run-script build
     - name: Deploy to S3
