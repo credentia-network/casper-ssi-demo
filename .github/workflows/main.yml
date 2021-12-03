@@ -31,7 +31,7 @@ jobs:
         name: id_rsa # optional
         known_hosts: github.com
       env:
-        CI: false
+        CI: ''
     - run: npm install -E
     - run: npm run-script build
     - name: Deploy to S3
