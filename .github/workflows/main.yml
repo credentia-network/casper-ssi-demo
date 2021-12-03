@@ -30,10 +30,8 @@ jobs:
         key: ${{ secrets.TOKEN }}
         name: id_rsa # optional
         known_hosts: github.com
-      env:
-        CI: ''
     - run: npm install -E
-    - run: npm run-script build
+    - run: CI='' npm run-script build
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master
       with:
