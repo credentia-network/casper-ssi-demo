@@ -1,21 +1,13 @@
-//import { CLValue, DeployUtil, PublicKey, RuntimeArgs } from "casper-js-sdk";
-//import { CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, NETWORK } from "../constants";
-import ipfsClient from "../ipfs-client";
+import { getPublicKeyFromDid } from "../helpers/create-did-key";
 import { VERIFIER_VC } from "../reducers/types";
-import { store } from "../store";
 import { VeramoAgentManager } from "../veramo-agent-manager";
 
-export function createVcAction(data: any) {
+export function createVcAction(targeDid: string, data: Array<{[key: string]: string}>) {
     return async function (dispatch) {
-        const state = store.getState();
-
-        const agentManager = new VeramoAgentManager(state.signin.publicKey);
-
-        const vc = await agentManager.createVC(data);
-        
-        const { cid } = await ipfsClient.add(JSON.stringify(vc));
-
-        dispatch({type: VERIFIER_VC, payload: { ipfsHash: cid }});
+        const targetPublicKeyHex = getPublicKeyFromDid(targeDid);
+        const ipfsHash = await VeramoAgentManager.instance.createVC(targetPublicKeyHex, data);
+                
+        dispatch({type: VERIFIER_VC, payload: { ipfsHash }});
 
 
         // await agentManager.agent.didManagerAddKey({

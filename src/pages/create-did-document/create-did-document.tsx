@@ -63,15 +63,15 @@ export class CreateDidDocument extends React.Component {
                 {this.state.step === 3 &&
                     <>
                         <div className="mt-4 w-50">
-                            <InputField label="VC ID" placeholder="DID: ex: 1234567890abcdef" className="mb-2" inputChange={true} onChange={this.onFieldChange('id')}></InputField>
-                            <InputField label="VC Description" placeholder="My contacts" className="mb-2" inputChange={true} onChange={this.onFieldChange('description')}></InputField>
+                            <InputField label="VC ID" placeholder="DID: ex: 1234567890abcdef" className="mb-2" inputChange={true} onChange={this.onFieldChange('vcid')}></InputField>
+                            <InputField label="VC Description" placeholder="My contacts" className="mb-2" inputChange={true} onChange={this.onFieldChange('vcdescription')}></InputField>
                             {this.state.category === 0 &&
                                 <>
                                     <InputField label="Phone 1" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('phone1')}></InputField>
                                     <InputField label="Phone 2" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('phone2')}></InputField>
                                     <InputField label="Telegram" placeholder="@test_user" className="mb-2" inputChange={true} onChange={this.onFieldChange('telegram')}></InputField>
                                     <InputField label="Viber" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('viber')}></InputField>
-                                    <InputField label="WhatsApp" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('whatsApp')}></InputField>
+                                    <InputField label="WhatsApp" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('whatsapp')}></InputField>
                                     <InputField label="Linkedin" placeholder="/userlink_1" className="mb-2" inputChange={true} onChange={this.onFieldChange('linkedIn')}></InputField>
                                     <InputField label="Email" placeholder="my@mail.com" inputChange={true} onChange={this.onFieldChange('email')}></InputField>
                                 </>}
@@ -115,10 +115,10 @@ export class CreateDidDocument extends React.Component {
                                 </>}
                             {this.state.category === 4 &&
                                 <>
-                                    <InputField label="Diploma ID" placeholder="СН 787187982" className="mb-2" inputChange={true} onChange={this.onFieldChange('diploma')}></InputField>
-                                    <InputField label="Specialty" placeholder="Applied math" className="mb-2" inputChange={true} onChange={this.onFieldChange('specialty')}></InputField>
-                                    <InputField label="Academic degree" placeholder="Ph.D." className="mb-2" inputChange={true} onChange={this.onFieldChange('degree')}></InputField>
-                                    <InputField label="Date" placeholder="11 May 2016" className="mb-2" inputChange={true} onChange={this.onFieldChange('graduationDate')}></InputField>
+                                    <InputField label="Diploma ID" placeholder="СН 787187982" className="mb-2" inputChange={true} onChange={this.onFieldChange('diplomid')}></InputField>
+                                    <InputField label="Specialty" placeholder="Applied math" className="mb-2" inputChange={true} onChange={this.onFieldChange('speciality')}></InputField>
+                                    <InputField label="Academic degree" placeholder="Ph.D." className="mb-2" inputChange={true} onChange={this.onFieldChange('academicdegree')}></InputField>
+                                    <InputField label="Date" placeholder="11 May 2016" className="mb-2" inputChange={true} onChange={this.onFieldChange('date')}></InputField>
                                 </>}
                         </div>
                         <div className="d-flex mt-4">
@@ -166,7 +166,13 @@ export class CreateDidDocument extends React.Component {
             }
         });
 
-        store.dispatch(createVcAction(this.state));
+        console.log(this.state);
+
+        const dataArr: any[] = [];
+        Object.entries(this.state.data!).forEach(([k, v]) => dataArr.push({ [k]: v }));
+        console.log(dataArr);
+
+        store.dispatch(createVcAction(this.state.did!, dataArr));
 
         // const state = store.getState();
 

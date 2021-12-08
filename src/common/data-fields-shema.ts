@@ -9,8 +9,9 @@ export const DATA_FIELDS_SHEMA: {title: string, items: any[]}[] = [
             { phone2: 'Phone2' },
             { telegram: 'Telegram' },
             { linkedin: 'Linkedin' },
-            { whatsup: 'WhatsApp' },
+            { whatsapp: 'WhatsApp' },
             { viber: 'Viber' },
+            { email: 'Email' }
         ]
     }, {
         title: 'Governament',
@@ -27,7 +28,7 @@ export const DATA_FIELDS_SHEMA: {title: string, items: any[]}[] = [
     }, {
         title: 'E-Health',
         items: [
-            { vacctination: 'Vaccination covid' },
+            { vaccination: 'Vaccination covid' },
         ]
     }, {
         title: 'Education',
@@ -40,7 +41,7 @@ export const DATA_FIELDS_SHEMA: {title: string, items: any[]}[] = [
     }, {
         title: 'Professional',
         items: [
-            { email: 'Email' }
+            { profemail: 'Email' }
         ]
     }
 ];

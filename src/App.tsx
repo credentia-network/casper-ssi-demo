@@ -18,10 +18,8 @@ import { Verifier } from "./pages/verifier/verifier";
 export class App extends React.Component {
 
   componentDidMount() {
-    window.addEventListener('signer:locked', () => {
-      store.dispatch(signoutAction());
-      window.location.href = '/';
-    });
+    window.addEventListener('signer:locked', () => this.onLogoutEvent());
+    window.addEventListener('signer:activeKeyChanged', () => this.onLogoutEvent());
 
     window.addEventListener('signer:unlocked', (event: any) => {
       if (event.detail.activeKey) {
@@ -30,72 +28,75 @@ export class App extends React.Component {
     });
   }
 
+  onLogoutEvent() {
+    store.dispatch(signoutAction());
+    window.location.href = '/';
+  }
+
   render() {
     return (
-      <>
-        <Router>
-          <Header></Header>
+      <Router>
+        <Header></Header>
 
-          <Switch>
+        <Switch>
 
-            <Route path="/did-management">
-              <div className="page-bg-blue">
-                <div className="container">
-                  <DidManagement />
-                </div>
+          <Route path="/did-management">
+            <div className="page-bg-blue">
+              <div className="container">
+                <DidManagement />
               </div>
-            </Route>
+            </div>
+          </Route>
 
-            <Route path="/issuer">
-              <div className="page-bg-blue">
-                <div className="container">
-                  <Issuer />
-                </div>
+          <Route path="/issuer">
+            <div className="page-bg-blue">
+              <div className="container">
+                <Issuer />
               </div>
-            </Route>
+            </div>
+          </Route>
 
-            <Route path="/create-did-document">
-              <div className="page-bg-blue">
-                <div className="container">
-                  <CreateDidDocument />
-                </div>
+          <Route path="/create-did-document">
+            <div className="page-bg-blue">
+              <div className="container">
+                <CreateDidDocument />
               </div>
-            </Route>
+            </div>
+          </Route>
 
-            <Route path="/holder">
-              <div className="page-bg-pink">
-                <div className="container">
-                  <Holder />
-                </div>
+          <Route path="/holder">
+            <div className="page-bg-pink">
+              <div className="container">
+                <Holder />
               </div>
-            </Route>
+            </div>
+          </Route>
 
-            <Route path="/verifier">
-              <div className="page-bg-blue">
-                <div className="container">
-                  <Verifier />
-                </div>
+          <Route path="/verifier">
+            <div className="page-bg-blue">
+              <div className="container">
+                <Verifier />
               </div>
-            </Route>
-            <Route path="/create-verifier">
-              <div className="page-bg-blue">
-                <div className="container">
-                  <CreateVerifierRequest />
-                </div>
+            </div>
+          </Route>
+          <Route path="/create-verifier">
+            <div className="page-bg-blue">
+              <div className="container">
+                <CreateVerifierRequest />
               </div>
-            </Route>
+            </div>
+          </Route>
 
-            <Route path="/">
-              <div className="page-bg-blue">
-                <div className="container">
-                  <Home />
-                </div>
+          <Route path="/">
+            <div className="page-bg-blue">
+              <div className="container">
+                <Home />
               </div>
-            </Route>
+            </div>
+          </Route>
 
-          </Switch>
-        </Router>
-      </>
+        </Switch>
+      </Router>
     );
   }
 }

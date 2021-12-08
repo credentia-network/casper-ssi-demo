@@ -1,13 +1,12 @@
 import React from "react";
-import { signin } from "../../common/actions/signin-actions";
-import { store } from "../../common/store";
+import { SignerHelper } from "../../common/helpers/signer-helper";
 import './signin-button.scss';
 
 const SigninButton = (props: any) => {
     
 
     const onButtonClick = () => {
-        store.dispatch(signin() as any);
+        SignerHelper.sendConnectionRequest();
 
         // const unsubscribe = store.subscribe(() => {
         //     const state = store.getState();

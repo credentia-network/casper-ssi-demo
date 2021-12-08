@@ -7,16 +7,29 @@ import { KeyManagementSystem } from "@veramo/kms-local";
 import { ISelectiveDisclosure, SelectiveDisclosure } from "@veramo/selective-disclosure";
 import { BrowserCasperSignerAdapter, CasperDidProvider } from "casper-did-provider";
 import { CasperDidResolver } from "casper-did-resolver";
-import { CasperClient, CasperServiceByJsonRPC } from "casper-js-sdk";
-import { CONTRACT_DID_HASH, NETWORK, RPC_URL } from "./constants";
+import { CasperClient, CasperServiceByJsonRPC, CLValue, Signer } from "casper-js-sdk";
+import { CONTRACT_DID_HASH, DID_PREFIX, NETWORK, RPC_URL, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, CONTRACT_DEMOVCREGISTRY_HASH } from "./constants";
+import * as bs58 from 'bs58';
+import { DeployUtil, PublicKey, RuntimeArgs } from "casper-js-sdk";
+import { IdentityHelper } from "./helpers/identity-helper";
+import MerkleTree from 'merkle-tools';
+import ipfsClient from "./ipfs-client";
+import { getPublicKeyFromDid } from "./helpers/create-did-key";
 
 export class VeramoAgentManager {
+    private static _instance: VeramoAgentManager;
+    
+    static get instance(): VeramoAgentManager {
+        return VeramoAgentManager._instance;
+    }
+
+    readonly client = new CasperClient(RPC_URL);
+    readonly clientRpc = new CasperServiceByJsonRPC(RPC_URL);
+
     agent: TAgent<IResolver | ICredentialIssuer | IDIDManager | ISelectiveDisclosure>;
     identifier!: Omit<IIdentifier, 'provider'>;
 
-    constructor(publicKeyHex: string) {
-        const client = new CasperClient(RPC_URL);
-        const clientRpc = new CasperServiceByJsonRPC(RPC_URL);
+    private constructor(public readonly publicKeyHex: string) {
         const browserCasperSignerAdapter = new BrowserCasperSignerAdapter(publicKeyHex, publicKeyHex);
 
         this.agent = createAgent<IResolver | ICredentialIssuer | IDIDManager>({
@@ -31,9 +44,9 @@ export class VeramoAgentManager {
                 }),
                 new DIDManager({
                     store: new MemoryDIDStore(),
-                    defaultProvider: 'did:casper',
+                    defaultProvider: DID_PREFIX,
                     providers: {
-                        'did:casper': new CasperDidProvider({
+                        [DID_PREFIX]: new CasperDidProvider({
                             contract: CONTRACT_DID_HASH,
                             identityKeyHex: publicKeyHex,
                             defaultKms: 'local',
@@ -41,7 +54,7 @@ export class VeramoAgentManager {
                             network: NETWORK,
                             ttl: 3600000,
                             gasPayment: 50000000000
-                        }, browserCasperSignerAdapter, client as any, clientRpc as any)
+                        }, browserCasperSignerAdapter, this.client as any, this.clientRpc as any)
                     },
                 }),
                 new DIDResolverPlugin({
@@ -53,6 +66,11 @@ export class VeramoAgentManager {
             ],
         });    
     }
+
+    static create(publicKeyHex: string): void {
+        VeramoAgentManager._instance = new VeramoAgentManager(publicKeyHex);
+    }
+
     async registerDid(did: string, publicKey: string): Promise<any> {
      
 
@@ -74,12 +92,35 @@ export class VeramoAgentManager {
         return result;
     }
 
-    async createVC(data: any): Promise<any> {
+    /**
+     * Creates a VC, stores it in IPFS and deploys into the Casper net
+     * @returns Ipfs hash
+     */
+    async createVC(targetPublicKeyHex: string, data: Array<{[key: string]: string}>): Promise<string> {
+        console.log('Data');
+        console.log(data);
+        
         const identifier = await this.agent.didManagerGetOrCreate();
 
         const jsonLd = this.getJsonLd(data, identifier.did);
+        console.log('Json LD');
+        console.log(jsonLd);
     
-        return this.agent.createVerifiableCredential({ credential: jsonLd, proofFormat: 'jwt' });
+        const vc = this.agent.createVerifiableCredential({ credential: jsonLd, proofFormat: 'jwt' });
+        console.log('Verifiable Credential');
+        console.log(vc);
+
+        const ipfsResponse = await ipfsClient.add(JSON.stringify(vc));
+        console.log('ipfs');
+        console.log(ipfsResponse);
+
+        const merkleRoot = this.getMerkleRoot(data);        
+        console.log('Merkle Root');
+        console.log(merkleRoot.toString());
+
+        await this.writeVC(this.publicKeyHex, targetPublicKeyHex, ipfsResponse.cid.bytes, merkleRoot);
+
+        return ipfsResponse.cid + '';
     }
 
     async createSdr(fields: string[]) {
@@ -118,7 +159,69 @@ export class VeramoAgentManager {
             // }
         };
     }
+
+    private getMerkleRoot(data: Array<{[key: string]: string}>): Uint8Array {
+        const tree = new MerkleTree({hashType: 'sha256'});
+        data.forEach(t => {
+            const entry = Object.entries(t)[0];
+            tree.addLeaf(entry[1], true);
+        });
+        tree.makeTree();
+        const root = tree.getMerkleRoot();
+        if (!root) {
+            throw new Error(`Merkle tree is not ready; [Data: ${JSON.stringify(data)}]`);
+        }
+        return root;
+    }
+
+    private writeVC(issuerPublicKeyHex: string, targetPublicKeyHex: string, ipfsHash: Uint8Array, merkleRoot: Uint8Array) {
+        const schemaHash = new Uint8Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]); //TODO: Put here JSON schema hash
+        const revocationFlag = true;
+
+        const runtimeArgs = RuntimeArgs.fromMap({
+            merkleRoot: CLValue.byteArray(merkleRoot),
+            ipfsHash:   CLValue.byteArray(ipfsHash),
+            schemaHash: CLValue.byteArray(schemaHash),
+            holder:     CLValue.byteArray(IdentityHelper.getIdentityKeyHash(targetPublicKeyHex)),
+            revocationFlag:  CLValue.bool(revocationFlag),
+        });
+
+        this.deployKey(issuerPublicKeyHex, targetPublicKeyHex, 'issueDemoVC', runtimeArgs);
+    }
+
+    private async deployKey(issuerPublicKeyHex: string, targetPublicKeyHex: string, entryPoint: string, runtimeArgs: RuntimeArgs) {
+        const contractHashAsByteArray = Buffer.from(CONTRACT_DEMOVCREGISTRY_HASH.slice(5), "hex");
+        const publicKey = await Signer.getActivePublicKey().then(pk => IdentityHelper.getIdentityKey(pk));
+
+        const deploy = DeployUtil.makeDeploy(
+            new DeployUtil.DeployParams(
+                PublicKey.fromEd25519(publicKey),
+                NETWORK,
+                DEPLOY_GAS_PRICE,
+                DEPLOY_TTL_MS
+            ),
+            DeployUtil.ExecutableDeployItem.newStoredContractByHash(
+                contractHashAsByteArray,
+                entryPoint,
+                runtimeArgs
+            ),
+            DeployUtil.standardPayment(DEPLOY_GAS_PAYMENT)
+        );
+
+        const json = DeployUtil.deployToJson(deploy);        
+        const signedDeploy = await Signer.sign(json, issuerPublicKeyHex, targetPublicKeyHex); 
+        // await new BrowserCasperSignerAdapter(issuerPublicKeyHex, targetPublicKeyHex).sign(deploy);
+        
+        console.log("Signed deploy");
+        console.log(signedDeploy);
+        
+        //const deployResult = await this.client.putDeploy(signedDeploy);
+
+        // console.log("Deploy result");
+        // console.log(deployResult);
+    }
 }
+
 
 /**
  * 
