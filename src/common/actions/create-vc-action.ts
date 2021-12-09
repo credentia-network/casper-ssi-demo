@@ -1,11 +1,11 @@
 import { getPublicKeyFromDid } from "../helpers/create-did-key";
 import { VERIFIER_VC } from "../reducers/types";
-import { VeramoAgentManager } from "../veramo-agent-manager";
+import { SsiManager } from "../ssi-manager";
 
 export function createVcAction(targeDid: string, data: Array<{[key: string]: string}>) {
     return async function (dispatch) {
         const targetPublicKeyHex = getPublicKeyFromDid(targeDid);
-        const ipfsHash = await VeramoAgentManager.instance.createVC(targetPublicKeyHex, data);
+        const ipfsHash = await SsiManager.instance.createVC(targetPublicKeyHex, data);
                 
         dispatch({type: VERIFIER_VC, payload: { ipfsHash }});
 

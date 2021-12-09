@@ -1,8 +1,45 @@
+import dayjs from 'dayjs';
 import * as React from 'react';
+import { truncDid } from '../../common/helpers/trunc-did';
+import { store } from '../../common/store';
 import { Label } from '../label/label';
-import {IssuerTableProps} from "./issuer-table-props";
+import { IssuerTableProps } from "./issuer-table-props";
 
-export class IssuerTable extends React.Component<IssuerTableProps> {
+
+export class IssuerTable extends React.Component<IssuerTableProps, any> {
+    private storeChangeSubscription;
+
+    constructor(props: IssuerTableProps) {
+        super(props);
+
+        const storeState = store.getState();
+        this.state = {
+            list: storeState.vcList.list || []
+        };
+        console.log(this.state);
+    }
+
+    componentDidMount() {
+        this.storeChangeSubscription = store.subscribe(() => {
+            const storeState = store.getState();
+            this.setState(() => {
+                return {
+                    ...this.state,
+                    list: storeState.vcList.list || []
+                }
+            });
+        });
+    }
+
+    componentWillUnmount() {
+        this.storeChangeSubscription && this.storeChangeSubscription();
+        this.storeChangeSubscription = null;
+    }
+
+    formatDate(date: string): string {
+        return date ? (dayjs as any).utc(date).format('hh:mm:ss (UTC) DD MMM YYYY') : null;
+    }
+
     render() {
         return (
             <table className="table table-bordered table-striped">
@@ -18,28 +55,20 @@ export class IssuerTable extends React.Component<IssuerTableProps> {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th><Label name="Active" color="success"></Label></th>
-                        <td>01eec...e0214</td>
-                        <td>Holder</td>
-                        <td>17:11:02 (UTC) 11 May 2021</td>
-                        <td>-</td>
-                        <td>Lectus mattis nulla neque</td>
-                        <td>
-                            <button className="button primary button-sm me-2" onClick={this.props.onClick}>Revoke</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><Label name="Deactivated" color="danger"></Label></th>
-                        <td>01eec...e0214</td>
-                        <td>Holder</td>
-                        <td>17:11:02 (UTC) 11 May 2021</td>
-                        <td>02:31:42 (UTC) 24 July 2021</td>
-                        <td>Lectus mattis nulla neque</td>
-                        <td>
-                            <button className="button primary button-sm me-2" onClick={this.props.onClick}>Revoke</button>
-                        </td>
-                    </tr>
+                    {this.state &&
+                        this.state.list.map(item => {
+                            return <tr>
+                                <th><Label name={item.active ? 'Active' : 'Deactivated'} color={item.active ? 'success' : 'danger'}></Label></th>
+                                <td>{truncDid(item.did)}</td>
+                                <td>{item.role}</td>
+                                <td>{this.formatDate(item.createDate)}</td>
+                                <td>{item.active ? '-' : this.formatDate(item.deactivateDate)}</td>
+                                <td>{item.description}</td>
+                                <td>
+                                    <button className="button primary button-sm me-2" onClick={this.props.onClick}>Revoke</button>
+                                </td>
+                            </tr>
+                        })}
                 </tbody>
             </table>
         );

@@ -1,11 +1,11 @@
 import { createDidKey } from "../helpers/create-did-key";
 import { toAccountHash } from "../helpers/to-account-hash";
 import { SIGNEDIN } from "../reducers/types";
-import { VeramoAgentManager } from "../veramo-agent-manager";
+import { SsiManager } from "../ssi-manager";
 
 export function signedin(publicKey: string) {
     return function (dispatch) {
-        VeramoAgentManager.create(publicKey);
+        SsiManager.create(publicKey);
         
         dispatch({
             type: SIGNEDIN,

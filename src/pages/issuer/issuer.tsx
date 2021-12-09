@@ -3,16 +3,15 @@ import { Link } from "react-router-dom";
 import { BackButton } from "../../components/back-button/back-button";
 import { IssuerTable } from "../../components/issuer-table/issuer-table";
 import { Pagetitle } from "../../components/page-title/page-title";
-import {RevokeDialog} from "../../components/revoke-dialog/revoke-dialog";
-import {RevokeSuccessDialog} from "../../components/revoke-success-dialog/revoke-success-dialog";
+import { RevokeDialog } from "../../components/revoke-dialog/revoke-dialog";
+import { RevokeSuccessDialog } from "../../components/revoke-success-dialog/revoke-success-dialog";
 
 export class Issuer extends React.Component {
-
-       state = {
-            createDialogOpenned: false,
-            didCreated: false,
-
+    state = {
+        createDialogOpenned: false,
+        didCreated: false,        
     }
+
     render() {
         return (
             <div>
@@ -27,7 +26,7 @@ export class Issuer extends React.Component {
                 <h4 className="mb-4">Creation and management of VC issued by you</h4>
 
                 <div className="d-flex mb-4">
-                    <p>In this tab you can create and sign (issue) VC documents for a specific recipient (including yourself).<br />The issued document can be revoked and its data can be viewed.</p>                    
+                    <p>In this tab you can create and sign (issue) VC documents for a specific recipient (including yourself).<br />The issued document can be revoked and its data can be viewed.</p>
                     <div className="spacer"></div>
                     <div>
                         <Link role="button" className="button primary w-auto px-3 text-nowrap" to="create-did-document">Create Issuer VC</Link>
@@ -38,11 +37,11 @@ export class Issuer extends React.Component {
                     <IssuerTable onClick={this.onViewDidDocument}></IssuerTable>
                 </div>
                 {!!this.state.createDialogOpenned &&
-                <RevokeDialog onClose={this.onViewDidDialogClose}></RevokeDialog>
+                    <RevokeDialog onClose={this.onViewDidDialogClose}></RevokeDialog>
                 }
 
                 {!!this.state.didCreated &&
-                <RevokeSuccessDialog onClose={this.onDidCreatedSuccessClose}></RevokeSuccessDialog>
+                    <RevokeSuccessDialog onClose={this.onDidCreatedSuccessClose}></RevokeSuccessDialog>
                 }
             </div>
 

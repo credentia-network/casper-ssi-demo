@@ -1,10 +1,10 @@
-import { VeramoAgentManager } from "../veramo-agent-manager";
+import { SsiManager } from "../ssi-manager";
 
 
 export function createVerifyRequestAction(data) {
     return async function (dispatch) {
-        const sdr = await VeramoAgentManager.instance.createSdr(data);
-        console.log(sdr);
+        // const sdr = await VeramoAgentManager.instance.createVPRequest(data);
+        // console.log(sdr);
 
         //await agentManager.
     };

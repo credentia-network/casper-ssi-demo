@@ -9,15 +9,17 @@ import { BrowserCasperSignerAdapter, CasperDidProvider } from "casper-did-provid
 import { CasperDidResolver } from "casper-did-resolver";
 import { CasperClient, CasperServiceByJsonRPC, CLValue, DeployUtil, PublicKey, RuntimeArgs, Signer } from "casper-js-sdk";
 import MerkleTree from 'merkle-tools';
+import { vcListAction } from "./actions/vc-list";
 import { CONTRACT_DEMOVCREGISTRY_HASH, CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, DID_PREFIX, NETWORK, RPC_URL } from "./constants";
 import { IdentityHelper } from "./helpers/identity-helper";
 import ipfsClient from "./ipfs-client";
+import { store } from "./store";
 
-export class VeramoAgentManager {
-    private static _instance: VeramoAgentManager;
+export class SsiManager {
+    private static _instance: SsiManager;
     
-    static get instance(): VeramoAgentManager {
-        return VeramoAgentManager._instance;
+    static get instance(): SsiManager {
+        return SsiManager._instance;
     }
 
     readonly client = new CasperClient(RPC_URL);
@@ -61,11 +63,13 @@ export class VeramoAgentManager {
                     }) as any,
                 }),
             ],
-        });    
+        });  
+        
+        this.readVCRegistry();
     }
 
     static create(publicKeyHex: string): void {
-        VeramoAgentManager._instance = new VeramoAgentManager(publicKeyHex);
+        SsiManager._instance = new SsiManager(publicKeyHex);
     }
 
     async registerDid(did: string, publicKey: string): Promise<any> {
@@ -120,16 +124,25 @@ export class VeramoAgentManager {
         return ipfsResponse.cid + '';
     }
 
-    async createSdr(fields: string[]) {
+    async createVPRequest(fields: string[], holderPaublicKeyHex: string) {
         const identifier = await this.agent.didManagerGetOrCreate();
 
-        return this.agent.createSelectiveDisclosureRequest({
+        const sdr = await this.agent.createSelectiveDisclosureRequest({
             data:   {
                 issuer: identifier.did,
                 claims: fields.map(t => ({claimType: t}))
             }
         });
-    }
+
+        console.log('SDR hash');
+        console.log(sdr);
+
+        const ipfsResponse = await ipfsClient.add(JSON.stringify(sdr));
+        console.log('ipfs');
+        console.log(ipfsResponse);
+
+        this.writeVPRequest(this.publicKeyHex, ipfsResponse.cid.bytes, holderPaublicKeyHex);
+    }   
 
     private getJsonLd(data: any, did: string) {
         return {
@@ -186,6 +199,18 @@ export class VeramoAgentManager {
         this.deployKey(issuerPublicKeyHex, targetPublicKeyHex, 'issueDemoVC', runtimeArgs);
     }
 
+    private writeVPRequest(senderPublicKeyHex: string, ipfsHash: Uint8Array, holderPublicKeyHex: string) {
+        const status = 0;
+        const ipfsHashResponce = new Uint8Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+        const runtimeArgs = RuntimeArgs.fromMap({
+            ipfsHash: CLValue.byteArray(ipfsHash),
+            ipfsHashResponce: CLValue.byteArray(ipfsHashResponce),
+            holder: CLValue.byteArray(IdentityHelper.getIdentityKeyHash(holderPublicKeyHex)),
+            status: CLValue.u8(status),
+        });
+        this.deployKey(senderPublicKeyHex, holderPublicKeyHex, 'sendVPRequest', runtimeArgs);
+    }
+
     private async deployKey(issuerPublicKeyHex: string, targetPublicKeyHex: string, entryPoint: string, runtimeArgs: RuntimeArgs) {
         const contractHashAsByteArray = Buffer.from(CONTRACT_DEMOVCREGISTRY_HASH.slice(5), "hex");
         const publicKey = await Signer.getActivePublicKey().then(pk => IdentityHelper.getIdentityKey(pk));
@@ -207,7 +232,6 @@ export class VeramoAgentManager {
 
         const json = DeployUtil.deployToJson(deploy);        
         const signedDeploy = await Signer.sign(json, issuerPublicKeyHex, targetPublicKeyHex); 
-        // await new BrowserCasperSignerAdapter(issuerPublicKeyHex, targetPublicKeyHex).sign(deploy);
         
         console.log("Signed deploy");
         console.log(signedDeploy);
@@ -216,6 +240,36 @@ export class VeramoAgentManager {
 
         // console.log("Deploy result");
         // console.log(deployResult);
+    }
+
+    private async readVCRegistry() {
+        //TODO: Implement reading
+        const data = await Promise.resolve([
+            {
+                active: true,
+                did: 'did:casper:casper-test:01ab27f6aec0889278fb2970ad8bfe2ecf1f3d25c2eb17ad4a1fb3801d5d8068b4',
+                role: 'Holder',
+                createDate: new Date().toISOString(),
+                deactivateDate: null,
+                description: 'Lectus mattis nulla neque'
+            },{
+                active: false,
+                did: 'did:casper:casper-test:01ab27f6aec0889278fb2970ad8bfe2ecf1f3d25c2eb17ad4a1fb3801d5d8068b4',
+                role: 'Holder',
+                createDate: new Date().toISOString(),
+                deactivateDate: new Date().toISOString(),
+                description: 'Lectus mattis nulla neque'
+            },{
+                active: true,
+                did: 'did:casper:casper-test:01ab27f6aec0889278fb2970ad8bfe2ecf1f3d25c2eb17ad4a1fb3801d5d8068b4',
+                role: 'Holder',
+                createDate: new Date().toISOString(),
+                deactivateDate: null,
+                description: 'Lectus mattis nulla neque'
+            }
+        ]); 
+
+        store.dispatch(vcListAction(data));
     }
 }
 
@@ -236,6 +290,6 @@ export class VeramoAgentManager {
 
 3 Отправить его в ipfs
 4 взять транзу от ipfs
-5 Пописать через каспер этот хеш и отправить в каспер
+5 Прописать через каспер этот хеш и отправить в каспер
 
  */

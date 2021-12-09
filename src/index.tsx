@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
@@ -6,6 +7,9 @@ import App from './App';
 import { store } from './common/store';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
+
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc);
 
 
 ReactDOM.render(
