@@ -7,14 +7,11 @@ import { KeyManagementSystem } from "@veramo/kms-local";
 import { ISelectiveDisclosure, SelectiveDisclosure } from "@veramo/selective-disclosure";
 import { BrowserCasperSignerAdapter, CasperDidProvider } from "casper-did-provider";
 import { CasperDidResolver } from "casper-did-resolver";
-import { CasperClient, CasperServiceByJsonRPC, CLValue, Signer } from "casper-js-sdk";
-import { CONTRACT_DID_HASH, DID_PREFIX, NETWORK, RPC_URL, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, CONTRACT_DEMOVCREGISTRY_HASH } from "./constants";
-import * as bs58 from 'bs58';
-import { DeployUtil, PublicKey, RuntimeArgs } from "casper-js-sdk";
-import { IdentityHelper } from "./helpers/identity-helper";
+import { CasperClient, CasperServiceByJsonRPC, CLValue, DeployUtil, PublicKey, RuntimeArgs, Signer } from "casper-js-sdk";
 import MerkleTree from 'merkle-tools';
+import { CONTRACT_DEMOVCREGISTRY_HASH, CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, DID_PREFIX, NETWORK, RPC_URL } from "./constants";
+import { IdentityHelper } from "./helpers/identity-helper";
 import ipfsClient from "./ipfs-client";
-import { getPublicKeyFromDid } from "./helpers/create-did-key";
 
 export class VeramoAgentManager {
     private static _instance: VeramoAgentManager;
