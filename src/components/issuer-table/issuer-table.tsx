@@ -16,7 +16,6 @@ export class IssuerTable extends React.Component<IssuerTableProps, any> {
         this.state = {
             list: storeState.vcList.list || []
         };
-        console.log(this.state);
     }
 
     componentDidMount() {
@@ -56,8 +55,8 @@ export class IssuerTable extends React.Component<IssuerTableProps, any> {
                 </thead>
                 <tbody>
                     {this.state &&
-                        this.state.list.map(item => {
-                            return <tr>
+                        this.state.list.map((item, i) => {
+                            return <tr key={'tr-'+i}>
                                 <th><Label name={item.active ? 'Active' : 'Deactivated'} color={item.active ? 'success' : 'danger'}></Label></th>
                                 <td>{truncDid(item.did)}</td>
                                 <td>{item.role}</td>

@@ -290,28 +290,31 @@ export class SsiManager {
             });
 
         const result = await Promise.all(new Array(vcLength).fill(0).map(async (_, index) => {
-            const vc_merkleRoot_key = `VC_${issuerHash}_${index}_merkleRoot`;
+            // const vc_merkleRoot_key = `VC_${issuerHash}_${index}_merkleRoot`;
             const vc_ipfsHash_key = `VC_${issuerHash}_${index}_ipfsHash`;
-            const vc_schemaHash_key = `VC_${issuerHash}_${index}_schemaHash`;
-            const vc_holder_key = `VC_${issuerHash}_${index}_holder`;
-            const vc_revocationFlag_key = `VC_${issuerHash}_${index}_revocationFlag`;
+            // const vc_schemaHash_key = `VC_${issuerHash}_${index}_schemaHash`;
+            // const vc_holder_key = `VC_${issuerHash}_${index}_holder`;
+            // const vc_revocationFlag_key = `VC_${issuerHash}_${index}_revocationFlag`;
 
-            const [merkleRoot, ipfsHash, schemaHash, holder, revocationFlag] = await Promise.all([
-                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_merkleRoot_key])
-                    .then(data => data.CLValue?.asBytesArray() || null),
-                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_ipfsHash_key])
-                    .then(data => data.CLValue?.asBytesArray() || null),
-                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_schemaHash_key])
-                    .then(data => data.CLValue?.asBytesArray() || null),
-                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_holder_key])
-                    .then(data => data.CLValue?.asBytesArray() || null),
-                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_revocationFlag_key])
-                    .then(data => data.CLValue?.asBoolean() || true)
-            ]);
-            return { merkleRoot, ipfsHash, schemaHash, holder, revocationFlag };
+            // const [merkleRoot, ipfsHash, schemaHash, holder, revocationFlag] = await Promise.all([
+            //     this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_merkleRoot_key])
+            //         .then(data => data.CLValue?.asBytesArray() || null),
+            //     this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_ipfsHash_key])
+            //         .then(data => data.CLValue?.asBytesArray() || null),
+            //     this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_schemaHash_key])
+            //         .then(data => data.CLValue?.asBytesArray() || null),
+            //     this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_holder_key])
+            //         .then(data => data.CLValue?.asBytesArray() || null),
+            //     this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_revocationFlag_key])
+            //         .then(data => data.CLValue?.asBoolean() || true)
+            // ]);
+            // return { merkleRoot, ipfsHash, schemaHash, holder, revocationFlag };
+
+            return this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_ipfsHash_key])
+                    .then(data => ({ipfsHash: data.CLValue?.asBytesArray() || null}))
         }));
 
-        const data = await this.readDataFromIpfs(result.map(t => t.ipfsHash!));        
+        const data = await this.readDataFromIpfs(result.map(t => t.ipfsHash!));
 
         return this.parseVCs(data);
     }
