@@ -8,6 +8,7 @@ import { ISelectiveDisclosure, SelectiveDisclosure } from "@veramo/selective-dis
 import { BrowserCasperSignerAdapter, CasperDidProvider } from "casper-did-provider";
 import { CasperDidResolver } from "casper-did-resolver";
 import { CasperClient, CasperServiceByJsonRPC, CLValue, DeployUtil, PublicKey, RuntimeArgs, Signer } from "casper-js-sdk";
+import dayjs from "dayjs";
 import MerkleTree from 'merkle-tools';
 import { vcListAction } from "./actions/vc-list";
 import { CONTRACT_DEMOVCREGISTRY_HASH, CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, DID_PREFIX, NETWORK, RPC_URL } from "./constants";
@@ -17,7 +18,7 @@ import { store } from "./store";
 
 export class SsiManager {
     private static _instance: SsiManager;
-    
+
     static get instance(): SsiManager {
         return SsiManager._instance;
     }
@@ -63,9 +64,9 @@ export class SsiManager {
                     }) as any,
                 }),
             ],
-        });  
-        
-        this.readVCRegistry();
+        });
+
+        this.readVCRegistryFake();
     }
 
     static create(publicKeyHex: string): void {
@@ -73,7 +74,7 @@ export class SsiManager {
     }
 
     async registerDid(did: string, publicKey: string): Promise<any> {
-     
+
 
         const keyType = 'Ed25519'
         const key = await this.agent.keyManagerCreate({ kms: 'local', type: keyType });
@@ -97,16 +98,16 @@ export class SsiManager {
      * Creates a VC, stores it in IPFS and deploys into the Casper net
      * @returns Ipfs hash
      */
-    async createVC(targetPublicKeyHex: string, data: Array<{[key: string]: string}>): Promise<string> {
+    async createVC(targetPublicKeyHex: string, data: Array<{ [key: string]: string }>, validDate?: string | null): Promise<string> {
         console.log('Data');
         console.log(data);
-        
+
         const identifier = await this.agent.didManagerGetOrCreate();
 
-        const jsonLd = this.getJsonLd(data, identifier.did);
+        const jsonLd = this.getJsonLd(data, identifier.did, validDate);
         console.log('Json LD');
         console.log(jsonLd);
-    
+
         const vc = this.agent.createVerifiableCredential({ credential: jsonLd, proofFormat: 'jwt' });
         console.log('Verifiable Credential');
         console.log(vc);
@@ -115,7 +116,7 @@ export class SsiManager {
         console.log('ipfs');
         console.log(ipfsResponse);
 
-        const merkleRoot = this.getMerkleRoot(data);        
+        const merkleRoot = this.getMerkleRoot(data);
         console.log('Merkle Root');
         console.log(merkleRoot.toString());
 
@@ -128,9 +129,9 @@ export class SsiManager {
         const identifier = await this.agent.didManagerGetOrCreate();
 
         const sdr = await this.agent.createSelectiveDisclosureRequest({
-            data:   {
+            data: {
                 issuer: identifier.did,
-                claims: fields.map(t => ({claimType: t}))
+                claims: fields.map(t => ({ claimType: t }))
             }
         });
 
@@ -142,9 +143,9 @@ export class SsiManager {
         console.log(ipfsResponse);
 
         this.writeVPRequest(this.publicKeyHex, ipfsResponse.cid.bytes, holderPaublicKeyHex);
-    }   
+    }
 
-    private getJsonLd(data: any, did: string) {
+    private getJsonLd(data: any, did: string, expirationDate?: string | null) {
         return {
             "@context": [
                 "https://www.w3.org/2018/credentials/v1"
@@ -156,6 +157,7 @@ export class SsiManager {
                 id: did
             },
             issuanceDate: new Date().toISOString(),
+            expirationDate: expirationDate ? dayjs(expirationDate, 'YYYY-MM-DD').toISOString() : undefined,
             credentialSubject: {
                 // "id": accountDid,
                 ...data
@@ -170,8 +172,8 @@ export class SsiManager {
         };
     }
 
-    private getMerkleRoot(data: Array<{[key: string]: string}>): Uint8Array {
-        const tree = new MerkleTree({hashType: 'sha256'});
+    private getMerkleRoot(data: Array<{ [key: string]: string }>): Uint8Array {
+        const tree = new MerkleTree({ hashType: 'sha256' });
         data.forEach(t => {
             const entry = Object.entries(t)[0];
             tree.addLeaf(entry[1], true);
@@ -185,15 +187,15 @@ export class SsiManager {
     }
 
     private writeVC(issuerPublicKeyHex: string, targetPublicKeyHex: string, ipfsHash: Uint8Array, merkleRoot: Uint8Array) {
-        const schemaHash = new Uint8Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]); //TODO: Put here JSON schema hash
+        const schemaHash = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); //TODO: Put here JSON schema hash
         const revocationFlag = true;
 
         const runtimeArgs = RuntimeArgs.fromMap({
             merkleRoot: CLValue.byteArray(merkleRoot),
-            ipfsHash:   CLValue.byteArray(ipfsHash),
+            ipfsHash: CLValue.byteArray(ipfsHash),
             schemaHash: CLValue.byteArray(schemaHash),
-            holder:     CLValue.byteArray(IdentityHelper.getIdentityKeyHash(targetPublicKeyHex)),
-            revocationFlag:  CLValue.bool(revocationFlag),
+            holder: CLValue.byteArray(IdentityHelper.getIdentityKeyHash(targetPublicKeyHex)),
+            revocationFlag: CLValue.bool(revocationFlag),
         });
 
         this.deployKey(issuerPublicKeyHex, targetPublicKeyHex, 'issueDemoVC', runtimeArgs);
@@ -201,7 +203,7 @@ export class SsiManager {
 
     private writeVPRequest(senderPublicKeyHex: string, ipfsHash: Uint8Array, holderPublicKeyHex: string) {
         const status = 0;
-        const ipfsHashResponce = new Uint8Array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);
+        const ipfsHashResponce = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         const runtimeArgs = RuntimeArgs.fromMap({
             ipfsHash: CLValue.byteArray(ipfsHash),
             ipfsHashResponce: CLValue.byteArray(ipfsHashResponce),
@@ -230,19 +232,19 @@ export class SsiManager {
             DeployUtil.standardPayment(DEPLOY_GAS_PAYMENT)
         );
 
-        const json = DeployUtil.deployToJson(deploy);        
-        const signedDeploy = await Signer.sign(json, issuerPublicKeyHex, targetPublicKeyHex); 
-        
+        const json = DeployUtil.deployToJson(deploy);
+        const signedDeploy = await Signer.sign(json, issuerPublicKeyHex, targetPublicKeyHex);
+
         console.log("Signed deploy");
         console.log(signedDeploy);
-        
+
         //const deployResult = await this.client.putDeploy(signedDeploy);
 
         // console.log("Deploy result");
         // console.log(deployResult);
     }
 
-    private async readVCRegistry() {
+    private async readVCRegistryFake() {
         //TODO: Implement reading
         const data = await Promise.resolve([
             {
@@ -252,14 +254,14 @@ export class SsiManager {
                 createDate: new Date().toISOString(),
                 deactivateDate: null,
                 description: 'Lectus mattis nulla neque'
-            },{
+            }, {
                 active: false,
                 did: 'did:casper:casper-test:01ab27f6aec0889278fb2970ad8bfe2ecf1f3d25c2eb17ad4a1fb3801d5d8068b4',
                 role: 'Holder',
                 createDate: new Date().toISOString(),
                 deactivateDate: new Date().toISOString(),
                 description: 'Lectus mattis nulla neque'
-            },{
+            }, {
                 active: true,
                 did: 'did:casper:casper-test:01ab27f6aec0889278fb2970ad8bfe2ecf1f3d25c2eb17ad4a1fb3801d5d8068b4',
                 role: 'Holder',
@@ -267,9 +269,56 @@ export class SsiManager {
                 deactivateDate: null,
                 description: 'Lectus mattis nulla neque'
             }
-        ]); 
+        ]);
 
         store.dispatch(vcListAction(data));
+    }
+
+    private async readVCRegistry(issuerPublicKeyHex: string) {
+        const stateRootHash = await (this.clientRpc as any).getStateRootHash();
+        const issuerHash = Buffer.from(IdentityHelper.getIdentityKeyHash(issuerPublicKeyHex)).toString('hex');
+
+        const vc_length_key = `VC_length_${issuerHash}`;
+        const vcLength: number = await this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_length_key])
+            .then(data => +data.CLValue?.asString()! || 0);
+
+        const result = await Promise.all(new Array(vcLength).fill(0).map(async (_, index) => {
+            const vc_merkleRoot_key = `VC_${issuerHash}_${index}_merkleRoot`;
+            const vc_ipfsHash_key = `VC_${issuerHash}_${index}_ipfsHash`;
+            const vc_schemaHash_key = `VC_${issuerHash}_${index}_schemaHash`;
+            const vc_holder_key = `VC_${issuerHash}_${index}_holder`;
+            const vc_revocationFlag_key = `VC_${issuerHash}_${index}_revocationFlag`;
+
+            const [merkleRoot, ipfsHash, schemaHash, holder, revocationFlag] = await Promise.all([
+                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_merkleRoot_key])
+                    .then(data => data.CLValue?.asString() || null),
+                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_ipfsHash_key])
+                    .then(data => data.CLValue?.asString() || null),
+                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_schemaHash_key])
+                    .then(data => data.CLValue?.asString() || null),
+                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_holder_key])
+                    .then(data => data.CLValue?.asString() || null),
+                this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_revocationFlag_key])
+                    .then(data => data.CLValue?.asBoolean() || true)
+            ]);
+            return { merkleRoot, ipfsHash, schemaHash, holder, revocationFlag };
+        }));
+
+        const data = await this.readDataFromIpfs(result.map(t => t.ipfsHash!));
+
+        return data;
+    }
+
+    private async readDataFromIpfs(ipfsHashes: string[]): Promise<any[]> {
+        const data = new Array(ipfsHashes.length);
+        for (const cid of ipfsHashes) {
+            for await (const buf of ipfsClient.get(cid)) {
+                const str = Buffer.from(buf).toString();
+                console.log(str);
+                data.push(str);
+            }
+        }
+        return data;
     }
 }
 
@@ -286,10 +335,18 @@ export class SsiManager {
             "verificationMethod": "https://example.edu/issuers/keys/1",
             "jws": "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..TCYt5XsITJX1CxPCT8yAV-TVkIEq_PbChOMqsLfRoPsnsgw5WEuts01mq-pQy7UJiN5mgRxD-WUcX16dUEMGlv50aqzpqh4Qktb3rk- BuQy72IFLOqV0G_zS245 - kronKb78cPN25DGlcTwLtjPAYuNzVBAh4vGHSrQyHUdBBPM"
         }
-		
+    	
 
 3 Отправить его в ipfs
 4 взять транзу от ipfs
 5 Прописать через каспер этот хеш и отправить в каспер
+
+ */
+
+/**
+09.12.2021
+VC ID - идентификатор VC - можно взять меркель рут/либо ее хеш
+Valid until -  дорисовать поде даты, его юзер установит (опционально)
+Issue date -  взять после верамо proof.created
 
  */

@@ -1,4 +1,6 @@
+import dayjs from 'dayjs';
 import * as React from 'react';
+import { mockComponent } from 'react-dom/test-utils';
 import { Link } from 'react-router-dom';
 import { createVcAction } from '../../common/actions/create-vc-action';
 import { store } from '../../common/store';
@@ -17,7 +19,8 @@ export class CreateDidDocument extends React.Component {
         did: null,
         category: null,
         data: null,
-        transactionId: null
+        transactionId: null,
+        validDate: null
     };
 
     steps = ['Choose reciever', 'Choose document type', 'Generate document', 'Check document', 'Sign a document'];
@@ -58,7 +61,12 @@ export class CreateDidDocument extends React.Component {
                     </div>}
 
                 {(this.state.step === 2 || this.state.step === 3) &&
-                    <CategoriesBar categories={this.categories} onSelectCategory={this.onSelectCategory}></CategoriesBar>}
+                    <>
+                        <div className="mt-4 w-50">
+                            <InputField label="Valid until (optional)" placeholder="MM/DD/YYYY" className="mb-2" inputChange={true} onChange={this.onValidDateChange}></InputField>
+                        </div>
+                        <CategoriesBar categories={this.categories} onSelectCategory={this.onSelectCategory}></CategoriesBar>
+                    </>}
 
                 {this.state.step === 3 &&
                     <>
@@ -153,6 +161,10 @@ export class CreateDidDocument extends React.Component {
         };
     }
 
+    private onValidDateChange = (value: unknown) => {
+        this.setState(state => ({ ...state, validDate: value ? dayjs(value as string, 'MM/DD/YYYY').format('YYYY-MM-DD') : null }));
+    };
+
     private onSignButtonClick = async () => {
         //const dataStr = JSON.stringify(this.state.data);
         //const { cid } = await ipfsClient.add(dataStr);
@@ -172,7 +184,7 @@ export class CreateDidDocument extends React.Component {
         Object.entries(this.state.data!).forEach(([k, v]) => dataArr.push({ [k]: v }));
         console.log(dataArr);
 
-        store.dispatch(createVcAction(this.state.did!, dataArr));
+        store.dispatch(createVcAction(this.state.did!, dataArr, this.state.validDate));
 
         // const state = store.getState();
 

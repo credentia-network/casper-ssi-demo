@@ -2,10 +2,10 @@ import { getPublicKeyFromDid } from "../helpers/create-did-key";
 import { VERIFIER_VC } from "../reducers/types";
 import { SsiManager } from "../ssi-manager";
 
-export function createVcAction(targeDid: string, data: Array<{[key: string]: string}>) {
+export function createVcAction(targeDid: string, data: Array<{[key: string]: string}>, validDate?: string | null) {
     return async function (dispatch) {
         const targetPublicKeyHex = getPublicKeyFromDid(targeDid);
-        const ipfsHash = await SsiManager.instance.createVC(targetPublicKeyHex, data);
+        const ipfsHash = await SsiManager.instance.createVC(targetPublicKeyHex, data, validDate);
                 
         dispatch({type: VERIFIER_VC, payload: { ipfsHash }});
 
