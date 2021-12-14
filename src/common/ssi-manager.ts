@@ -15,6 +15,8 @@ import { CONTRACT_DEMOVCREGISTRY_HASH, CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DE
 import { IdentityHelper } from "./helpers/identity-helper";
 import ipfsClient from "./ipfs-client";
 import { store } from "./store";
+import * as IPFS from "ipfs-http-client";
+import { VerifiableCredentials } from "./contracts/verifiable-credentials";
 
 export class SsiManager {
     private static _instance: SsiManager;
@@ -66,7 +68,9 @@ export class SsiManager {
             ],
         });
 
-        this.readVCRegistryFake();
+        // this.readVCRegistryFake();
+        this.readVCRegistry()
+            .then(data => store.dispatch(vcListAction(data)));
     }
 
     static create(publicKeyHex: string): void {
@@ -274,13 +278,16 @@ export class SsiManager {
         store.dispatch(vcListAction(data));
     }
 
-    private async readVCRegistry(issuerPublicKeyHex: string) {
+    private async readVCRegistry() {
         const stateRootHash = await (this.clientRpc as any).getStateRootHash();
-        const issuerHash = Buffer.from(IdentityHelper.getIdentityKeyHash(issuerPublicKeyHex)).toString('hex');
+        const pubKey = await Signer.getActivePublicKey();
+        const issuerHash = Buffer.from(IdentityHelper.getIdentityKeyHash(pubKey)).toString('hex');
 
         const vc_length_key = `VC_length_${issuerHash}`;
         const vcLength: number = await this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_length_key])
-            .then(data => +data.CLValue?.asString()! || 0);
+            .then(data => {
+                return data.CLValue?.asBigNumber().toNumber() || 0;
+            });
 
         const result = await Promise.all(new Array(vcLength).fill(0).map(async (_, index) => {
             const vc_merkleRoot_key = `VC_${issuerHash}_${index}_merkleRoot`;
@@ -291,34 +298,47 @@ export class SsiManager {
 
             const [merkleRoot, ipfsHash, schemaHash, holder, revocationFlag] = await Promise.all([
                 this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_merkleRoot_key])
-                    .then(data => data.CLValue?.asString() || null),
+                    .then(data => data.CLValue?.asBytesArray() || null),
                 this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_ipfsHash_key])
-                    .then(data => data.CLValue?.asString() || null),
+                    .then(data => data.CLValue?.asBytesArray() || null),
                 this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_schemaHash_key])
-                    .then(data => data.CLValue?.asString() || null),
+                    .then(data => data.CLValue?.asBytesArray() || null),
                 this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_holder_key])
-                    .then(data => data.CLValue?.asString() || null),
+                    .then(data => data.CLValue?.asBytesArray() || null),
                 this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_revocationFlag_key])
                     .then(data => data.CLValue?.asBoolean() || true)
             ]);
             return { merkleRoot, ipfsHash, schemaHash, holder, revocationFlag };
         }));
 
-        const data = await this.readDataFromIpfs(result.map(t => t.ipfsHash!));
+        const data = await this.readDataFromIpfs(result.map(t => t.ipfsHash!));        
 
-        return data;
+        return this.parseVCs(data);
     }
 
-    private async readDataFromIpfs(ipfsHashes: string[]): Promise<any[]> {
+    private async readDataFromIpfs(ipfsHashes: Uint8Array[]): Promise<any[]> {
         const data = new Array(ipfsHashes.length);
-        for (const cid of ipfsHashes) {
-            for await (const buf of ipfsClient.get(cid)) {
+        for (const rawHash of ipfsHashes) {
+            const buf = new Uint8Array([18, 32, ...rawHash as any]);
+            const cid = IPFS.CID.decode(buf);
+            for await (const buf of ipfsClient.cat(cid)) {
                 const str = Buffer.from(buf).toString();
-                console.log(str);
-                data.push(str);
+                data.push(str ? JSON.parse(str) : null);
             }
         }
-        return data;
+        return data.filter(t => !!t);
+    }
+
+    private parseVCs(data: any[]): VerifiableCredentials[] {
+        const now = new Date().valueOf();
+        return data.map(t => ({
+            active: !t.expirationDate || new Date(t.expirationDate).valueOf() > now,
+            did: t.issuer.id,
+            role: t.credentialSubject.role,
+            createDate: t.issuanceDate,
+            deactivateDate: t.expirationDate || null,
+            description: t.credentialSubject.description || null
+        }));
     }
 }
 
