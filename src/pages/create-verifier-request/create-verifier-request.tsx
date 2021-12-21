@@ -28,7 +28,7 @@ class CreateVerifierRequest extends React.Component<RouteComponentProps<any>, an
             fields: {
                 ...this.state.fields,
                 [key]: !this.state[key]
-            }            
+            }
         });
     }
 
@@ -40,19 +40,26 @@ class CreateVerifierRequest extends React.Component<RouteComponentProps<any>, an
     }
 
     onSaveButtonClick = () => {
-        const obj = Object.entries(this.state.fields as any).filter(([_, v]) => !!v).map(([k]) => k);
-        store.dispatch(createVerifyRequestAction(obj));
+        const fields = Object.entries(this.state.fields as any).filter(([_, v]) => !!v).map(([k]) => k);
+        store.dispatch(createVerifyRequestAction({holderDid: this.state.holderDid, fields}));
     }
 
     getSelectedCategories() {
-        return  DATA_FIELDS_SHEMA.map((t, i) => {
+        return DATA_FIELDS_SHEMA.map((t, i) => {
             const items = t.items.filter((it: any) => {
                 const [key] = Object.entries(it)[0];
                 return this.state.fields[key] == true;
             });
-            return items.length ? {...t, items} : null;
+            return items.length ? { ...t, items } : null;
         })
-        .filter(t => !!t);
+            .filter(t => !!t);
+    }
+
+    onHolderDidInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            ...this.state,
+            holderDid: event.target.value
+        });
     }
 
     render() {
@@ -78,12 +85,23 @@ class CreateVerifierRequest extends React.Component<RouteComponentProps<any>, an
 
                 <div>
                     {this.state.step == 0 &&
-                        <ChooseFields categories={DATA_FIELDS_SHEMA} onToggleCategoryItem={this.onToggleCategoryItem}></ChooseFields>}
+                        <>
+                            <ChooseFields categories={DATA_FIELDS_SHEMA} onToggleCategoryItem={this.onToggleCategoryItem}></ChooseFields>
+
+                            <div className="w-50">
+                                <label className="form-label">Holder's DID</label>
+
+                                <div className="d-flex">
+                                    <input className="form-control me-2" onChange={this.onHolderDidInputChange} />
+                                </div>
+                            </div>
+                        </>}
+
 
                     {this.state.step == 1 &&
                         <SaveRequest categories={this.getSelectedCategories()}></SaveRequest>}
                 </div>
-                <div>
+                <div className="mt-4">
                     <button className="btn-close mb-2">Close</button>
                     {this.state.step == 0 &&
                         <button className="btn-create" onClick={this.onCreateButtonClick}>Create</button>}

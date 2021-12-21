@@ -5,6 +5,7 @@
   "dependencies": {
     "@veramo/credential-w3c": "3.1.0",
     "@veramo/selective-disclosure": "3.1.0",
+    "blakejs": "1.1.1",
     "bootstrap": "5.1.1",
     "bs58": "4.0.1",
     "casper-did-provider": "git+ssh://git@github.com/ITsurkan-Vareger/casper-did-provider.git",
@@ -23,6 +24,7 @@
     "react-scripts": "4.0.3",
     "redux": "4.1.1",
     "redux-thunk": "2.3.0",
+    "reflect-metadata": "0.1.13",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },

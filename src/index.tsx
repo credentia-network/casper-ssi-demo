@@ -7,6 +7,12 @@ import App from './App';
 import { store } from './common/store';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
+import "reflect-metadata";
+// import initSqlJs from 'sql.js';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+//window.SQL = initSqlJs;
 
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc);

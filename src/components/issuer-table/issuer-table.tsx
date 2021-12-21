@@ -45,11 +45,10 @@ export class IssuerTable extends React.Component<IssuerTableProps, any> {
                 <thead>
                     <tr>
                         <th scope="col">State</th>
-                        <th scope="col">DID</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Created</th>
-                        <th scope="col">Deactivated</th>
-                        <th scope="col">Description</th>
+                        <th scope="col">Holder</th>
+                        <th scope="col">Issued by</th>
+                        <th scope="col">Valid until</th>
+                        <th scope="col">VC ID</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -59,10 +58,9 @@ export class IssuerTable extends React.Component<IssuerTableProps, any> {
                             return <tr key={'tr-'+i}>
                                 <th><Label name={item.active ? 'Active' : 'Deactivated'} color={item.active ? 'success' : 'danger'}></Label></th>
                                 <td>{truncDid(item.did)}</td>
-                                <td>{item.role}</td>
                                 <td>{this.formatDate(item.createDate)}</td>
                                 <td>{item.active ? '-' : this.formatDate(item.deactivateDate)}</td>
-                                <td>{item.description}</td>
+                                <td>{item.vcId}</td>
                                 <td>
                                     <button className="button primary button-sm me-2" onClick={this.props.onClick}>Revoke</button>
                                 </td>
