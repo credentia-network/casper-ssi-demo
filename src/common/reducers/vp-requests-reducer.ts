@@ -1,16 +1,16 @@
-import { VP_HOLDER } from "./types";
+import { VP_REQUESTS } from "./types";
 
 const initState = {
     list: []
 };
 
-export function vpHolderReducer(state = initState, action): any {
+export function vpRequestsReducer(state = initState, action): any {
     switch (action.type) {
-        case VP_HOLDER:
+        case VP_REQUESTS:
             return {
                 ...state,
                 list: [...action.payload]
-            };       
+            };
         default:
             return { ...state };
     }

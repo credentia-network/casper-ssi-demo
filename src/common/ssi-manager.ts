@@ -9,9 +9,13 @@ import { BrowserCasperSignerAdapter, CasperDidProvider } from "casper-did-provid
 import { CasperDidResolver } from "casper-did-resolver";
 import { CasperClient, CasperServiceByJsonRPC, CLValue, DeployUtil, PublicKey, RuntimeArgs, Signer } from "casper-js-sdk";
 import dayjs from "dayjs";
+import { decodeJWT } from 'did-jwt';
 import * as IPFS from "ipfs-http-client";
 import MerkleTree from 'merkle-tools';
-import { vcListAction } from "./actions/vc-list";
+import { holderVcsAction } from "./actions/holder-vcs-action";
+import { holderSdrRequestsAction } from "./actions/holder-vp-requests-action";
+import { vcListAction } from "./actions/vc-list-action";
+import { vpRequestsAction } from "./actions/vp-requests-action";
 import { CONTRACT_DEMOVCREGISTRY_HASH, CONTRACT_DID_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, DID_PREFIX, NETWORK, RPC_URL } from "./constants";
 import { VerifiableCredentials } from "./contracts/verifiable-credentials";
 import { VerifiablePresentationRequest } from "./contracts/verifiable-presentation-request";
@@ -19,8 +23,6 @@ import { IdentityHelper } from "./helpers/identity-helper";
 import { IndexDbDataDtore } from "./indexdb-data-store";
 import ipfsClient from "./ipfs-client";
 import { store } from "./store";
-import { verifyJWT } from 'did-jwt';
-import { vpRequestHolderAction } from "./actions/vp-request-holder";
 
 export class SsiManager {
     private static _instance: SsiManager;
@@ -78,13 +80,17 @@ export class SsiManager {
 
         this.readVPRequestRegistry()
             .then(data => {
-                console.log('readVPRegistry');
-                console.log(data)
+                store.dispatch(vpRequestsAction(data));
+            });
+
+        this.loadLinkedVpRequests()
+            .then(data => {
+                store.dispatch(holderSdrRequestsAction(data));
             });
 
         this.loadLinkedVcRegistry()
             .then(data => {
-                store.dispatch(vpRequestHolderAction(data))
+                store.dispatch(holderVcsAction(data))
             });
     }
 
@@ -379,11 +385,21 @@ export class SsiManager {
 
         return Promise.all(new Array(vcLength).fill(0).map((_, index) => {
             const vc_ipfsHash_key = `VPRequest_${issuerHash}_${index}_ipfsHash`;
+            const vc_holder_key = `VPRequest_${issuerHash}_${index}_holder`;
 
             return this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_ipfsHash_key])
                 .then(data => data ? data.CLValue?.asBytesArray() : null)
                 .then(hash => hash ? this.readSdrFromIpfs(hash) : null)
                 .then(data => data ? this.mapVPRequestObject(data) : null)
+                .then(data => {
+                    if (data) {
+                        return this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_holder_key])
+                            .then(h => h ? h.CLValue?.asBytesArray() : null)
+                            .then(h => h ? Buffer.from(h).toString('hex') : null)
+                            .then(holder => ({ ...data, holder }))
+                    }
+                    return null;
+                })
                 .catch(e => {
                     console.error(e);
                     return null;
@@ -391,22 +407,25 @@ export class SsiManager {
         })).then(data => data.filter(t => !!t) as VerifiablePresentationRequest[]);
     }
 
-    private async readSdrFromIpfs(ipfsHashe: Uint8Array) {
-        if (!ipfsHashe) {
+    private async readSdrFromIpfs(ipfsHash: Uint8Array): Promise<{ sdr: string, ipfsHash: string } | null> {
+        if (!ipfsHash) {
             return null;
         }
-        const buf = new Uint8Array([18, 32, ...ipfsHashe as any]);
+        const buf = new Uint8Array([18, 32, ...ipfsHash as any]);
         const cid = IPFS.CID.decode(buf);
         for await (const buf of ipfsClient.cat(cid)) {
-            return Buffer.from(buf).toString();
+            const sdr = Buffer.from(buf).toString();
+            return { sdr: JSON.parse(sdr), ipfsHash: cid + '' }
         }
         return null;
     }
 
-    private mapVPRequestObject(data: any) {
-        console.log('mapVPRequestObject');
-        console.log(data);
-        return data;
+    private mapVPRequestObject(data: { sdr: string, ipfsHash: string }) {
+        const decodedSdr = decodeJWT(data.sdr);
+        return {
+            ...decodedSdr,
+            ...data
+        };
     }
 
     private async loadLinkedVcRegistry() {
@@ -439,6 +458,47 @@ export class SsiManager {
                         if (vc)
                             return this.agent.dataStoreSaveVerifiableCredential({ verifiableCredential: vc }).then(() => vc);
                         return vc;
+                    });
+            }))
+                .then(data => data.filter(t => !!t));
+        }
+
+        return [];
+    }
+
+    private async loadLinkedVpRequests() {
+        const stateRootHash = await (this.clientRpc as any).getStateRootHash();
+        const pubKey = await Signer.getActivePublicKey();
+        const hash = IdentityHelper.hash(pubKey, 'hex');
+
+        const vc_length_key = `VPRequestLink_length_${hash}`;
+        const vcLength: number = await this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_length_key])
+            .then(data => data.CLValue?.asBigNumber().toNumber() || 0)
+            .catch((e) => {
+                console.log(e);
+                return 0;
+            });
+
+        if (vcLength) {
+            return Promise.all(new Array(vcLength).fill(0).map((_, index) => {
+                const vc_link_key = `VPRequestLink_${hash}_${index}`;
+
+                return this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_link_key])
+                    .then(data => data ? data.CLValue?.asString() : null)
+                    .catch(() => null)
+                    .then(link => {
+                        if (link) {
+                            const ipfsHash_key = `${link}ipfsHash`;
+                            return this.clientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsHash_key]);
+                        }
+                        return null;
+                    })
+                    .then(data => data ? data.CLValue?.asBytesArray() : null)
+                    .then(hash => hash ? this.readSdrFromIpfs(hash) : null)
+                    .then(data => data ? this.mapVPRequestObject(data) : null)
+                    .catch(e => {
+                        console.error(e);
+                        return null;
                     });
             }))
                 .then(data => data.filter(t => !!t));

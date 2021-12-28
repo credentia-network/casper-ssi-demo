@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import * as React from 'react';
-import { truncDid } from '../../common/helpers/trunc-did';
+import { truncateStr } from '../../common/helpers/truncate-str';
 import { store } from '../../common/store';
 import { Label } from '../label/label';
 import { IssuerTableProps } from "./issuer-table-props";
@@ -57,7 +57,7 @@ export class IssuerTable extends React.Component<IssuerTableProps, any> {
                         this.state.list.map((item, i) => {
                             return <tr key={'tr-'+i}>
                                 <th><Label name={item.active ? 'Active' : 'Deactivated'} color={item.active ? 'success' : 'danger'}></Label></th>
-                                <td>{truncDid(item.did)}</td>
+                                <td>{truncateStr(item.did, 27)}</td>
                                 <td>{this.formatDate(item.createDate)}</td>
                                 <td>{item.active ? '-' : this.formatDate(item.deactivateDate)}</td>
                                 <td>{item.vcId}</td>

@@ -53,7 +53,7 @@ export class Holder extends React.Component<any, any> {
                 
                 <div className="mb-4">
                     <button className="button primary button-md" onClick={this.onViewDidDocument}>View DID checkbox</button>
-                    <button className="button primary button-md" onClick={this.onViewDidReadDocument}>View DID </button>
+                    <button className="button primary button-md ms-2" onClick={this.onViewDidReadDocument}>View DID </button>
                 </div>
                 {!!this.state.viewDialogOpenned &&
                     <ViewDidDialog onClose={this.onViewDidDialogClose}></ViewDidDialog>
