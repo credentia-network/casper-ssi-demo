@@ -1,17 +1,53 @@
+import { CLValue, RuntimeArgs, Signer } from "casper-js-sdk";
+import { deployKeyToCasperNet } from "../casper-client";
 import { IdentityHelper } from "../helpers/identity-helper";
-import { SsiManager } from "../ssi-manager";
+import ipfsClient from "../ipfs-client";
+import { CREATE_VP_REQUEST } from "../reducers/types";
+import VeramoManager from "../veramo-manager";
 
 export interface CreateVerifyRequestAction {
     holderDid: string;
     fields: string[];
 }
 
-export function createVerifyRequestAction(data: CreateVerifyRequestAction) {
-    return async function (dispatch) {
-        const holderPubKey = IdentityHelper.getPublicKeyFromDid(data.holderDid);
-        await SsiManager.instance.createVPRequest(data.fields, holderPubKey!);
-        // console.log(sdr);
+export async function createVerifyRequestAction(data: CreateVerifyRequestAction) {
+    const holderPubKey = IdentityHelper.getPublicKeyFromDid(data.holderDid);
+    await createVPRequest(data.fields, holderPubKey!);
 
-        //await agentManager.
+    return function (dispatch) {
+        dispatch({type: CREATE_VP_REQUEST});
     };
+}
+
+async function createVPRequest(fields: string[], holderPaublicKeyHex: string) {
+    const publicKeyHex = await Signer.getActivePublicKey();
+    const identifier = await VeramoManager.agent.didManagerGetOrCreate();
+
+    const sdr = await VeramoManager.agent.createSelectiveDisclosureRequest({
+        data: {
+            issuer: identifier.did,
+            claims: fields.map(t => ({ claimType: t }))
+        }
+    });
+
+    console.log('SDR hash');
+    console.log(sdr);
+
+    const ipfsHash = await ipfsClient.add(sdr);
+    console.log('ipfs');
+    console.log(ipfsHash + '');
+
+    writeVPRequest(publicKeyHex, ipfsHash, holderPaublicKeyHex);
+}
+
+function writeVPRequest(senderPublicKeyHex: string, ipfsHash: Uint8Array, holderPublicKeyHex: string) {
+    const status = 0;
+    const ipfsHashResponce = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    const runtimeArgs = RuntimeArgs.fromMap({
+        ipfsHash: CLValue.byteArray(ipfsHash),
+        ipfsHashResponce: CLValue.byteArray(ipfsHashResponce),
+        holder: CLValue.byteArray(IdentityHelper.hash(holderPublicKeyHex)),
+        status: CLValue.u8(status),
+    });
+    deployKeyToCasperNet(senderPublicKeyHex, holderPublicKeyHex, 'sendVPRequest', runtimeArgs);
 }

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { createVerifyRequestAction } from '../../common/actions/create-verify-request-action';
-import { DATA_FIELDS_SHEMA } from '../../common/data-fields-shema';
+import { readVpRequestAction } from '../../common/actions/read-vp-requests-action';
+import DATA_FIELDS_SHEMA from '../../common/data-fields-shema';
 import { store } from '../../common/store';
 import { BackButton } from '../../components/back-button/back-button';
 import { Pagetitle } from '../../components/page-title/page-title';
@@ -41,7 +42,9 @@ class CreateVerifierRequest extends React.Component<RouteComponentProps<any>, an
 
     onSaveButtonClick = () => {
         const fields = Object.entries(this.state.fields as any).filter(([_, v]) => !!v).map(([k]) => k);
-        store.dispatch(createVerifyRequestAction({holderDid: this.state.holderDid, fields}));
+        createVerifyRequestAction({holderDid: this.state.holderDid, fields})
+            .then(fn => store.dispatch(fn))
+            .then(() => store.dispatch(readVpRequestAction()));
     }
 
     getSelectedCategories() {

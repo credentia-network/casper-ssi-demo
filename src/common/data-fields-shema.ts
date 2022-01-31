@@ -1,10 +1,9 @@
 
-export const DATA_FIELDS_SHEMA: {title: string, items: any[]}[] = [
+const DATA_FIELDS_SHEMA: {title: string, credentialType: string, items: any[]}[] = [
     {
         title: 'Personal',
+        credentialType: 'PersonalDataCredential',
         items: [
-            { vcid: 'VC ID' },
-            { vcdescription: 'VC Description' },
             { phone1: 'Phone1' },
             { phone2: 'Phone2' },
             { telegram: 'Telegram' },
@@ -14,24 +13,45 @@ export const DATA_FIELDS_SHEMA: {title: string, items: any[]}[] = [
             { email: 'Email' }
         ]
     }, {
-        title: 'Governament',
+        title: 'Government',
+        credentialType: 'PassportCredential',
         items: [
-            { govid: 'ID' },
-            { social: '#Social' },
+            { passport: 'Passport ID' },
+            { nationality: 'Nationality' },
+            { surname: 'Surname' },
+            { givenName: 'Given names' },
+            { sex: 'Sex' },
+            { birthDate: 'Date of birth' },
+            { birthPlace: 'Place of birth' },
+            { issued: 'Issued On' },
+            { expiered: 'Expiered On' },
+            { photo: 'Photo' },
         ]
     }, {
         title: 'Finance',
+        credentialType: 'BankCredential',
         items: [
-            { finvcid: 'VC ID' },
-            { finvcdescription: 'VC Description' },
+            { for: 'For (date)' },
+            { to: 'To (date)' },
+            { balance: 'Opening balance' },
+            { withdrawals: 'Withdrawals' },
+            { deposits: 'Deposits' },
+            { closingBalance: 'Closing balance to date' },
+            { currency: 'Currency' },
         ]
     }, {
         title: 'E-Health',
+        credentialType: 'EhealthCredential',
         items: [
-            { vaccination: 'Vaccination covid' },
+            { covidPassport: 'Covid Passport ID' },
+            { vaccination: 'Date of vaccination' },
+            { stages: 'Number of stages' },
+            { vaccine: 'Vaccine name' },
+            { manufacturer: 'Manufacturer' },
         ]
     }, {
         title: 'Education',
+        credentialType: 'EducationCredential',
         items: [
             { diplomid: 'Diplom ID' },
             { speciality: 'Speciality' },
@@ -40,8 +60,14 @@ export const DATA_FIELDS_SHEMA: {title: string, items: any[]}[] = [
         ]
     }, {
         title: 'Professional',
+        credentialType: 'ProfessionalCredential',
         items: [
-            { profemail: 'Email' }
+            { position: 'Position' },
+            { cooperationStartDate: 'Start of cooperation' },
+            { cooperationEndDate: 'End of cooperation' },
+            { additionalDescription: 'Additional description' },
         ]
     }
 ];
+
+export default DATA_FIELDS_SHEMA;

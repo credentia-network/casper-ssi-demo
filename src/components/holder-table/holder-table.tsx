@@ -13,7 +13,7 @@ export class HolderTable extends React.Component<any, any> {
         const storeState = store.getState();
         this.state = {
             list: storeState.holder.requests as any[],
-            viewDialogOpenned: false
+            considerVpRequest: null
         } as any;
         console.log(storeState.holder.requests);
     }
@@ -35,12 +35,20 @@ export class HolderTable extends React.Component<any, any> {
         this.storeChangeSubscription = null;
     }
 
-    onConsiderButtonClick = () => {
-        this.toggleDidDialog(true);
+    onConsiderButtonClick(vpRequest: any) {
+        return () => {
+            this.setState({
+                ...this.state,
+                considerVpRequest: vpRequest
+            })
+        }
     }
 
     onViewDidDialogClose = () => {
-        this.toggleDidDialog(false);
+        this.setState({
+            ...this.state,
+            considerVpRequest: null
+        });
     }
 
     render() {
@@ -61,18 +69,18 @@ export class HolderTable extends React.Component<any, any> {
                             this.state.list.map((item: any, index) => {
                                 return <tr key={'row-' + index}>
                                     <th><Label name="Active" color="success"></Label></th>
-                                    <td>{truncateStr(item.payload.iss, 27)}</td>
+                                    <td>{truncateStr(item.iss, 27)}</td>
                                     <td>-</td>
                                     <td>{truncateStr(item.ipfsHash)}</td>
                                     <td>
-                                        <button className="button primary button-sm me-2 float-end" onClick={this.onConsiderButtonClick}>Consider</button>
+                                        <button className="button primary button-sm me-2 float-end" onClick={this.onConsiderButtonClick(item)}>Consider</button>
                                     </td>
                                 </tr>
                             })}
                     </tbody>
                 </table>
-                {!!this.state.viewDialogOpenned &&
-                    <ViewDidDialog onClose={this.onViewDidDialogClose}></ViewDidDialog>
+                {!!this.state.considerVpRequest &&
+                    <ViewDidDialog vpRequest={this.state.considerVpRequest} onClose={this.onViewDidDialogClose}></ViewDidDialog>
                 }
             </>
         );

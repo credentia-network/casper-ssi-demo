@@ -1,42 +1,59 @@
 import * as React from "react";
-import {ViewDidReadDialogProps} from "./view-did-read-dialog-props";
+import { ViewDidReadDialogProps } from "./view-did-read-dialog-props";
 import ReactModal from "react-modal";
 import './view-did-read-dialog.scss'
-import {InputField} from "../input-field/input-field";
-import {Button} from "../button/button";
+import { InputField } from "../input-field/input-field";
+import { Button } from "../button/button";
+import { store } from "../../common/store";
+import DATA_FIELDS_SHEMA from "../../common/data-fields-shema";
 
 
-export class ViewDidReadDialog extends React.Component<ViewDidReadDialogProps> {
-    render() {
-        return (
-            <ReactModal className="view-did-read-dialog d-flex flex-column justify-content-between "
-                        isOpen={true}>
-<h4 className="mb-3"> View DID Document
-</h4>
-                <div className="mb-3">
-                    <h5>General</h5>
-                <InputField label="DID Number" value="DID: ex: 1234567890abcdef"  className="mb-2"/>
-                <InputField label="Reciever" value="DID: ex: 1234567890abcdef"  className="mb-2"/>
-                <InputField label="Issued" value="17:11:02 (UTC) 11 May 2021"  className="mb-2"/>
-                <InputField label="Valid until" value="Without limit"  className="mb-2"/>
-                </div>
+export class ViewDidReadDialog extends React.Component<ViewDidReadDialogProps, any> {
 
-                <div className="mb-3">
-                    <h5>General</h5>
-                    <InputField label="Company name" value="Vareger"  className="mb-2"/>
-                    <InputField label="DID document type" value="DID: ex: 1234567890abcdef"  className="mb-2"/>
-                </div>
+    constructor(props: ViewDidReadDialogProps) {
+        super(props);
 
-                <div className="mb-3">
-                    <h5>Privat fields
-                    </h5>
-                    <InputField label="Privat fields" value="7 fields"  className="mb-2"/>
-                </div>
-                <div className="d-flex justify-content-end">
-                    <Button className="me-2" onClick={this.props.onClose}>Cancel</Button>
-                    <Button color="primary"onClick={this.props.onClose}>Revoke</Button>
-                </div>
-            </ReactModal>
-        );
+        const storeState = store.getState();
+        const vc = storeState.holder.vcs.find(t => t.type.indexOf(this.props.credentialType) > -1);
+        const schema = DATA_FIELDS_SHEMA.find(t => t.credentialType == this.props.credentialType);
+        if (vc && schema) {
+            const entries = Object.entries(vc.credentialSubject);
+            this.state = {
+                title: schema.title,
+                data: entries.map(ent => {
+                    const [key, value] = ent;
+                    const item = schema.items.find(x => {
+                        const [k, v]: any = Object.entries(x)[0];
+                        return k.toLowerCase() == key.toLowerCase();
+                    });
+                    const title = item ? item[key] : null;
+
+                    return title ? { title, value } : null;
+            }).filter(t => !!t)
+        };
     }
+}
+
+render() {
+    return (
+        <ReactModal className="view-did-read-dialog d-flex flex-column justify-content-between "
+            isOpen={true}>
+            <h4 className="mb-3"> View DID Document
+            </h4>
+
+            <div className="mb-3">
+                <h5>{this.state?.title}</h5>
+                {!!this.state?.data?.length &&
+                    this.state?.data.map((item, index) =>
+                        <InputField key={'item-' + index} label={item.title} value={item.value} className="mb-2" />
+                    )
+                }
+            </div>
+
+            <div className="d-flex justify-content-end">
+                <Button className="me-2" onClick={this.props.onClose}>Close</Button>
+            </div>
+        </ReactModal>
+    );
+}
 }

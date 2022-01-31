@@ -14,6 +14,7 @@
   background: #FFFFFF;
 
   box-shadow: 0px 0px 4px rgba(40, 66, 90, 0.2);
+  border: none;
   border-radius: 4px;
 
   flex: none;
@@ -23,32 +24,28 @@
 }
 .button-for-holder:hover{
   background: #EBF4F8;
-  .government{
-    background-repeat: no-repeat;
+  box-shadow: 0px 0px 4px rgba(40, 66, 90, 0.2);
+  border-radius: 4px;
+  background-repeat: no-repeat;
+
+  .government{ 
     background-image: url("../../assets/images/government_hover.svg");
   }
   .personaldata{
-    background-repeat: no-repeat;
     background-image: url("../../assets/images/personal data_hover.svg");
   }
   .ehealth{
-    background-repeat: no-repeat;
     background-image: url("../../assets/images/e-health_hover.svg");
   }
   .finance{
-    background-repeat: no-repeat;
     background-image: url("../../assets/images/finance_hover.svg");
   }
   .education{
-    background-repeat: no-repeat;
     background-image: url("../../assets/images/education_hover.svg");
   }
   .professional_achievments{
-    background-repeat: no-repeat;
     background-image: url("../../assets/images/professional_achievements_hover.svg");
   }
-  box-shadow: 0px 0px 4px rgba(40, 66, 90, 0.2);
-  border-radius: 4px;
 }
 .title{
   position: static;

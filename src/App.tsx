@@ -14,6 +14,12 @@ import { Holder } from './pages/holder/holder';
 import Home from './pages/home/home';
 import { Issuer } from './pages/issuer/issuer';
 import { Verifier } from "./pages/verifier/verifier";
+import { readVpRequestAction } from './common/actions/read-vp-requests-action';
+import { readVCListAction } from './common/actions/read-vc-list-action';
+import { readHolderVPRequestsAction } from './common/actions/read-holder-vp-requests-action';
+import { readHolderVCListAction } from './common/actions/read-holder-vc-list.action';
+import VeramoManager from './common/veramo-manager';
+import { SignerHelper } from './common/helpers/signer-helper';
 
 export class App extends React.Component {
 
@@ -23,9 +29,25 @@ export class App extends React.Component {
 
     window.addEventListener('signer:unlocked', (event: any) => {
       if (event.detail.activeKey) {
-        store.dispatch(signedin(event.detail.activeKey));
+        this.loadData(event.detail.activeKey);
       }
     });
+
+    SignerHelper.tryGetPublicKey()
+      .then(publicKey => {
+        if (publicKey) {
+          this.loadData(publicKey);
+        }
+      });
+  }
+
+  loadData(publicKey: string) {
+    store.dispatch(signedin(publicKey));
+    VeramoManager.createVeramoAgent(publicKey);
+    store.dispatch(readVpRequestAction());
+    store.dispatch(readVCListAction());
+    store.dispatch(readHolderVPRequestsAction());
+    store.dispatch(readHolderVCListAction());
   }
 
   onLogoutEvent() {

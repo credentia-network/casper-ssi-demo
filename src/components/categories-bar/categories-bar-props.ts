@@ -1,4 +1,4 @@
-export type CategorySelectEventHandler = (index: number) => void;
+export type CategorySelectEventHandler = (value: any) => void;
 
 export interface CategoriesBarProps {
     active?: number;
@@ -9,4 +9,5 @@ export interface CategoriesBarProps {
 export interface CategoriesBarItem {
     title: string;
     button: string;
+    value: any;
 }

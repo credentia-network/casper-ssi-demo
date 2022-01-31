@@ -13,7 +13,8 @@ export class Holder extends React.Component<any, any> {
         super(props);
         this.state = {
             viewDialogOpenned: false,
-            viewReadDialogOpenned: false
+            viewReadDialogOpenned: false,
+            viewVcCredentialType: ''
         }
     }
     render() {
@@ -34,14 +35,14 @@ export class Holder extends React.Component<any, any> {
 
                 <div className="mb-4">
                     <div className="button-row mb-4">
-                        <ButtonHolder className="personaldata" title="Personal Data" />
-                        <ButtonHolder className="government" title="Government Documents" />
-                        <ButtonHolder className="finance" title="Finance" />
+                        <ButtonHolder className="personaldata" title="Personal Data" name="PersonalDataCredential" onClick={this.onVcCategoryClick} />
+                        <ButtonHolder className="government" title="Government Documents" name="PassportCredential" onClick={this.onVcCategoryClick} />
+                        <ButtonHolder className="finance" title="Finance" name="BankCredential" onClick={this.onVcCategoryClick} />
                     </div>
                     <div className="button-row">
-                        <ButtonHolder className="ehealth" title="E-Health" />
-                        <ButtonHolder className="education" title="Education" />
-                        <ButtonHolder className="professional_achievments" title="Professional achievements" />
+                        <ButtonHolder className="ehealth" title="E-Health" name="EhealthCredential" onClick={this.onVcCategoryClick} />
+                        <ButtonHolder className="education" title="Education" name="EducationCredential" onClick={this.onVcCategoryClick} />
+                        <ButtonHolder className="professional_achievments" title="Professional achievements" name="ProfessionalCredential" onClick={this.onVcCategoryClick} />
                     </div>
                 </div>
                 
@@ -51,15 +52,15 @@ export class Holder extends React.Component<any, any> {
                     <HolderTable />
                 </div>
                 
-                <div className="mb-4">
+                {/* <div className="mb-4">
                     <button className="button primary button-md" onClick={this.onViewDidDocument}>View DID checkbox</button>
                     <button className="button primary button-md ms-2" onClick={this.onViewDidReadDocument}>View DID </button>
-                </div>
+                </div> */}
                 {!!this.state.viewDialogOpenned &&
-                    <ViewDidDialog onClose={this.onViewDidDialogClose}></ViewDidDialog>
+                    <ViewDidDialog vpRequest={null} onClose={this.onViewDidDialogClose}></ViewDidDialog>
                 }
-                {!!this.state.viewReadDialogOpenned &&
-                    <ViewDidReadDialog onClose={this.onViewDidReadDocumentClose} />
+                {!!this.state.viewVcCredentialType &&
+                    <ViewDidReadDialog credentialType={this.state.viewVcCredentialType} onClose={this.onViewDidReadDocumentClose} />
                 }
             </div>
         );
@@ -71,9 +72,16 @@ export class Holder extends React.Component<any, any> {
         this.setState((state: any) => ({ ...state, viewDialogOpenned: true }));
     }
     private onViewDidReadDocumentClose = () => {
-        this.setState((state: any) => ({ ...state, viewReadDialogOpenned: false }));
+        this.setState((state: any) => ({ ...state, viewVcCredentialType: '' }));
     }
     private onViewDidReadDocument = () => {
         this.setState((state: any) => ({ ...state, viewReadDialogOpenned: true }));
+    }
+
+    private onVcCategoryClick = (viewVcCredentialType: string) => {
+        this.setState({
+            ...this.state,
+            viewVcCredentialType
+        });
     }
 };

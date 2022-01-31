@@ -1,4 +1,4 @@
-import { decodeBase16, Keys, PublicKey } from "casper-js-sdk";
+import { decodeBase16, PublicKey } from "casper-js-sdk";
 import { NETWORK } from "../constants";
 
 export class IdentityHelper {

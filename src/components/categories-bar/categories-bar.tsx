@@ -25,9 +25,10 @@ export class CategoriesBar extends React.Component<CategoriesBarProps, Categorie
     }
 
     private onCategoryClick(index: number) {
+        const item = this.props.categories[index];
         this.setState(state => ({ ...state, active: index }));
         if (this.props.onSelectCategory) {
-            this.props.onSelectCategory(index);
+            this.props.onSelectCategory(item.value);
         }
     }
 }

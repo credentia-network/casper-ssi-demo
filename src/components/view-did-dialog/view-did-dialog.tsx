@@ -1,53 +1,32 @@
 import * as React from 'react';
 import ReactModal from 'react-modal';
+import DATA_FIELDS_SHEMA from '../../common/data-fields-shema';
+import { store } from '../../common/store';
 import { Button } from '../button/button';
-import "./view-did-dialog.scss";
-import { ViewDidDialogProps } from "./view-did-dialog-props";
 import { InputField } from "../input-field/input-field";
+import { ViewDidDialogProps } from "./view-did-dialog-props";
+import "./view-did-dialog.scss";
 
 ReactModal.defaultStyles = {}
 
-export class ViewDidDialog extends React.Component<ViewDidDialogProps> {
+type ViewDidDialogState = { data: Array<{ title: string, items: { title: string, field: string, value: string }[] }> };
+
+export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDialogState> {
     togle = {
         personal: true,
         education: true
     };
-    state = {
-        personal: {
-            vcId: { checked: false },
-            vcDes: { checked: false },
-            phoneOne: { checked: false },
-            phoneTwo: { checked: false },
-            telegram: { checked: false },
-            viber: { checked: false },
-            whatsapp: { checked: false },
-            linkedin: { checked: false },
-            email: { checked: false },
-        },
-        education: {
-            vcId: { checked: false },
-            vcDes: { checked: false },
-            diplom: { checked: false },
-            speciality: { checked: false },
-            academic_degree: { checked: false },
-            date: { checked: false },
-        }
+
+    constructor(props: ViewDidDialogProps) {
+        super(props);
+
+        this.state = { data: this.mapData(this.props.vpRequest) };
     }
 
     changeChecked = (event, key, prop) => {
-        this.setState({ ...this.state, [key]: { ...this.state[key], [prop]: { checked: event.target.checked } } })
+        //this.setState({ ...this.state, [key]: { ...this.state[key], [prop]: { checked: event.target.checked } } })
     }
-    selectAll = (key) => {
-        let statebox = this.state[key]
-        for (let personalKey in statebox) {
-            if (statebox[personalKey].checked !== this.togle[key]) {
-                statebox[personalKey].checked = this.togle[key]
-            }
-        }
-        this.togle[key] = !this.togle[key]
-        this.setState({ ...this.state, [key]: statebox })
 
-    }
     render() {
         return (
             <ReactModal className="view-did-dialog d-flex flex-column justify-content-between"
@@ -56,86 +35,15 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps> {
 
                     <h5 className="fw-bold mb-3 mt-2">VC Request permission</h5>
 
-                    <div className="mb-3">
+                    {this.state.data.map((category, index) =>
+                        <div className="mb-3" key={'category-' + index}>
 
-                        <div className="d-flex flex-row justify-content-between mb-2">
-                            <div className="fw-bold ">Personal Data - Contacts</div>
-
-                            <div className="text-primary" onClick={() => this.selectAll('personal')}>Allow All VC</div>
-
+                            <div className="d-flex flex-row justify-content-between mb-2">
+                                <div className="fw-bold ">{category.title}</div>
+                            </div>
+                            {category.items.map((item, itemIndex) => <InputField key={'item-' + itemIndex} label={item.title} value={item.value} className="mb-2" />)}
                         </div>
-                        <InputField label="VC ID" value="DID: ex: 1234567890abcdef" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'vcId') }}
-                            isChecked={this.state.personal.vcId.checked}
-                        />
-
-                        <InputField label="VC Description" value="My contacts" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'vcDes') }}
-                            isChecked={this.state.personal.vcDes.checked} />
-
-                        <InputField label="Phone 1" value="+38 (067) 123 45 67" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'phoneOne') }}
-                            isChecked={this.state.personal.phoneOne.checked} />
-
-                        <InputField label="Phone 2" value="+38 (067) 123 49 67" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'phoneTwo') }}
-                            isChecked={this.state.personal.phoneTwo.checked} />
-
-                        <InputField label="Telegram" value="@test_user" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'telegram') }}
-                            isChecked={this.state.personal.telegram.checked} />
-
-                        <InputField label="Viber" value="+38 (067) 123 49 67" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'viber') }}
-                            isChecked={this.state.personal.viber.checked} />
-
-                        <InputField label="WhatsApp" value="+38 (067) 123 49 67" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'whatsapp') }}
-                            isChecked={this.state.personal.whatsapp.checked} />
-
-                        <InputField label="Linkedin" value="/userlink_1" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'linkedin') }}
-                            isChecked={this.state.personal.linkedin.checked} />
-
-                        <InputField label="Email" value="my@mail.com" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'personal', 'email') }}
-                            isChecked={this.state.personal.email.checked} />
-                    </div>
-
-                    <div className="mb-3">
-
-                        <div className="d-flex flex-row justify-content-between mb-2">
-                            <div className="fw-bold ">Education - Diploma</div>
-
-                            <div className="text-primary" onClick={() => this.selectAll('education')}>Allow All VC</div>
-
-                        </div>
-                        <InputField label="VC ID" value="DID: ex: 1234567890abcdef" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'education', 'vcId') }}
-                            isChecked={this.state.education.vcId.checked} />
-
-                        <InputField label="VC description" value="My contacts" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'education', 'vcDes') }}
-                            isChecked={this.state.education.vcDes.checked} />
-
-                        <InputField label="Diploma ID" value="89010019291" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'education', 'diplom') }}
-                            isChecked={this.state.education.diplom.checked} />
-
-                        <InputField label="Speciality" value="Medical Assistant" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'education', 'speciality') }}
-                            isChecked={this.state.education.speciality.checked} />
-
-                        <InputField label="Academic degree" value="Pre-college" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'education', 'academic_degree') }}
-                            isChecked={this.state.education.academic_degree.checked} />
-
-                        <InputField label="Date" value="9/4/12" checkbox={true} className="mb-2"
-                            onChange={(e) => { this.changeChecked(e, 'education', 'date') }}
-                            isChecked={this.state.education.date.checked} />
-                    </div>
-
-
+                    )}
                 </div>
                 <div className="d-flex justify-content-end align-items-center btn-box">
 
@@ -161,5 +69,32 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps> {
         if (this.props.onClose) {
             this.props.onClose(data);
         }
+    }
+
+    private mapData(vcRequest: any): any {
+        const categories = DATA_FIELDS_SHEMA.filter(group => vcRequest.claims.some(c => group.items.some(t => !!t[c.claimType])));
+        console.log(categories);
+        const result = categories.map(c => {
+            const items: any = [];
+            c.items.forEach(t => {
+                const entries = Object.entries(t)[0];
+                const value = this.findValueByField(entries[0]);
+                if (value) {
+                    items.push({ title: entries[1], field: entries[0], value });
+                }
+            })
+            return {
+                title: c.title,
+                items
+            }
+        })
+            .filter(t => !!t.items.length);
+        return result;
+    }
+
+    private findValueByField(field: string): string | null {
+        const state = store.getState();
+        const vc = state.holder?.vcs.find(t => t.credentialSubject[field]);
+        return vc?.credentialSubject[field] || null;
     }
 }

@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import * as React from 'react';
-import { mockComponent } from 'react-dom/test-utils';
 import { Link } from 'react-router-dom';
 import { createVcAction } from '../../common/actions/create-vc-action';
 import { store } from '../../common/store';
@@ -17,7 +16,7 @@ export class CreateDidDocument extends React.Component {
     state = {
         step: 0,
         did: null,
-        category: null,
+        category: '',
         data: null,
         transactionId: null,
         validDate: null
@@ -26,12 +25,12 @@ export class CreateDidDocument extends React.Component {
     steps = ['Choose reciever', 'Choose document type', 'Generate document', 'Check document', 'Sign a document'];
 
     categories = [
-        { title: 'Personal Data', button: 'My contacts' },
-        { title: 'Government', button: 'Passport' },
-        { title: 'Finance', button: 'Bank statement' },
-        { title: 'E-health', button: 'Covid passport' },
-        { title: 'Education', button: 'Diploma' },
-        { title: 'Professional achievements', button: 'Recomendations' }
+        { title: 'Personal Data', button: 'My contacts', value: 'PersonalDataCredential' },
+        { title: 'Government', button: 'Passport', value: 'PassportCredential' },
+        { title: 'Finance', button: 'Bank statement', value: 'BankCredential' },
+        { title: 'E-health', button: 'Covid passport', value: 'EhealthCredential' },
+        { title: 'Education', button: 'Diploma', value: 'EducationCredential' },
+        { title: 'Professional achievements', button: 'Recomendations', value: 'ProfessionalCredential' }
     ];
 
     render() {
@@ -73,17 +72,17 @@ export class CreateDidDocument extends React.Component {
                         <div className="mt-4 w-50">
                             <InputField label="VC ID" placeholder="DID: ex: 1234567890abcdef" className="mb-2" inputChange={true} onChange={this.onFieldChange('vcid')}></InputField>
                             <InputField label="VC Description" placeholder="My contacts" className="mb-2" inputChange={true} onChange={this.onFieldChange('vcdescription')}></InputField>
-                            {this.state.category === 0 &&
+                            {this.state.category === 'PersonalDataCredential' &&
                                 <>
                                     <InputField label="Phone 1" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('phone1')}></InputField>
                                     <InputField label="Phone 2" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('phone2')}></InputField>
                                     <InputField label="Telegram" placeholder="@test_user" className="mb-2" inputChange={true} onChange={this.onFieldChange('telegram')}></InputField>
                                     <InputField label="Viber" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('viber')}></InputField>
                                     <InputField label="WhatsApp" placeholder="+38 (067) 123 45 67" className="mb-2" inputChange={true} onChange={this.onFieldChange('whatsapp')}></InputField>
-                                    <InputField label="Linkedin" placeholder="/userlink_1" className="mb-2" inputChange={true} onChange={this.onFieldChange('linkedIn')}></InputField>
+                                    <InputField label="Linkedin" placeholder="/userlink_1" className="mb-2" inputChange={true} onChange={this.onFieldChange('linkedin')}></InputField>
                                     <InputField label="Email" placeholder="my@mail.com" inputChange={true} onChange={this.onFieldChange('email')}></InputField>
                                 </>}
-                            {this.state.category === 1 &&
+                            {this.state.category === 'PassportCredential' &&
                                 <>
                                     <InputField label="Passport ID" placeholder="TQJF07879871113" className="mb-2" inputChange={true} onChange={this.onFieldChange('passport')}></InputField>
                                     <InputField label="Nationality" placeholder="USA" className="mb-2" inputChange={true} onChange={this.onFieldChange('nationality')}></InputField>
@@ -96,14 +95,14 @@ export class CreateDidDocument extends React.Component {
                                     <InputField label="Expiered On" placeholder="01 Jan 2023" className="mb-2" inputChange={true} onChange={this.onFieldChange('expiered')}></InputField>
                                     <InputField label="Photo" placeholder="https://ipfs.io/ipfs/Qme7ss3ARVgxv6rXqVPiikMJ8u2NLgmgszg13pYrDKEoiu" className="mb-2" inputChange={true} onChange={this.onFieldChange('photo')}></InputField>
                                 </>}
-                            {this.state.category === 5 &&
+                            {this.state.category === 'ProfessionalCredential' &&
                                 <>
                                     <InputField label="Position" placeholder="Sales Manager" className="mb-2" inputChange={true} onChange={this.onFieldChange('position')}></InputField>
                                     <InputField label="Start of cooperation" placeholder="11 May 2019" className="mb-2" inputChange={true} onChange={this.onFieldChange('cooperationStartDate')}></InputField>
                                     <InputField label="End of cooperation" placeholder="11 May 2020" className="mb-2" inputChange={true} onChange={this.onFieldChange('cooperationEndDate')}></InputField>
                                     <InputField label="Additional description" placeholder="Good boy!" className="mb-2" inputChange={true} onChange={this.onFieldChange('additionalDescription')}></InputField>
                                 </>}
-                            {this.state.category === 3 &&
+                            {this.state.category === 'EhealthCredential' &&
                                 <>
                                     <InputField label="Covid Passport ID" placeholder="HK871987981LKS" className="mb-2" inputChange={true} onChange={this.onFieldChange('covidPassport')}></InputField>
                                     <InputField label="Date of vaccination" placeholder="11 May 2021" className="mb-2" inputChange={true} onChange={this.onFieldChange('vaccination')}></InputField>
@@ -111,7 +110,7 @@ export class CreateDidDocument extends React.Component {
                                     <InputField label="Vaccine name" placeholder="Moderna" className="mb-2" inputChange={true} onChange={this.onFieldChange('vaccine')}></InputField>
                                     <InputField label="Manufacturer" placeholder="Moderna, Inc" className="mb-2" inputChange={true} onChange={this.onFieldChange('manufacturer')}></InputField>
                                 </>}
-                            {this.state.category === 2 &&
+                            {this.state.category === 'BankCredential' &&
                                 <>
                                     <InputField label="For (date)" placeholder="1 Jan 2019" className="mb-2" inputChange={true} onChange={this.onFieldChange('for')}></InputField>
                                     <InputField label="To (date)" placeholder="31 Dec 2019" className="mb-2" inputChange={true} onChange={this.onFieldChange('to')}></InputField>
@@ -121,7 +120,7 @@ export class CreateDidDocument extends React.Component {
                                     <InputField label="Closing balance to date" placeholder="7871" className="mb-2" inputChange={true} onChange={this.onFieldChange('closingBalance')}></InputField>
                                     <InputField label="Currency" placeholder="USD" className="mb-2" inputChange={true} onChange={this.onFieldChange('currency')}></InputField>
                                 </>}
-                            {this.state.category === 4 &&
+                            {this.state.category === 'EducationCredential' &&
                                 <>
                                     <InputField label="Diploma ID" placeholder="СН 787187982" className="mb-2" inputChange={true} onChange={this.onFieldChange('diplomid')}></InputField>
                                     <InputField label="Specialty" placeholder="Applied math" className="mb-2" inputChange={true} onChange={this.onFieldChange('speciality')}></InputField>
@@ -150,8 +149,8 @@ export class CreateDidDocument extends React.Component {
         this.setState(state => ({ ...state, step: 2 }));
     }
 
-    private onSelectCategory = (index: number) => {
-        this.setState(state => ({ ...state, category: index, step: 3 }));
+    private onSelectCategory = (value: any) => {
+        this.setState(state => ({ ...state, category: value, step: 3 }));
     }
 
     private onFieldChange(fieldName: string) {
@@ -184,7 +183,12 @@ export class CreateDidDocument extends React.Component {
         Object.entries(this.state.data!).forEach(([k, v]) => dataArr.push({ [k]: v }));
         console.log(dataArr);
 
-        store.dispatch(createVcAction(this.state.did!, dataArr, this.state.validDate));
+        createVcAction(this.state.did!, dataArr, this.state.category, this.state.validDate)
+            .then(fn => store.dispatch(fn))
+            .catch(e => {
+                console.warn(e);
+            });
+        
 
         // const state = store.getState();
 

@@ -1,7 +1,5 @@
 import React from "react";
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { signedin } from "../../common/actions/signedin-action";
-import { SignerHelper } from "../../common/helpers/signer-helper";
 import { store } from "../../common/store";
 import { CasperSignerBlock } from "../../components/casper-signer-block/casper-signer-block";
 import { LedgerBlock } from "../../components/ledger-block/ledger-block";
@@ -20,9 +18,6 @@ class Home extends React.Component<RouteComponentProps<any>, any> {
                 history.push('/did-management');
             }
         });
-
-        SignerHelper.tryGetPublicKey()
-            .then(publicKey => publicKey && store.dispatch(signedin(publicKey)));
     }
 
     render() {
