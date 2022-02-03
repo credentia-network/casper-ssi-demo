@@ -5,9 +5,9 @@ import { IdentityHelper } from "./helpers/identity-helper";
 const casperClientRpc = new CasperServiceByJsonRPC(RPC_URL);
 const casperClient = new CasperClient(RPC_URL);
 
-async function deployKeyToCasperNet(issuerPublicKeyHex: string, targetPublicKeyHex: string, entryPoint: string, runtimeArgs: RuntimeArgs) {
+async function deployKeyToCasperNet(issuerPublicKeyHex: string, targetPublicKeyHex: string, entryPoint: string, runtimeArgs: RuntimeArgs, accountPublicKey?: string) {
     const contractHashAsByteArray = Buffer.from(CONTRACT_DEMOVCREGISTRY_HASH.slice(5), "hex");
-    const publicKey = await Signer.getActivePublicKey().then(pk => IdentityHelper.getIdentityKey(pk));
+    const publicKey = await (accountPublicKey ? Promise.resolve(accountPublicKey) : Signer.getActivePublicKey()).then(pk => IdentityHelper.getIdentityKey(pk));
 
     const deploy = DeployUtil.makeDeploy(
         new DeployUtil.DeployParams(

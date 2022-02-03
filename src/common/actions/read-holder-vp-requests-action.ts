@@ -46,6 +46,7 @@ async function loadLinkedVpRequests() {
                 .then(data => data ? data.CLValue?.asBytesArray() : null)
                 .then(hash => hash ? readSdrFromIpfs(hash) : null)
                 .then(data => data ? mapVPRequestObject(data) : null)
+                .then(data => ({ ...data, index }))
                 .catch(e => {
                     console.error(e);
                     return null;

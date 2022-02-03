@@ -1,5 +1,6 @@
 import * as React from 'react';
 import ReactModal from 'react-modal';
+import { rejectVpRequest } from '../../common/actions/reject-vp-request';
 import DATA_FIELDS_SHEMA from '../../common/data-fields-shema';
 import { store } from '../../common/store';
 import { Button } from '../button/button';
@@ -48,10 +49,8 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
                 <div className="d-flex justify-content-end align-items-center btn-box">
 
                     <Button onClick={this.onCancelButtonClick} className="m-lg-1">Cancel</Button>
-                    <Button onClick={this.onCancelButtonClick} className="ms-2 bg-danger text-white">Reject the entire
-                        request</Button>
-                    <Button color="primary" className="m-lg-1" onClick={this.onSubmitButtonClick}>Revoke</Button>
-
+                    <Button onClick={this.onRejectButtonClick} className="ms-2 bg-danger text-white">Reject request</Button>
+                    <Button color="primary" className="m-lg-1" onClick={this.onCancelButtonClick}>Approve</Button>
                 </div>
             </ReactModal>
         );
@@ -61,7 +60,9 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
         this.emitCloseEvent();
     }
 
-    private onSubmitButtonClick = () => {
+    private onRejectButtonClick = () => {
+        // rejectVpRequest(this.props.vpRequest)
+        //     .then(() => this.emitCloseEvent());
         this.emitCloseEvent();
     }
 
