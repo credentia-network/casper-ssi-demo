@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { createVerifyRequestAction } from '../../common/actions/create-verify-request-action';
 import { readVpRequestAction } from '../../common/actions/read-vp-requests-action';
 import DATA_FIELDS_SHEMA from '../../common/data-fields-shema';
@@ -13,6 +13,7 @@ import './create-verifier.scss';
 
 class CreateVerifierRequest extends React.Component<RouteComponentProps<any>, any> {
     steps = ['Choose fields', 'Send VC request'];
+    history = this.props.history;
 
     constructor(props: RouteComponentProps<any>) {
         super(props);
@@ -44,7 +45,8 @@ class CreateVerifierRequest extends React.Component<RouteComponentProps<any>, an
         const fields = Object.entries(this.state.fields as any).filter(([_, v]) => !!v).map(([k]) => k);
         createVerifyRequestAction({holderDid: this.state.holderDid, fields})
             .then(fn => store.dispatch(fn))
-            .then(() => store.dispatch(readVpRequestAction()));
+            .then(() => store.dispatch(readVpRequestAction()))
+            .then(() => this.history.push('/did-management'));
     }
 
     getSelectedCategories() {
@@ -105,7 +107,7 @@ class CreateVerifierRequest extends React.Component<RouteComponentProps<any>, an
                         <SaveRequest categories={this.getSelectedCategories()}></SaveRequest>}
                 </div>
                 <div className="mt-4">
-                    <button className="btn-close mb-2">Close</button>
+                    <Link to="/did-management"><button className="btn-close mb-2">Close</button></Link>
                     {this.state.step == 0 &&
                         <button className="btn-create" onClick={this.onCreateButtonClick}>Create</button>}
                     {this.state.step == 1 &&

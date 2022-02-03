@@ -30,27 +30,30 @@ async function loadLinkedVpRequests() {
         });
 
     if (vcLength) {
-        return Promise.all(new Array(vcLength).fill(0).map((_, index) => {
+        return Promise.all(new Array(vcLength).fill(0).map(async (_, index) => {
             const vc_link_key = `VPRequestLink_${hash}_${index}`;
 
-            return casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_link_key])
-                .then(data => data ? data.CLValue?.asString() : null)
-                .catch(() => null)
-                .then(link => {
-                    if (link) {
-                        const ipfsHash_key = `${link}ipfsHash`;
-                        return casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsHash_key]);
+            try {
+                const link = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_link_key])
+                    .then(data => data ? data.CLValue?.asString() : null);
+
+                if (link) {
+                    const ipfsHash_key = `${link}ipfsHash`;
+                    const status_key = `${link}status`;
+                    const ipfsHash = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsHash_key])
+                        .then(data => data ? data.CLValue?.asBytesArray() : null);
+                    const status = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [status_key])
+                        .then(data => data ? +data.CLValue?.asBigNumber()! : null);
+
+                    if (ipfsHash) {
+                        return { ...mapVPRequestObject(await readSdrFromIpfs(ipfsHash) as any), index, status };
                     }
                     return null;
-                })
-                .then(data => data ? data.CLValue?.asBytesArray() : null)
-                .then(hash => hash ? readSdrFromIpfs(hash) : null)
-                .then(data => data ? mapVPRequestObject(data) : null)
-                .then(data => ({ ...data, index }))
-                .catch(e => {
-                    console.error(e);
-                    return null;
-                });
+                }
+            } catch (e) {
+                console.error(e);
+                return null;
+            }
         }))
             .then(data => data.filter(t => !!t));
     }

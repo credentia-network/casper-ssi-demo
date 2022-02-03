@@ -24,7 +24,7 @@ export class HolderTable extends React.Component<any, any> {
             this.setState(() => {
                 return {
                     ...this.state,
-                    list: storeState.vpRequest.list.filter(t => !!t.credentialSubject)
+                    list: storeState.holder.requests.filter(t => !!t.credentialSubject)
                 }
             });
         });
@@ -68,7 +68,11 @@ export class HolderTable extends React.Component<any, any> {
                         {this.state &&
                             this.state.list.map((item: any, index) => {
                                 return <tr key={'row-' + index}>
-                                    <th><Label name="Active" color="success"></Label></th>
+                                    <th>
+                                        {!item.status && <Label name="Pending" color="second"></Label>}
+                                        {item.status == 1 && <Label name="Approved" color="success"></Label>}
+                                        {item.status == 2 && <Label name="Rejected" color="danger"></Label>}
+                                    </th>
                                     <td>{truncateStr(item.iss, 27)}</td>
                                     <td>-</td>
                                     <td>{truncateStr(item.ipfsHash)}</td>

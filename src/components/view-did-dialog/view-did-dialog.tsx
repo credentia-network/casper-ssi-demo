@@ -1,5 +1,6 @@
 import * as React from 'react';
 import ReactModal from 'react-modal';
+import { changeVpRequestStatus } from '../../common/actions/change-vp-request-status-action';
 import { rejectVpRequest } from '../../common/actions/reject-vp-request';
 import DATA_FIELDS_SHEMA from '../../common/data-fields-shema';
 import { store } from '../../common/store';
@@ -50,7 +51,7 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
 
                     <Button onClick={this.onCancelButtonClick} className="m-lg-1">Cancel</Button>
                     <Button onClick={this.onRejectButtonClick} className="ms-2 bg-danger text-white">Reject request</Button>
-                    <Button color="primary" className="m-lg-1" onClick={this.onCancelButtonClick}>Approve</Button>
+                    <Button color="primary" className="m-lg-1" onClick={this.onApproveButtonClick}>Approve</Button>
                 </div>
             </ReactModal>
         );
@@ -63,6 +64,12 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
     private onRejectButtonClick = () => {
         // rejectVpRequest(this.props.vpRequest)
         //     .then(() => this.emitCloseEvent());
+        store.dispatch(changeVpRequestStatus(this.props.vpRequest.ipfsHash, 2));
+        this.emitCloseEvent();
+    }
+
+    private onApproveButtonClick = () => {
+        store.dispatch(changeVpRequestStatus(this.props.vpRequest.ipfsHash, 1));
         this.emitCloseEvent();
     }
 

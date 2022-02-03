@@ -10,7 +10,7 @@ export function vpRequestsReducer(state = initState, action): any {
             return {
                 ...state,
                 list: [...action.payload]
-            };
+            };        
         // case CREATE_VP_REQUEST:
         //     return { ...state };
         default:
