@@ -51,7 +51,12 @@ export class VerefierTable extends React.Component<any, any> {
                     {this.state &&
                         this.state.list.map((item, index) => {
                             return <tr key={'key-' + index}>
-                                <th><Label name="Provided" color="success"></Label></th>
+                                <th>
+                                    {!item.status &&
+                                        <Label name="Pending" color="second"></Label>}
+                                    {item.status == 1 &&
+                                        <Label name="Provided" color="success"></Label>}
+                                </th>
                                 <td>{truncateStr(item.holder)}</td>
                                 <td>-</td>
                                 <td>{truncateStr(item.ipfsHash)}</td>

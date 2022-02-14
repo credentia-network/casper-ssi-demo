@@ -41,13 +41,11 @@ async function createVPRequest(fields: string[], holderPaublicKeyHex: string) {
 }
 
 async function writeVPRequest(senderPublicKeyHex: string, ipfsHash: Uint8Array, holderPublicKeyHex: string) {
-    const status = 0;
     const ipfsHashResponce = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     const runtimeArgs = RuntimeArgs.fromMap({
         ipfsHash: CLValue.byteArray(ipfsHash),
         ipfsHashResponce: CLValue.byteArray(ipfsHashResponce),
-        holder: CLValue.byteArray(IdentityHelper.hash(holderPublicKeyHex)),
-        status: CLValue.u8(status),
+        holder: CLValue.byteArray(IdentityHelper.hash(holderPublicKeyHex))
     });
     await deployKeyToCasperNet(senderPublicKeyHex, holderPublicKeyHex, 'sendVPRequest', runtimeArgs);
 }

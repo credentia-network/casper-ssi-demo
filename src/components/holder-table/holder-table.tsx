@@ -24,7 +24,7 @@ export class HolderTable extends React.Component<any, any> {
             this.setState(() => {
                 return {
                     ...this.state,
-                    list: storeState.holder.requests.filter(t => !!t.credentialSubject)
+                    list: storeState.holder.requests as any[],
                 }
             });
         });

@@ -11,7 +11,7 @@ import "./view-did-dialog.scss";
 
 ReactModal.defaultStyles = {}
 
-type ViewDidDialogState = { data: Array<{ title: string, items: { title: string, field: string, value: string }[] }> };
+type ViewDidDialogState = { vpRequest: any, data: Array<{ title: string, items: { title: string, field: string, value: string }[] }> };
 
 export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDialogState> {
     togle = {
@@ -22,7 +22,10 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
     constructor(props: ViewDidDialogProps) {
         super(props);
 
-        this.state = { data: this.mapData(this.props.vpRequest) };
+        this.state = {
+            vpRequest: this.props.vpRequest,
+            data: this.mapData(this.props.vpRequest)
+        };
     }
 
     changeChecked = (event, key, prop) => {
@@ -47,12 +50,18 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
                         </div>
                     )}
                 </div>
-                <div className="d-flex justify-content-end align-items-center btn-box">
-
-                    <Button onClick={this.onCancelButtonClick} className="m-lg-1">Cancel</Button>
-                    <Button onClick={this.onRejectButtonClick} className="ms-2 bg-danger text-white">Reject request</Button>
-                    <Button color="primary" className="m-lg-1" onClick={this.onApproveButtonClick}>Approve</Button>
-                </div>
+                {!this.state.vpRequest.status &&
+                    <div className="d-flex justify-content-end align-items-center btn-box">
+                        <Button onClick={this.onCancelButtonClick} className="m-lg-1">Cancel</Button>
+                        <Button onClick={this.onRejectButtonClick} className="ms-2 bg-danger text-white">Reject request</Button>
+                        <Button color="primary" className="m-lg-1" onClick={this.onApproveButtonClick}>Approve</Button>
+                    </div>
+                }
+                {this.state.vpRequest.status &&
+                    <div className="d-flex justify-content-end align-items-center btn-box">
+                        <Button onClick={this.onCancelButtonClick} className="m-lg-1">Close</Button>
+                    </div>
+                }
             </ReactModal>
         );
     }

@@ -1,4 +1,4 @@
-import { HOLDER_REQUESTS, HOLDER_VC, STATUS_VP_REQUEST } from "./types";
+import { HOLDER_REQUESTS, HOLDER_VC } from "./types";
 
 const initState = {
     requests: [],
@@ -17,12 +17,6 @@ export function holderReducer(state = initState, action): any {
                 ...state,
                 vcs: [...action.payload]
             };
-        case STATUS_VP_REQUEST: {
-            return {
-                vcs: state.vcs,
-                requests: action.payload
-            };
-        }
         default:
             return { ...state };
     }
