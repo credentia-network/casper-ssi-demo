@@ -1,11 +1,11 @@
 import * as React from "react";
-import { ViewDidReadDialogProps } from "./view-did-read-dialog-props";
 import ReactModal from "react-modal";
-import './view-did-read-dialog.scss'
-import { InputField } from "../input-field/input-field";
-import { Button } from "../button/button";
-import { store } from "../../common/store";
 import DATA_FIELDS_SHEMA from "../../common/data-fields-shema";
+import { store } from "../../common/store";
+import { Button } from "../button/button";
+import { InputField } from "../input-field/input-field";
+import { ViewDidReadDialogProps } from "./view-did-read-dialog-props";
+import './view-did-read-dialog.scss';
 
 
 export class ViewDidReadDialog extends React.Component<ViewDidReadDialogProps, any> {
@@ -23,7 +23,7 @@ export class ViewDidReadDialog extends React.Component<ViewDidReadDialogProps, a
                 data: entries.map(ent => {
                     const [key, value] = ent;
                     const item = schema.items.find(x => {
-                        const [k, v]: any = Object.entries(x)[0];
+                        const [k]: any = Object.entries(x)[0];
                         return k.toLowerCase() == key.toLowerCase();
                     });
                     const title = item ? item[key] : null;

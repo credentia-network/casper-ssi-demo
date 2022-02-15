@@ -1,7 +1,6 @@
 import * as React from 'react';
 import ReactModal from 'react-modal';
 import { changeVpRequestStatus } from '../../common/actions/change-vp-request-status-action';
-import { rejectVpRequest } from '../../common/actions/reject-vp-request';
 import DATA_FIELDS_SHEMA from '../../common/data-fields-shema';
 import { store } from '../../common/store';
 import { Button } from '../button/button';
