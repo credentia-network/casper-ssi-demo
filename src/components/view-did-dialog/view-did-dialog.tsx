@@ -10,7 +10,7 @@ import "./view-did-dialog.scss";
 
 ReactModal.defaultStyles = {}
 
-type ViewDidDialogState = { vpRequest: any, data: Array<{ title: string, items: { title: string, field: string, value: string }[] }> };
+type ViewDidDialogState = { vpRequest: any, data: Array<{ title: string, credentialType: string, items: { title: string, field: string, value: string }[] }> };
 
 export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDialogState> {
     togle = {
@@ -72,12 +72,16 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
     private onRejectButtonClick = () => {
         // rejectVpRequest(this.props.vpRequest)
         //     .then(() => this.emitCloseEvent());
-        store.dispatch(changeVpRequestStatus(this.props.vpRequest.ipfsHash, 2));
+        store.dispatch(changeVpRequestStatus(this.props.vpRequest.ipfsHash, 2, []));
         this.emitCloseEvent();
     }
 
     private onApproveButtonClick = () => {
-        store.dispatch(changeVpRequestStatus(this.props.vpRequest.ipfsHash, 1));
+        const data = this.state.data.map(t => ({
+            credentialType: t.credentialType,
+            items: t.items.map(x => ({ field: x.field, value: x.value }))
+        }));
+        store.dispatch(changeVpRequestStatus(this.props.vpRequest.ipfsHash, 1, data));
         this.emitCloseEvent();
     }
 
@@ -88,8 +92,7 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
     }
 
     private mapData(vcRequest: any): any {
-        const categories = DATA_FIELDS_SHEMA.filter(group => vcRequest.claims.some(c => group.items.some(t => !!t[c.claimType])));
-        console.log(categories);
+        const categories = DATA_FIELDS_SHEMA.filter(group => vcRequest.response.some(c => group.credentialType == c.credentialType));
         const result = categories.map(c => {
             const items: any = [];
             c.items.forEach(t => {
@@ -98,8 +101,9 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
                 if (value) {
                     items.push({ title: entries[1], field: entries[0], value });
                 }
-            })
+            });
             return {
+                credentialType: c.credentialType,
                 title: c.title,
                 items
             }

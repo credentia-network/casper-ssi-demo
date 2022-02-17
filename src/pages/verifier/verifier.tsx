@@ -24,7 +24,6 @@ export class Verifier extends React.Component {
                         yourself). The issued document can be revoked and its data can be viewed.</p>
                     <div className="conte">
                         <Link to="/create-verifier"> <button className="button primary button-sm w-auto px-3 text-nowrap" >Create VC request</button></Link>
-                       <button className="button primary button-sm w-auto px-3 text-nowrap">Validate VC by ID</button>
                     </div>
                     <div>
                         <VerefierTable/>

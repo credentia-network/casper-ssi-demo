@@ -35,6 +35,7 @@ async function readVPRequestRegistry(): Promise<VerifiablePresentationRequest[]>
         const ipfsHash_key = `VPRequest_${issuerHash}_${index}_ipfsHash`;
         const holder_key = `VPRequest_${issuerHash}_${index}_holder`;
         const status_key = `VPRequest_${issuerHash}_${index}_status`;
+        const ipfsResponse_key = `VPRequest_${issuerHash}_${index}_ipfsHashResponce`;
 
         try {
             const vpRequest: any = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsHash_key])
@@ -53,6 +54,13 @@ async function readVPRequestRegistry(): Promise<VerifiablePresentationRequest[]>
                     .then(h => h?.CLValue ? h.CLValue.asBigNumber().toNumber() : 0);
 
                 vpRequest.status = status || 0;
+
+                if (vpRequest.status == 1) {
+                    vpRequest.response = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsResponse_key])
+                        .then(h => h.CLValue?.asBytesArray() || null)
+                        .then(h => h ? ipfsClient.decodeCid(h) : null)
+                        .then(t => t ? ipfsClient.readHash(t) : null);
+                }
             }
             return vpRequest;
         } catch (e) {
