@@ -92,14 +92,17 @@ export class ViewDidDialog extends React.Component<ViewDidDialogProps, ViewDidDi
     }
 
     private mapData(vcRequest: any): any {
-        const categories = DATA_FIELDS_SHEMA.filter(group => vcRequest.response.some(c => group.credentialType == c.credentialType));
+        const categories = DATA_FIELDS_SHEMA.filter(group => vcRequest.claims.some(c => group.items.some(t => !!t[c.claimType])));
         const result = categories.map(c => {
             const items: any = [];
             c.items.forEach(t => {
                 const entries = Object.entries(t)[0];
-                const value = this.findValueByField(entries[0]);
-                if (value) {
-                    items.push({ title: entries[1], field: entries[0], value });
+                const [field, title] = entries;
+                if (vcRequest.claims.some(x => field == x.claimType)) {
+                    const value = this.findValueByField(field);
+                    if (value) {
+                        items.push({ title, field, value });
+                    }
                 }
             });
             return {
