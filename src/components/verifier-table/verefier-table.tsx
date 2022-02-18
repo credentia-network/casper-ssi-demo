@@ -45,7 +45,7 @@ export class VerefierTable extends React.Component<any, any> {
     onVerifiableCredentialsDialogClose = () => {
         this.toggleVerifiableCredentialsDialog(null);
     }
-    
+
     toggleVerifiableCredentialsDialog(viewDialogVpRequest: any) {
         this.setState({
             ...this.state,
@@ -80,13 +80,14 @@ export class VerefierTable extends React.Component<any, any> {
                                     <td>-</td>
                                     <td>{truncateStr(item.ipfsHash)}</td>
                                     <td>
-                                        <button className="button primary button-sm  float-end" onClick={this.onViewButtonClick(item)}>View</button>
+                                        {item.status == 1 &&
+                                        <button className="button primary button-sm  float-end" onClick={this.onViewButtonClick(item)}>View</button>}
                                     </td>
                                 </tr>
                             })}
                     </tbody>
                 </table>
-                {this.state.viewDialogVpRequest && 
+                {this.state.viewDialogVpRequest &&
                     <VerifiableCredentialsDialog vpRequest={this.state.viewDialogVpRequest} onClose={this.onVerifiableCredentialsDialogClose}></VerifiableCredentialsDialog>}
             </>
         );
