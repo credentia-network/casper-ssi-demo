@@ -3,7 +3,7 @@
 ## 1.	Unfolding Casper SSI Framework, 
 -	Instal Visual Studio Code
 -	Create account on Github
--	Connect developer repository …. (need invitation via git)
+-	Clone repository
 -	Run commands in terminal: 
 -	npm install -E
 -	npm run start
