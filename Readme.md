@@ -1,3 +1,12 @@
+# Video Overview of Casper SSI Web App & Framework
+
+1. Create Account with Casper: https://drive.google.com/file/d/1boMIEVwURs0tFB1lMUdgDLD0rJS6WKh4/view?usp=sharing
+2. Connecting Vault and signing in: https://drive.google.com/file/d/1rGXfUcnQhnjQCii5uAT6mZCx_a5rcWfX/view?usp=sharing
+3. Issuing first Verifiable Credential document (Issuer PoV, Diploma creential): https://drive.google.com/file/d/1WpOlmaGKWknunQNNGwo-OYtWT-fEIChO/view?usp=sharing
+4. Receiving Verifiable Credential (Holder PoV): https://drive.google.com/file/d/1bG1RbvZDD3OS3rOtp-XRWfoG8D5ckpIx/view?usp=sharing
+5. Issuing Verifiable Credential of a different type (CovPass): https://drive.google.com/file/d/1puSTpagrv2Jy7Du3OAinIi8V4BvcwNbv/view?usp=sharing
+6. Requesting Verifiable Crdential with selected data points (Verifier PoV), sharing verification request with the Holder, approving and sharing VC (Holder PoV), viewing credetial shared by the holder (Verifier PoV) https://drive.google.com/file/d/1XKwEJRITsZ2Y0TRX_MuNj41HA25AS0FS/view?usp=sharing
+
 # Installation Instructions Casper SSI Framework
 
 ## 1.	Unfolding Casper SSI Framework, 
@@ -10,7 +19,7 @@
 -	In Google Chrome: localhost:3000 
 -	Run Chrome browser without CORS
 
-## 2.
+## 2. Install Casper Signer Extenstion
 ![2.](./screenshots/Picture1.png)
 
 ## 3. Create New Vault, Click  Casper Lab Singer, set password for Vault
