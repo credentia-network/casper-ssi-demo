@@ -1,4 +1,4 @@
-import { CLValue, RuntimeArgs, Signer } from "casper-js-sdk";
+import { CLValueBuilder, RuntimeArgs, Signer } from "casper-js-sdk";
 import dayjs from "dayjs";
 import MerkleTree from "merkle-tools";
 import { deployKeyToCasperNet } from "../casper-client";
@@ -122,11 +122,11 @@ async function writeVC(issuerPublicKeyHex: string, targetPublicKeyHex: string, i
     const revocationFlag = true;
 
     const runtimeArgs = RuntimeArgs.fromMap({
-        merkleRoot: CLValue.byteArray(merkleRoot),
-        ipfsHash: CLValue.byteArray(ipfsHash),
-        schemaHash: CLValue.byteArray(schemaHash),
-        holder: CLValue.byteArray(IdentityHelper.hash(targetPublicKeyHex)),
-        revocationFlag: CLValue.bool(revocationFlag),
+        merkleRoot: CLValueBuilder.byteArray(merkleRoot),
+        ipfsHash: CLValueBuilder.byteArray(ipfsHash),
+        schemaHash: CLValueBuilder.byteArray(schemaHash),
+        holder: CLValueBuilder.byteArray(IdentityHelper.hash(targetPublicKeyHex)),
+        revocationFlag: CLValueBuilder.bool(revocationFlag),
     });
 
     await deployKeyToCasperNet(issuerPublicKeyHex, targetPublicKeyHex, 'issueDemoVC', runtimeArgs);

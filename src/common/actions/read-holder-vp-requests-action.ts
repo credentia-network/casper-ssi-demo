@@ -23,7 +23,7 @@ async function loadLinkedVpRequests() {
 
     const vc_length_key = `VPRequestLink_length_${hash}`;
     const vcLength: number = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_length_key])
-        .then(data => data.CLValue?.asBigNumber().toNumber() || 0)
+        .then(data => data.CLValue?.value().toNumber() || 0)
         .catch((e) => {
             console.log(e);
             return 0;
@@ -35,15 +35,15 @@ async function loadLinkedVpRequests() {
 
             try {
                 const link = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_link_key])
-                    .then(data => data ? data.CLValue?.asString() : null);
+                    .then(data => data ? data.CLValue?.value() : null);
 
                 if (link) {
                     const ipfsHash_key = `${link}ipfsHash`;
                     const status_key = `${link}status`;
                     const ipfsHash = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsHash_key])
-                        .then(data => data ? data.CLValue?.asBytesArray() : null);
+                        .then(data => data ? data.CLValue?.value() : null);
                     const status = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [status_key])
-                        .then(data => data ? +data.CLValue?.asBigNumber()! : null);
+                        .then(data => data ? +data.CLValue?.value()! : null);
 
                     if (ipfsHash) {
                         return { ...mapVPRequestObject(await readSdrFromIpfs(ipfsHash) as any), index, status };

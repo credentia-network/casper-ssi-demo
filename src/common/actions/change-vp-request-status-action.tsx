@@ -1,4 +1,4 @@
-import { CLValue, RuntimeArgs, Signer } from "casper-js-sdk";
+import { CLValueBuilder, RuntimeArgs, Signer } from "casper-js-sdk";
 import { deployKeyToCasperNet } from "../casper-client";
 import { ApprovedVerifiableCredentials } from "../contracts/approved-verifiable-credentials";
 import { IdentityHelper } from "../helpers/identity-helper";
@@ -32,10 +32,10 @@ export function changeVpRequestStatus(ipfsHash: string, status: number, data: Ap
 
 async function setStatus(senderPublicKeyHex: string, issuerPublicKey: string, index: number, newStatus: number, cid: Uint8Array) {
     const runtimeArgs = RuntimeArgs.fromMap({
-        verifier: CLValue.byteArray(IdentityHelper.hash(issuerPublicKey)),
-        index: CLValue.u64(index),
-        newStatus: CLValue.u8(newStatus),
-        ipfsHashResponce: CLValue.byteArray(cid),
+        verifier: CLValueBuilder.byteArray(IdentityHelper.hash(issuerPublicKey)),
+        index: CLValueBuilder.u64(index),
+        newStatus: CLValueBuilder.u8(newStatus),
+        ipfsHashResponce: CLValueBuilder.byteArray(cid),
     });
     await deployKeyToCasperNet(senderPublicKeyHex, issuerPublicKey, 'changeVPRequestStatus', runtimeArgs);
 }

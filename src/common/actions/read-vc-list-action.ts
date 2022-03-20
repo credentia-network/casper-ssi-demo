@@ -25,7 +25,7 @@ async function readVCRegistry(): Promise<VerifiableCredentials[]> {
     const length_key = `VC_length_${issuerHash}`;
     const vcLength: number = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [length_key])
         .then(data => {
-            return data.CLValue?.asBigNumber().toNumber() || 0;
+            return data.CLValue?.value().toNumber() || 0;
         })
         .catch(() => 0);
 
@@ -38,7 +38,7 @@ async function readVCRegistry(): Promise<VerifiableCredentials[]> {
         const vc_holder_key = `VC_${issuerHash}_${index}_holder`;
 
         const holderArr = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_holder_key])
-            .then(data => data.CLValue!.asBytesArray());
+            .then(data => data.CLValue!.value());
 
         const holderPubKey = Buffer.from(holderArr).toString('hex');
 
@@ -57,7 +57,7 @@ async function readVCRegistry(): Promise<VerifiableCredentials[]> {
 
 async function readVCByKey(key: string, holderPubKey: string, stateRootHash: any): Promise<VerifiableCredentials | null> {
     return casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [key])
-        .then(data => data ? data.CLValue?.asBytesArray() : null)
+        .then(data => data ? data.CLValue?.value() : null)
         .then(hash => hash ? readIpfsData(hash) : null)
         .then(data => data ? mapVcObject(data, holderPubKey) : null)
         .catch(e => {

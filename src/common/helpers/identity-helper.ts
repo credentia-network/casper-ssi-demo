@@ -1,4 +1,4 @@
-import { decodeBase16, PublicKey } from "casper-js-sdk";
+import { decodeBase16, CLPublicKey } from "casper-js-sdk";
 import { NETWORK } from "../constants";
 
 export class IdentityHelper {
@@ -13,7 +13,7 @@ export class IdentityHelper {
         //     return algorithm == 2 ? Keys.Secp256K1.accountHash(arr) : Keys.Ed25519.accountHash(arr);
         // }
         // return Keys.Ed25519.accountHash(decodeBase16(identityKeyHex));
-        const hash = PublicKey.fromHex(identityKeyHex).toAccountHash();
+        const hash = CLPublicKey.fromHex(identityKeyHex).toAccountHash();
         return format == 'hex' ? Buffer.from(hash).toString('hex') : hash;
     }
     

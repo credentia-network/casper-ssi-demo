@@ -24,7 +24,7 @@ async function readVPRequestRegistry(): Promise<VerifiablePresentationRequest[]>
 
     const length_key = `VPRequest_length_${issuerHash}`;
     const vcLength: number = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [length_key])
-        .then(data => data.CLValue?.asBigNumber().toNumber() || 0)
+        .then(data => +data.CLValue?.value() || 0)
         .catch(() => 0);
 
     if (!vcLength) {
@@ -39,25 +39,25 @@ async function readVPRequestRegistry(): Promise<VerifiablePresentationRequest[]>
 
         try {
             const vpRequest: any = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsHash_key])
-                .then(data => data.CLValue?.asBytesArray() || null)
+                .then(data => data.CLValue?.value() || null)
                 .then(hash => hash ? readSdrFromIpfs(hash) : null)
                 .then(data => data ? mapVPRequestObject(data) : null);
 
             if (vpRequest) {
                 const holder = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [holder_key])
-                    .then(h => h.CLValue?.asBytesArray() || null)
+                    .then(h => h.CLValue?.value() || null)
                     .then(h => h ? Buffer.from(h).toString('hex') : null);
 
                 vpRequest.holder = holder;
 
                 const status = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [status_key])
-                    .then(h => h?.CLValue ? h.CLValue.asBigNumber().toNumber() : 0);
+                    .then(h => h?.CLValue ? h.CLValue.value().toNumber() : 0);
 
                 vpRequest.status = status || 0;
 
                 if (vpRequest.status == 1) {
                     vpRequest.response = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [ipfsResponse_key])
-                        .then(h => h.CLValue?.asBytesArray() || null)
+                        .then(h => h.CLValue?.value() || null)
                         .then(h => h ? ipfsClient.decodeCid(h) : null)
                         .then(t => t ? ipfsClient.readHash(t) : null);
                 }

@@ -1,4 +1,4 @@
-import { CasperClient, CasperServiceByJsonRPC, DeployUtil, PublicKey, RuntimeArgs, Signer } from "casper-js-sdk";
+import { CasperClient, CasperServiceByJsonRPC, CLPublicKey, DeployUtil, RuntimeArgs, Signer } from "casper-js-sdk";
 import { CONTRACT_DEMOVCREGISTRY_HASH, DEPLOY_GAS_PAYMENT, DEPLOY_GAS_PRICE, DEPLOY_TTL_MS, NETWORK, RPC_URL } from "./constants";
 import { IdentityHelper } from "./helpers/identity-helper";
 
@@ -11,7 +11,7 @@ async function deployKeyToCasperNet(issuerPublicKeyHex: string, targetPublicKeyH
 
     const deploy = DeployUtil.makeDeploy(
         new DeployUtil.DeployParams(
-            PublicKey.fromEd25519(publicKey),
+            CLPublicKey.fromEd25519(publicKey),
             NETWORK,
             DEPLOY_GAS_PRICE,
             DEPLOY_TTL_MS
@@ -32,11 +32,13 @@ async function deployKeyToCasperNet(issuerPublicKeyHex: string, targetPublicKeyH
 
     const deployObj = DeployUtil.deployFromJson(signedDeploy);
 
-    if (deployObj) {
-        const deployResult = await casperClient.putDeploy(deployObj);
+    if (deployObj.ok) {
+        const deployResult = await casperClient.putDeploy(deployObj.val);
 
         console.log("Deploy result");
         console.log(deployResult);
+    } else {
+        console.error(deployObj.val);
     }
 }
 

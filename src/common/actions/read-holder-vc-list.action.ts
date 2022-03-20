@@ -23,7 +23,7 @@ async function loadLinkedVcRegistry() {
 
     const vc_length_key = `VCLink_length_${hash}`;
     const vcLength: number = await casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_length_key])
-        .then(data => data.CLValue?.asBigNumber().toNumber() || 0)
+        .then(data => data.CLValue?.value().toNumber() || 0)
         .catch(() => 0);
 
     if (vcLength) {
@@ -31,7 +31,7 @@ async function loadLinkedVcRegistry() {
             const vc_link_key = `VCLink_${hash}_${index}`;
 
             return casperClientRpc.getBlockState(stateRootHash, CONTRACT_DEMOVCREGISTRY_HASH, [vc_link_key])
-                .then(data => data ? data.CLValue?.asString() : null)
+                .then(data => data ? data.CLValue?.value() : null)
                 .catch(() => null)
                 .then(link => {
                     if (link) {
@@ -40,7 +40,7 @@ async function loadLinkedVcRegistry() {
                     }
                     return null;
                 })
-                .then(data => data ? data.CLValue?.asBytesArray() : null)
+                .then(data => data ? data.CLValue?.value() : null)
                 .then(hash => hash ? readIpfsData(hash) : null)
                 .then(vc => {
                     if (vc)
