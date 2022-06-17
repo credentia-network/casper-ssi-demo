@@ -141,8 +141,8 @@ Create request click [Create VC request]
 
 ![Error 1](./screenshots/error1.png)
 If you face this error, do next:
-In files
- *./node_modules/@veramo/kms-local/node_modules/did-jwt/lib/index.module.js 1660*
- *./node_modules/@veramo/key-manager/node_modules/did-jwt/lib/index.module.js 1660*
- *./node_modules/@veramo/selective-disclosure/node_modules/did-jwt/lib/index.module.js 1660*
+In files:
+- *./node_modules/@veramo/kms-local/node_modules/did-jwt/lib/index.module.js 1660*
+- *./node_modules/@veramo/key-manager/node_modules/did-jwt/lib/index.module.js 1660*
+- *./node_modules/@veramo/selective-disclosure/node_modules/did-jwt/lib/index.module.js 1660*
 replace **??** with **||**.
