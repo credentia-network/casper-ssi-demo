@@ -26,7 +26,7 @@ All these features work directly with Casper Network contracts deployed on testn
 # Installation Instructions Casper SSI Framework
 
 ## 1.	Unfolding Casper SSI Framework, 
-Prerequisites: Visual Studio Code, Github account
+Prerequisites: Visual Studio Code, Github account, **Node 14.19.3**
 
 -	Clone repository
 -	Run commands in terminal: 
