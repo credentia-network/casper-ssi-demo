@@ -26,12 +26,12 @@ All these features work directly with Casper Network contracts deployed on testn
 # Installation Instructions Casper SSI Framework
 
 ## 1.	Unfolding Casper SSI Framework, 
--	Instal Visual Studio Code
--	Create account on Github
+Prerequisites: Visual Studio Code, Github account
+
 -	Clone repository
 -	Run commands in terminal: 
--	npm install -E
--	npm run start
+-	- npm install -E
+- -	npm run start
 -	In Google Chrome: localhost:3000 
 -	Run Chrome browser without CORS
 
