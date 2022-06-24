@@ -6,4 +6,5 @@ export interface ButtonProps {
     disabled?: boolean;
     className?: string;
     onClick?: MouseEventHandler<HTMLButtonElement>;
+    children?: any;
 }
