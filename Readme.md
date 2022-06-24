@@ -32,6 +32,7 @@ Prerequisites: Visual Studio Code, Github account, **Node 14.19.3**
 -	Run commands in terminal: 
 -	- npm install -E
 - -	npm run build
+- - node tools/fix-babel-loader.js
 - -	npm run start
 -	In Google Chrome: localhost:3000 
 -	Run Chrome browser without CORS
