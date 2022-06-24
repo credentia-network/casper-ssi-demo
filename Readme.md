@@ -31,9 +31,11 @@ Prerequisites: Visual Studio Code, Github account, **Node 14.19.3**
 -	Clone repository
 -	Run commands in terminal: 
 -	- npm install -E
+- -	npm run build
 - -	npm run start
 -	In Google Chrome: localhost:3000 
 -	Run Chrome browser without CORS
+*(On Windows: Create folder 'C:\chromeTemp' and run Chrome with these parameters "C:\Program Files\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir="C:\chromeTemp")*
 
 ## 2. Install Casper Signer Extenstion
 ![2.](./screenshots/Picture1.png)
